@@ -12,12 +12,8 @@ model.add(Dense(5, input_dim =1, activation='relu')) # input_dimension=1 1차원
 model.add(Dense(3))                                  # Sequntial이라 input=5, output=3
 model.add(Dense(1, activation='relu'))                
 
-<<<<<<< HEAD
 model.summary()    # param : node와 node가 연결된 선의 갯수 / = [input node * output node] + bias(output node)  
 
-=======
-model.summary()
->>>>>>> 3428636822c543d11b4efb2e435b5494f35b991e
 '''
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
