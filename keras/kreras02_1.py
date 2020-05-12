@@ -11,6 +11,9 @@ model = Sequential()
 model.add(Dense(5, input_dim =1, activation='relu'))
 model.add(Dense(20))
 model.add(Dense(50))
+model.add(Dense(100))
+model.add(Dense(80))
+model.add(Dense(50))
 model.add(Dense(20))
 model.add(Dense(10))
 model.add(Dense(1, activation='relu'))
@@ -19,7 +22,7 @@ model.summary()
 
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs =120, batch_size=1, validation_data = (x_train, y_train))
+model.fit(x_train, y_train, epochs =1000, batch_size=100, validation_data = (x_train, y_train))
 loss, acc = model.evaluate(x_test, y_test, batch_size=1)
 
 print("loss : ", loss)
