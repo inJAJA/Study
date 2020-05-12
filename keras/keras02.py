@@ -14,7 +14,7 @@ model.add(Dense(1, activation='relu'))
 
 model.summary()   
 #모델의 노드와 파라미터의 수 등을 확인
-# paramter : node와 node가 연결된 선의 갯수 / = [input node * output node] + bias(output node)  
+# paramter : node와 node가 연결된 선의 갯수 / = [input node * output node] + bias(1*output node)  
 #                                       or (input node + 1) * output node
 
 '''
