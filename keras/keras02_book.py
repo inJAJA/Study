@@ -19,7 +19,7 @@ model.summary()
 
 
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])  
-#             손실 = mse, 최적화 = adam, metrics을 accuracy로 보여주기
+#             손실 = mse, 손실최적화 = adam, metrics을 accuracy로 보여주기
 
 model.fit(x_train, y_train, epochs =100, batch_size=1, validation_data = (x_train, y_train))
 # 훈련시키기(x_train, y_train으로 훈련, 훈련횟수, )
