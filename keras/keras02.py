@@ -1,14 +1,14 @@
-from keras.models import Sequential  # keras model 중 Sequential model 사용하겠다.
-from keras.layers import Dense       # layer를  Dense형을 사용하겠다.
-import numpy as np
+from keras.models import Sequential  # keras안에서 .(가져오기) model 중 import(가장 끝에거 가져오기) Sequential 
+from keras.layers import Dense       # keras안에서 layer중  Dense형을 사용하겠다.
+import numpy as np                   # numpy를 가져와 사용하겠다. numpy를 np라고 줄여 쓰겠다.
 
 x_train = np.array([1,2,3,4,5,6,7,8,9,10])
 y_train = np.array([1,2,3,4,5,6,7,8,9,10])
 x_test = np.array([101,102,103,104,105,106,107,108,109,110])
 y_test = np.array([101,102,103,104,105,106,107,108,109,110])
 
-model = Sequential()
-model.add(Dense(5, input_dim =1, activation='relu')) # input_dimension=1 1차원
+model = Sequential() # Seqeuntial을 model이라 하겠다.
+model.add(Dense(5, input_dim =1, activation='relu')) # model(Seqeuntial)에서 add사용, input_dimension=1 1차원
 model.add(Dense(3))                                  # Sequntial이라 input=5, output=3
 model.add(Dense(1, activation='relu'))                
 
