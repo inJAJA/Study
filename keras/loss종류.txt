@@ -1,0 +1,22 @@
+[평가 지표]
+
+< 1.회귀 평가 >
+
+1. MSE  (Mean Squared Error,평균 제곱 오차)         : sigma(실제값 - 예측값)^2 /n
+2. RMSE (Root Mean Squared Error, 평균 제곱근 오차) : root[sigma(실제값 - 예측값)^2 /n]
+                                                     MSE에 비해 에러값의 크기가 실제 값에 비례한다.(제곱된 것에 루트를 씌었기 때문)
+   [RMSE함수]
+   from sklearn.metrics import mean_squared_error
+   # tensorflow, keras가 나오기 전에 쓰던 API
+
+   def RMSE(y_test, y_predict):
+       return np.sqrt(mean_squared_error(y_test, y_predict))
+               # sprt() : root를 씌어줌
+
+   print("RMSE : ", RMSE(y_test, y_predict))
+3. R2     (R Squared, 설명력, 결정계수)             : (q1 - q2)/q1
+                                                     q1 = (전체 데이터들의 편차의 제곱) 
+                                                     q2 = (전체 데이터들의 잔차의 제곱)
+                                                     1 에 근접할 수록 정확도가 좋다.
+                                                    보통 다른 보조 지표와 함께 사용된다.
+                                                    
