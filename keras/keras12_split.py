@@ -3,12 +3,14 @@ import numpy as np
 x = np.array(range(1, 101))
 y = np.array(range(101, 201))
 
+# train_test_split(sklearn)사용하여  train, test, validation 나누기
+
 from sklearn.model_selection import train_test_split # sklearn안에 model안에 
 x_train, x_test, y_train, y_test = train_test_split( 
     # x, y, random_state=66, shuffle = True, # shuffle의 defalut = True
-    #random_state(섞는 방식,순서)가 없으면 섞을 때마다 매번 나온는 값이 다름 -> 미세하게 결과가 달라짐
+    # random_state(섞는 방식,순서)가 없으면 섞을 때마다 매번 나오는 값이 다름 -> 매번 미세하게 결과가 달라짐
     x, y, shuffle = False,
-    train_size =0.6
+    train_size =0.8
     )
     # x, y의 전체 데이터 받기, train_size를 전체 데이터의 60%를 받겠다.
 
@@ -25,7 +27,7 @@ x_val, x_test, y_val, y_test = train_test_split(
     x_test, y_test, shuffle = False,
     test_size =0.5
     )
-# x_test, y_test 데이터 받아서 그 데이터 50%를 test_size로 설정
+# x_test, y_test 데이터 받아서 그 데이터 50%를 test_size로 설정 
 
 # x_train = x[:60]  # python시퀀스 자료형 슬라이스 참조
 # x_val = x[60:80]
