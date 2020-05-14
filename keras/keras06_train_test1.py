@@ -20,7 +20,7 @@ model.add(Dense(10))
 # model.add(Dense(1000000))
 # model.add(Dense(1000000))
 model.add(Dense(20))
-model.add(Dense(40))
+model.add(Dense(40))    # hyperparameter tunning
 model.add(Dense(80))
 model.add(Dense(160))
 model.add(Dense(320))
