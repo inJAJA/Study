@@ -1,7 +1,7 @@
 #1. 데이터
 import numpy as np
 x = np.array(range(1, 101))
-y = np.array(range(101, 201))
+y = np.array(range(101, 201))  # train, test, validation 나누기(직접 손으로)
 
 x_train = x[:60]  # python시퀀스 자료형 슬라이스 참조
 x_val = x[60:80]
