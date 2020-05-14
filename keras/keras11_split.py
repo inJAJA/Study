@@ -1,14 +1,19 @@
 #1. 데이터
 import numpy as np
-x_train = np.array([1,2,3,4,5,6,7,8,9,10])
-y_train = np.array([1,2,3,4,5,6,7,8,9,10])
-x_test = np.array([11,12,13,14,15])
-y_test = np.array([11,12,13,14,15])
-# x_pred = np.array([16, 17, 18])
-x_val = np.array([101,102,103,104,105])
-y_val = np.array([101,102,103,104,105])
+x = np.array(range(1, 101))
+y = np.array(range(101, 201))
 
+x_train = x[:60]  # python시퀀스 자료형 슬라이스 참조
+x_val = x[60:80]
+x_test = x[80:]
 
+y_train = y[:60]
+y_val = y[60:80]
+y_test = y[80:]
+
+print(x_train)
+print(x_val )
+print(x_test )
 
 
 #2. 모델구성
@@ -21,7 +26,7 @@ model.add(Dense(10))
 model.add(Dense(15))
 model.add(Dense(20))
 model.add(Dense(30))
-model.add(Dense(50))
+model.add(Dense(70))
 model.add(Dense(40))
 model.add(Dense(20))
 model.add(Dense(10))
@@ -54,7 +59,5 @@ print("RMSE : ", RMSE(y_test, y_predict))
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
-
-
 
  
