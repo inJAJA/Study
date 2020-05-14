@@ -5,7 +5,7 @@ y_train = np.array([1,2,3,4,5,6,7,8,9,10])
 x_test = np.array([11,12,13,14,15])
 y_test = np.array([11,12,13,14,15])
 # x_pred = np.array([16, 17, 18])
-x_val = np.array([101,102,103,104,105])
+x_val = np.array([101,102,103,104,105]) # validation형성
 y_val = np.array([101,102,103,104,105])
 
 
