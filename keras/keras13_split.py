@@ -6,14 +6,17 @@ y = np.array(range(101, 201))
 # train_test
 from sklearn.model_selection import train_test_split 
 x_train, x_test, y_train, y_test = train_test_split( 
+    # x, y, random_state=66, shuffle = True,
     x, y, shuffle = False,
     train_size =0.8
     )
 
-    # train_size와 test_size를 둘 다 사용해도 되고, 둘 중 하나만 사용해도 됨
-    # 단, train_size + test_size = sum > 1 이면 에러 뜸
-    #                              sum < 1 이면 빠진 값 만큼 날아감 
-    # ex) train_size = 0.6, test_size = 0.3 이면 sum = 0.9로 0.1만큼의 값이 사라진다.                               
+'''
+#  train_size와 test_size를 둘 다 사용해도 되고, 둘 중 하나만 사용해도 됨
+#   단, train_size + test_size = sum > 1 이면 에러 뜸
+#                                sum < 1 이면 빠진 값 만큼 날아감 
+#   ex) train_size = 0.6, test_size = 0.3 이면 sum = 0.9로 0.1만큼의 값이 사라진다.                               
+'''
 
 # x_val, x_test, y_val, y_test = train_test_split( 
 #     # x_test, y_test, random_state=66,
@@ -82,4 +85,3 @@ from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
 
-model.summary()
