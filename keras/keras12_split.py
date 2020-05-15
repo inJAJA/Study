@@ -14,13 +14,14 @@ x_train, x_test, y_train, y_test = train_test_split(
     )
     # x, y의 전체 데이터 받기, train_size를 전체 데이터의 60%를 받겠다.
 
+'''
 # shuffle을 하는 이유?
 # : train와 test data의 범위가 완전히 분리되어 있으면 test값(train범위 외의 구간)을 제대로 유추 못할 수 있다.
 #   ( 한번도 Train에서 경험하지 못했기 때문에)
 # : 그래서 train과 test data범위가 겹치는 것이 정확도를 올리는데 좋음
 # shuffle 조건
 # : x, y를 쌍으로 넣어야 함 -> x와 y가 매칭되어야 하기 때문에
-
+'''
 
 x_val, x_test, y_val, y_test = train_test_split( 
     # x_test, y_test, random_state=66,
