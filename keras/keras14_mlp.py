@@ -6,7 +6,7 @@ x = np.transpose([range(1, 101), range(311, 411), range(100)])  # python의 list
 # x = np.array([range(1, 101), range(311, 411), range(100)]).reshape(100, 3)
 y = np.transpose([range(101, 201), range(711, 811), range(100)])
 
-print(x.shape)  # (3, 100) - 100개의 column(data종류)에 data 3개가 들어감
+print(x.shape)  # np.array() = (3, 100) - 100개의 column(data종류)에 data 3개가 들어감
 '''
 # ['열(column)' 우선, "행" 무시]
 # column(열) : data의 종류 = input_dim에 들어가는 갯수 ex)날씨, 돈, 주가 등등

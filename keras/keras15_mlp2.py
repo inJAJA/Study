@@ -3,7 +3,7 @@ import numpy as np
 x = np.transpose([range(1, 101), range(311, 411), range(100)])  
 y = np.transpose(range(711, 811))
 
-print(x.shape)  # (3, 100) 
+print(x.shape)  # (100, 3) 
 print(y.shape)
 
 from sklearn.model_selection import train_test_split    

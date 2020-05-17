@@ -27,6 +27,6 @@ model.compile(loss='mse', optimizer='adam', metrics=['acc'])
 model.fit(x, y, epochs =30, batch_size =2)
 
 #4. 평가,예측
-loss, acc= model.evaluate(x, y, batch_size =1) #평과 결과(손실, 정확도)를 loss, acc(변수)에 받겠다 
+loss, acc= model.evaluate(x, y, batch_size =1) #평가 결과(손실, 정확도)를 loss, acc(변수)에 받겠다 
 print("loss : ", loss)
 print("acc : ", acc)
