@@ -42,8 +42,8 @@ model.add(Dense(1))
 
 
 #3. 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['mse'])  
-model.fit(x_train, y_train, epochs =100, batch_size =1,
+model.compile(loss='mse', optimizer='adam', metrics=['mse'])  # metrics가 돌아가는데 딜레이가 있음 
+model.fit(x_train, y_train, epochs =1, batch_size =1,
         # validation_data = (x_val, y_val)
           validation_split= 0.25, verbose=1  #  0 : 안보임                      
           )                                  #  1 : defalut             
@@ -71,5 +71,4 @@ print("RMSE : ", RMSE(y_test, y_predict))
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
-
 
