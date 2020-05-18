@@ -25,15 +25,13 @@ from keras.layers import Dense, Input # 함수형 모델은 input layer 명시�
 input1 = Input(shape =(3, )) # input layer : 함수형 모델에서는 shape 사용, 행을 뺀 나머지 부분 
 
 dense1 = Dense(10, activation = 'relu')(input1) # 출력값 5, 함수형은 input이 무엇인지 명시해야함 :input1
+dense1 = Dense(20, activation = 'relu')(dense1) # acivation deflaut = linear
+dense1 = Dense(30, activation = 'relu')(dense1)
+dense1 = Dense(40, activation = 'relu')(dense1)
+dense1 = Dense(30, activation = 'relu')(dense1)
+dense1 = Dense(20, activation = 'relu')(dense1)
 dense1 = Dense(10, activation = 'relu')(dense1)
 dense1 = Dense(10, activation = 'relu')(dense1)
-dense1 = Dense(10, activation = 'relu')(dense1)
-dense1 = Dense(10, activation = 'relu')(dense1)
-dense1 = Dense(10, activation = 'relu')(dense1)
-dense1 = Dense(10, activation = 'relu')(dense1)
-dense1 = Dense(10, activation = 'relu')(dense1)
-dense1 = Dense(10, activation = 'relu')(dense1)
-
 
 output1 = Dense(1)(dense1)   # output layer
 
@@ -43,7 +41,7 @@ model.summary()
 
 #3. 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])  
-model.fit(x_train, y_train, epochs =120, batch_size =1,
+model.fit(x_train, y_train, epochs =200, batch_size =1,
         # validation_data = (x_val, y_val)
           validation_split= 0.25, verbose=1 
 )
