@@ -43,7 +43,7 @@ dense2_2 = Dense(4, activation = 'relu')(dense2_1)
 
 ######### 모델 병합#########
 from keras.layers.merge import concatenate   # 레이어를 병합 준다.
-merge1 = concatenate([dense1_2, dense2_2])   # 각 모델의 마지막 layer를 input으로 넣어줌
+merge1 = concatenate([dense1_2, dense2_2])   # 각 모델의 마지막 layer를 input으로 넣어줌 : list형태
                                              # concatenate에서는 param연산이 이루어 지지 않는다. 
 
 middle1 = Dense(30)(merge1)
@@ -81,7 +81,11 @@ loss = model.evaluate([x1_test, x2_test],
 
 print("model.metrics_names : ", model.metrics_names) # model.metrics_names : evaluate값으로 무엇이 나오는지 알려줌
                                                      # [(총loss값), (loss 1), (loss 2), (metrics 1), (metrics 2)]
-print("loss : ", loss)
+
+# loss : 모델이 다중 아웃풋을 갖는 경우, 손실의 리스트 혹은 손실의 딕셔너리를 전달하여 각 아웃풋에 각기 다른 손실을 사용할 수 있습니다.
+#       따라서 모델에 의해 최소화되는 손실 값은 모든 개별적 손실의 합이 됩니다.
+
+print("loss : ", loss)                               
 # print("mse : ", mse)
 
 # y_pred = model.predict(x_pred)  #눈으로 보기 위한 예측값
@@ -97,8 +101,12 @@ from sklearn.metrics import mean_squared_error
 def RMSE(y_test, y_predict):
     return np.sqrt(mean_squared_error(y_test, y_predict))
 
-print("RMSE1 : ", RMSE(y1_test, y1_predict))
-print("RMSE2 : ", RMSE(y2_test, y2_predict))
+
+RMSE1 = RMSE(y1_test, y1_predict)
+RMSE2 = RMSE(y2_test, y2_predict)
+print("RMSE1 : ", RMSE1)
+print("RMSE2 : ", RMSE2)
+print("RMSE : ", (RMSE1 + RMSE2)/2 )
 
 # R2 구하기
 from sklearn.metrics import r2_score
@@ -106,6 +114,8 @@ r2_1 = r2_score(y1_test, y1_predict)
 r2_2 = r2_score(y2_test, y2_predict)
 print("R2_1 : ", r2_1)
 print("R2_2 : ", r2_2)
+print("R2_2 : ", (r2_1 + r2_2)/2)
+
 
 
 
