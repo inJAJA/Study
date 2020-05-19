@@ -13,7 +13,7 @@ y1 = np.transpose([range(101, 201), range(411,511), range(100)])
 from sklearn.model_selection import train_test_split    
 x1_train, x1_test, x2_train, x2_test, y1_train, y1_test = train_test_split(  
     # x, y, random_state=66, shuffle = True,
-    x1, x2, y1, shuffle = False,
+    x1, x2, y1, random_state = 66,
     train_size =0.8                                     
     )
    
@@ -34,15 +34,12 @@ input1 = Input(shape =(3, ))
 dense1_1 = Dense(9, activation = 'relu')(input1)
 dense1_1 = Dense(5, activation = 'relu')(dense1_1)
 dense1_1 = Dense(5, activation = 'relu')(dense1_1)
-dense1_1 = Dense(5, activation = 'relu')(dense1_1)
 dense1_2 = Dense(3, activation = 'relu')(dense1_1)
    
 
 ######### 모델 2 #########
 input2 = Input(shape =(3, )) 
 dense2_1 = Dense(8, activation = 'relu')(input2) 
-dense2_1 = Dense(8, activation = 'relu')(dense2_1)
-dense2_1 = Dense(8, activation = 'relu')(dense2_1)
 dense2_1 = Dense(8, activation = 'relu')(dense2_1)
 dense2_2 = Dense(4, activation = 'relu')(dense2_1)
   
@@ -52,14 +49,15 @@ from keras.layers.merge import concatenate
 merge1 = concatenate([dense1_2, dense2_2])   
 
 middle1 = Dense(13)(merge1)
-middle1 = Dense(11)(middle1)
+middle1 = Dense(11)(middle1) 
 middle1 = Dense(9)(middle1) 
 middle1 = Dense(4)(middle1) 
 
 ######### output 모델 구성 ###########
 
-output1 = Dense(15)(middle1)   
-output1_2 = Dense(9)(output1)
+output1 = Dense(15)(middle1) 
+output1_1 = Dense(11)(output1)  
+output1_2 = Dense(9)(output1_1)
 output1_3 = Dense(3)(output1_2) 
 
 
@@ -75,7 +73,7 @@ model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
 ##### Early Stopping #####
 from keras.callbacks import EarlyStopping
-early_Stopping = EarlyStopping(monitor = 'loss', patience = 80, mode = 'min', verbose =1)
+early_Stopping = EarlyStopping(monitor = 'loss', patience = 70, mode = 'min', verbose =1)
                             # 'loss'를 보겠다/  참는 epoch값 / 값을 최소화  / verbose : earlyStopping되는 epoch보여줌  
                             #                              max, auto(알아서 설정)     
 
