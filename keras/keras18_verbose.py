@@ -45,7 +45,7 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])  # metrics가 돌아가는데 딜레이가 있음 
 model.fit(x_train, y_train, epochs =1, batch_size =1,
         # validation_data = (x_val, y_val)
-          validation_split= 0.25, verbose=1  #  0 : 안보임                      
+          validation_split= 0.25, verbose=3  #  0 : 안보임                      
           )                                  #  1 : defalut             
                                              #  2 : 프로그래스 바가 안보임
                                              #  3 : epoch만 보임 
