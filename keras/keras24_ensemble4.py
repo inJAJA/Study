@@ -39,7 +39,7 @@ dense1_1 = Dense(200, activation = 'relu')(dense1_1)
 dense1_1 = Dense(200, activation = 'relu')(dense1_1)
 dense1_1 = Dense(150, activation = 'relu')(dense1_1)
 dense1_1 = Dense(100, activation = 'relu')(dense1_1)
-dense1_2 = Dense(10, activation = 'relu')(dense1_1)
+dense1_2 = Dense(10, activation = 'relu')(dense1_1) # 분기 layer
    
 ######### 모델 병합#########
 # from keras.layers.merge import concatenate   
@@ -51,26 +51,27 @@ dense1_2 = Dense(10, activation = 'relu')(dense1_1)
 
 ######### output 모델 구성 ###########
 
-output1 = Dense(10)(dense1_2)     # input 1 : dense1_2 에서 분기
+output1 = Dense(10)(dense1_2)                         # input 1 : dense1_2 에서 분기
 output1_1 = Dense(10)(output1)   
 output1_1 = Dense(10)(output1_1) 
 output1_1 = Dense(10)(output1_1)   
 output1_2 = Dense(5)(output1_1)
-output1_3 = Dense(2)(output1_2)   # output 1  / output layer
+output1_3 = Dense(2)(output1_2)                       # output 1  / output layer
 
-output2 = Dense(10)(dense1_2)     # input 2 : dens1_2 에서 분기
+output2 = Dense(10)(dense1_2)                         # input 2 : dens1_2 에서 분기
 output2_1 = Dense(10)(output2)  
 output2_1 = Dense(10)(output2_1) 
 output2_1 = Dense(10)(output2_1)   
 output2_2 = Dense(5)(output2_1)
-output2_3 = Dense(2)(output2_2)   # output 2 / output layer
+output2_3 = Dense(2)(output2_2)                       # output 2 / output layer
 
 
 ######### 모델 명시 #########
-model = Model(inputs = input1,
-              outputs= [output1_3, output2_3]) 
+model = Model(inputs = input1,                        # input layer 명시
+              outputs= [output1_3, output2_3])        # output layer 명시
 
-model.summary()                    # shape 조심 : input, output 잘 보기
+model.summary()                                       # shape 조심 : input, output 잘 보기
+
 
 # # Early Stopping
 # from keras.callbacks import EarlyStopping

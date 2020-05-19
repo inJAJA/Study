@@ -42,7 +42,7 @@ dense2_2 = Dense(4, activation = 'relu')(dense2_1)
   
 
 ######### 모델 병합#########
-from keras.layers.merge import concatenate   # 레이어를 병합 준다.
+from keras.layers.merge import concatenate   # 레이어를 병합 해준다.
 merge1 = concatenate([dense1_2, dense2_2])   # 각 모델의 마지막 layer를 input으로 넣어줌 : list형태
                                              # concatenate에서는 param연산이 이루어 지지 않는다. 
 
@@ -52,7 +52,7 @@ middle1 = Dense(7)(middle1)
 
 ######### output 모델 구성 ###########
 
-output1 = Dense(30)(middle1)   # 상단 레이어를 input를 넣는다.
+output1 = Dense(30)(middle1)   # 상단 레이어를 input에 넣는다.
 output1_2 = Dense(7)(output1)
 output1_3 = Dense(3)(output1_2)  # 모델 1의 마지막 output
 

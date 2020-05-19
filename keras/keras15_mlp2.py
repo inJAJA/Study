@@ -35,12 +35,14 @@ print(x_test )
 from keras.models import Sequential
 from keras.layers import Dense
 model = Sequential()
-model.add(Dense(5, input_dim = 3 ))
+model.add(Dense(5, input_dim = 3 ))     # input layer
 model.add(Dense(10))
 model.add(Dense(10))
 model.add(Dense(10))
-model.add(Dense(1))
+model.add(Dense(1))                     # output layer
 
+
+model.summary
 
 #3. 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])  
@@ -73,4 +75,3 @@ r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
 
 
-model.summary()

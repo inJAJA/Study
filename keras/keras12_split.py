@@ -5,7 +5,7 @@ y = np.array(range(101, 201))
 
 # train_test_split(sklearn)사용하여  train, test, validation 나누기
 
-from sklearn.model_selection import train_test_split # sklearn안에 model안에 
+from sklearn.model_selection import train_test_split          # sklearn안에 model안에 train_test_split
 x_train, x_test, y_train, y_test = train_test_split( 
     # x, y, random_state=66, shuffle = True, # shuffle의 defalut = True
     # random_state(섞는 방식,순서)가 없으면 섞을 때마다 매번 나오는 값이 다름 -> 매번 미세하게 결과가 달라짐

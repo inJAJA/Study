@@ -36,7 +36,7 @@ print(x_train)
 print(x_val )
 print(x_test )
 
-'''
+
 #2. 모델구성
 from keras.models import Sequential
 from keras.layers import Dense
@@ -60,7 +60,7 @@ model.add(Dense(1))
 #3. 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])  
 model.fit(x_train, y_train, epochs =100, batch_size =1,
-          validation_data = (x_val, y_val))
+          validation_data = (x_val, y_val))                  # validation_data = ( , )
 
 #4. 평가,예측
 loss, mse = model.evaluate(x_test, y_test, batch_size =1) 
@@ -83,4 +83,4 @@ print("RMSE : ", RMSE(y_test, y_predict))
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
-'''
+

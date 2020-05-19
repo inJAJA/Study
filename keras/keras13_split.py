@@ -59,7 +59,7 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])  
 model.fit(x_train, y_train, epochs =100, batch_size =1,
         # validation_data = (x_val, y_val)
-          validation_split= 0.25                         # validation_split 사용하여 validation값 설정
+          validation_split= 0.25                           # validation_split 사용하여 validation값 설정
           )                                                # 둘 중 뭘 사용하던 상관없음
 
 

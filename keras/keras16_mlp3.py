@@ -44,7 +44,7 @@ model.add(Dense(10))
 model.add(Dense(10))
 model.add(Dense(17))
 model.add(Dense(9))
-model.add(Dense(3))  # y의 data column의 개수와 동일하게 설정
+model.add(Dense(3))  # output layer : y의 data column의 개수와 동일하게 설정
 
 
 #3. 훈련

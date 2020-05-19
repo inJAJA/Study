@@ -14,18 +14,18 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 
 #2. 모델구성
-from keras.models import Sequential, Model # 함수형 모델 가져오기 : Model
-from keras.layers import Dense, Input # 함수형 모델은 input layer 명시해야함
+from keras.models import Sequential, Model      # 함수형 모델 가져오기 : Model
+from keras.layers import Dense, Input           # 함수형 모델은 input layer 명시해야함
 # model = Sequential()
 # model.add(Dense(5, input_dim = 3 ))
 # model.add(Dense(4))
 # model.add(Dense(1))
 
 # 함수형 모델은 각 layer의 이름을 명시해야함
-input1 = Input(shape =(3, )) # input layer : 함수형 모델에서는 shape 사용, 행을 뺀 나머지 부분 
+input1 = Input(shape =(3, ))                     # input layer : 함수형 모델에서는 shape 사용, 행을 뺀 나머지 부분 
 
-dense1 = Dense(10, activation = 'relu')(input1) # 출력값 5, 함수형은 input이 무엇인지 명시해야함 :input1
-dense1 = Dense(20, activation = 'relu')(dense1) # acivation deflaut = linear
+dense1 = Dense(10, activation = 'relu')(input1)  # 출력값 5, 함수형은 input이 무엇인지 명시해야함 :input1
+dense1 = Dense(20, activation = 'relu')(dense1)  # acivation deflaut = linear
 dense1 = Dense(30, activation = 'relu')(dense1)
 dense1 = Dense(40, activation = 'relu')(dense1)
 dense1 = Dense(30, activation = 'relu')(dense1)
@@ -33,9 +33,11 @@ dense1 = Dense(20, activation = 'relu')(dense1)
 dense1 = Dense(10, activation = 'relu')(dense1)
 dense1 = Dense(10, activation = 'relu')(dense1)
 
-output1 = Dense(1)(dense1)   # output layer
+output1 = Dense(1)(dense1)                       # output layer
 
-model = Model(inputs = input1, outputs= output1) # 함수형 모델이라고 정의 : 시퀀스 모델의 경우 ex) model = Sequential()
+model = Model(inputs = input1, outputs= output1) # 함수형 모델이라고 정의 / 시퀀스 모델의 경우 ex) model = Sequential()
+                                                 # inputs = input layer이름
+                                                 # outputs = output layer 이름
 
 model.summary()
 
@@ -51,7 +53,7 @@ loss, mse = model.evaluate(x_test, y_test, batch_size =1)
 print("loss : ", loss)
 print("mse : ", mse)
 
-# y_pred = model.predict(x_pred)  #눈으로 보기 위한 예측값
+# y_pred = model.predict(x_pred)                 #눈으로 보기 위한 예측값
 # print("y_pred : ", y_pred)
 
 y_predict = model.predict(x_test)  
