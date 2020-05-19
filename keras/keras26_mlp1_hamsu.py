@@ -3,7 +3,7 @@ import numpy as np
 x = np.transpose([range(1, 101), range(311, 411), range(100)])  
 y = np.transpose([range(101, 201), range(711, 811), range(100)])
 
-print(x.shape)  
+print(x.shape)  # ( 100, 3)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split( 
@@ -15,7 +15,7 @@ x_train, x_test, y_train, y_test = train_test_split(
 from keras.models import Model
 from keras.layers import Dense, Input
 
-input1 = Input(shape=(3,))
+input1 = Input(shape=(3,))                       # input layer
 
 dense1 = Dense(10, activation = 'relu')(input1)
 dense1 = Dense(16, activation = 'relu')(dense1)
@@ -27,20 +27,22 @@ dense1 = Dense(20, activation = 'relu')(dense1)
 dense2 = Dense(16, activation = 'relu')(dense1)
 dense3 = Dense(11, activation = 'relu')(dense2)
 
-output = Dense(3)(dense3)
+output = Dense(3)(dense3)                        # output layer
 
-model = Model(inputs = input1, outputs = output)
+model = Model(inputs = input1, outputs = output) # 함수형 모델 명시
 
 model.summary()
 
 # 훈련
 model.compile(loss = 'mse', optimizer = 'adam' ,metrics = ['mse'])
 
+# Early Stopping
 from keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 100, verbose = 1)
 
 model.fit(x_train, y_train, epochs = 1000, batch_size = 1,
-        validation_split = 0.25, callbacks = [es]
+        validation_split = 0.25, 
+        callbacks = [es]
 )
 
 # 평가

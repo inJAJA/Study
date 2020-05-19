@@ -35,11 +35,13 @@ model.summary()
 # 훈련
 model.compile(loss = 'mse', optimizer = 'adam' ,metrics = ['mse'])
 
+# Early Stopping
 from keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 50, verbose = 1)
+es = EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 40, verbose = 1)
 
 model.fit(x_train, y_train, epochs = 500, batch_size = 1,
-        validation_split = 0.25, callbacks = [es]
+        validation_split = 0.25, 
+        callbacks = [es]
 )
 
 # 평가
