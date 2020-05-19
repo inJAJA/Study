@@ -4,7 +4,7 @@
 '''
 #1. 데이터
 import numpy as np
-x1 = np.transpose([range(1, 101), range(301,401)])  
+x1 = np.transpose([range(1, 101), range(301,401)])  # (100, 2)
 
 y1 = np.transpose([range(711, 811), range(611,711)])
 y2 = np.transpose([range(101, 201), range(411,511)])
@@ -13,7 +13,7 @@ y2 = np.transpose([range(101, 201), range(411,511)])
 from sklearn.model_selection import train_test_split    
 x1_train, x1_test, y1_train, y1_test, y2_train, y2_test = train_test_split(  
     # x, y, random_state=66, shuffle = True,
-    x1, y1, y2, shuffle = False,
+    x1, y1, y2, random_state = 5,
     train_size =0.8                                     
     )
    
@@ -23,18 +23,22 @@ x1_train, x1_test, y1_train, y1_test, y2_train, y2_test = train_test_split(
 #     train_size =0.8                                     
 #     )    
 
+print(x1_train.shape)   # (80, 2)
+print(y1_test.shape)    # (20, 2)
+
 
 #2. 모델구성
-from keras.models import Sequential, Model 
+from keras.models import Model 
 from keras.layers import Dense, Input 
 
 ######### 모델 1 #########
-input1 = Input(shape =(2, ))           
+input1 = Input(shape =(2, ))                       # input layer
 dense1_1 = Dense(10, activation = 'relu')(input1)
-dense1_1 = Dense(20, activation = 'relu')(dense1_1)
-dense1_1 = Dense(40, activation = 'relu')(dense1_1)
-dense1_1 = Dense(30, activation = 'relu')(dense1_1)
-dense1_1 = Dense(20, activation = 'relu')(dense1_1)
+dense1_1 = Dense(100, activation = 'relu')(dense1_1)
+dense1_1 = Dense(200, activation = 'relu')(dense1_1)
+dense1_1 = Dense(200, activation = 'relu')(dense1_1)
+dense1_1 = Dense(150, activation = 'relu')(dense1_1)
+dense1_1 = Dense(100, activation = 'relu')(dense1_1)
 dense1_2 = Dense(10, activation = 'relu')(dense1_1)
    
 ######### 모델 병합#########
@@ -47,26 +51,26 @@ dense1_2 = Dense(10, activation = 'relu')(dense1_1)
 
 ######### output 모델 구성 ###########
 
-output1 = Dense(10)(dense1_2)
+output1 = Dense(10)(dense1_2)     # input 1 : dense1_2 에서 분기
 output1_1 = Dense(10)(output1)   
 output1_1 = Dense(10)(output1_1) 
 output1_1 = Dense(10)(output1_1)   
-output1_2 = Dense(10)(output1_1)
-output1_3 = Dense(2)(output1_2) 
+output1_2 = Dense(5)(output1_1)
+output1_3 = Dense(2)(output1_2)   # output 1  / output layer
 
-output2 = Dense(10)(dense1_2) 
+output2 = Dense(10)(dense1_2)     # input 2 : dens1_2 에서 분기
 output2_1 = Dense(10)(output2)  
 output2_1 = Dense(10)(output2_1) 
 output2_1 = Dense(10)(output2_1)   
-output2_2 = Dense(10)(output2_1)
-output2_3 = Dense(2)(output2_2)
+output2_2 = Dense(5)(output2_1)
+output2_3 = Dense(2)(output2_2)   # output 2 / output layer
 
 
 ######### 모델 명시 #########
 model = Model(inputs = input1,
               outputs= [output1_3, output2_3]) 
 
-model.summary() 
+model.summary()                    # shape 조심 : input, output 잘 보기
 
 # # Early Stopping
 # from keras.callbacks import EarlyStopping
@@ -76,7 +80,7 @@ model.summary()
 #3. 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])  
 model.fit(x1_train,
-        [y1_train, y2_train], epochs= 70, batch_size =1,
+        [y1_train, y2_train], epochs= 280, batch_size =1,
         # validation_data = (x_val, y_val)
         validation_split= 0.25, verbose=1 #,callbacks = [es]
         )
