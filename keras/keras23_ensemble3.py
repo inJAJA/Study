@@ -31,30 +31,32 @@ from keras.layers import Dense, Input
 
 ######### 모델 1 #########
 input1 = Input(shape =(3, ))           
-dense1_1 = Dense(11, activation = 'relu')(input1)
-dense1_1 = Dense(7, activation = 'relu')(dense1_1)
+dense1_1 = Dense(7, activation = 'relu')(input1)
+dense1_1 = Dense(10, activation = 'relu')(dense1_1)
 dense1_2 = Dense(5, activation = 'relu')(dense1_1)
    
 
 ######### 모델 2 #########
 input2 = Input(shape =(3, )) 
-dense2_1 = Dense(11, activation = 'relu')(input2) 
-dense2_1 = Dense(7, activation = 'relu')(dense2_1)
-dense2_2 = Dense(5, activation = 'relu')(dense2_1)
+dense2_1 = Dense(8, activation = 'relu')(input2) 
+dense2_1 = Dense(12, activation = 'relu')(dense2_1)
+dense2_2 = Dense(4, activation = 'relu')(dense2_1)
   
 
 ######### 모델 병합#########
 from keras.layers.merge import concatenate   
 merge1 = concatenate([dense1_2, dense2_2])   
 
-middle1 = Dense(9)(merge1)
-middle1 = Dense(5)(middle1) 
-middle1 = Dense(5)(middle1) 
+middle1 = Dense(10)(merge1)
+middle1 = Dense(6)(middle1)
+middle1 = Dense(6)(middle1) 
+middle1 = Dense(6)(middle1) 
+middle1 = Dense(4)(middle1) 
 
 ######### output 모델 구성 ###########
 
-output1 = Dense(5)(middle1)   
-output1_2 = Dense(5)(output1)
+output1 = Dense(20)(middle1)   
+output1_2 = Dense(15)(output1)
 output1_3 = Dense(3)(output1_2) 
 
 
@@ -64,20 +66,27 @@ model = Model(inputs = [input1, input2],
 
 model.summary() 
 
+# # Early Stopping
+# from keras.callbacks import EarlyStopping
+# es = EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 50, verbose =1)
+
 
 #3. 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])  
 model.fit([x1_train, x2_train], 
-          y1_train, epochs= 75, batch_size =1,
+          y1_train, epochs= 130, batch_size =1,
         # validation_data = (x_val, y_val)
-        validation_split= 0.25, verbose=1
-)
+        validation_split= 0.25, verbose=1 #,callbacks = [es]
+        )
+
+
+
 
 #4. 평가,예측
 loss = model.evaluate([x1_test, x2_test],
                       y1_test, batch_size =1)
 
-print("model.metrics_names : ", model.metrics_names) 
+# print("model.metrics_names : ", model.metrics_names) 
 
 print("loss : ", loss)                               
 # print("mse : ", mse)
