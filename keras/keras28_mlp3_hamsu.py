@@ -19,16 +19,16 @@ from keras.models import Model
 from keras.layers import Dense, Input
 
 input1 = Input(shape=(1,))
-dense1 = Dense(5, activation = 'relu')(input1)
+dense1 = Dense(4, activation = 'relu')(input1)
 dense1 = Dense(10, activation = 'relu')(dense1)
 dense1 = Dense(20, activation = 'relu')(dense1)
 dense1 = Dense(22, activation = 'relu')(dense1) 
-dense1 = Dense(30, activation = 'relu')(dense1)
-dense1 = Dense(30, activation = 'relu')(dense1)
-dense1 = Dense(18, activation = 'relu')(dense1)
+dense1 = Dense(30, activation = 'relu')(dense1)  
+dense1 = Dense(17, activation = 'relu')(dense1)
 dense1 = Dense(16, activation = 'relu')(dense1)
 dense2 = Dense(10, activation = 'relu')(dense1)
-dense3 = Dense(9, activation = 'relu')(dense2)
+dense3 = Dense(9, activation = 'relu')(dense2) 
+
 output = Dense(3)(dense3)
 
 model = Model(inputs = input1, outputs = output)
@@ -38,15 +38,16 @@ model.summary()
 # 훈련
 model.compile(loss = 'mse', optimizer = 'adam' ,metrics = ['mse'])
 
+# Early Stopping
 from keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 100, verbose = 1)
 
-model.fit(x_train, y_train, epochs = 1000, batch_size = 1,
+model.fit(x_train, y_train, epochs = 2000, batch_size = 2,
         validation_split = 0.25, callbacks = [es]
 )
 
 # 평가
-loss = model.evaluate(x_test, y_test, batch_size =1)
+loss = model.evaluate(x_test, y_test, batch_size =2)
 
 y_predict = model.predict(x_test)
 print(y_predict)
