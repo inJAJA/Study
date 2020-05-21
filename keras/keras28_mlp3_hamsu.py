@@ -2,8 +2,8 @@ import numpy as np
 x = np.transpose(range(1, 101))    
 y = np.transpose([range(101, 201), range(711, 811), range(100)])
 
-print(x.shape)  
-print(y.shape)
+print(x.shape)   # (100, 1)
+print(y.shape)   # (100, 3)
 
 
 from sklearn.model_selection import train_test_split     
@@ -18,7 +18,8 @@ x_train, x_test, y_train, y_test = train_test_split(
 from keras.models import Model
 from keras.layers import Dense, Input
 
-input1 = Input(shape=(1,))
+input1 = Input(shape=(1,))                       # input layer
+
 dense1 = Dense(4, activation = 'relu')(input1)
 dense1 = Dense(10, activation = 'relu')(dense1)
 dense1 = Dense(20, activation = 'relu')(dense1)
@@ -29,9 +30,9 @@ dense1 = Dense(16, activation = 'relu')(dense1)
 dense2 = Dense(10, activation = 'relu')(dense1)
 dense3 = Dense(9, activation = 'relu')(dense2) 
 
-output = Dense(3)(dense3)
+output = Dense(3)(dense3)                        # output layer
 
-model = Model(inputs = input1, outputs = output)
+model = Model(inputs = input1, outputs = output) # 함수형 model 명시
 
 model.summary()
 

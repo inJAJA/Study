@@ -1,6 +1,6 @@
 #1. 데이터
 import numpy as np
-x = np.transpose([range(1, 101), range(311, 411), range(100)])  
+x = np.transpose([range(1, 101), range(311, 411), range(100)])  # (3, 100)  
 y = np.transpose(range(711, 811))
 
 print(x.shape)  # (100, 3) 

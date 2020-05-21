@@ -1,6 +1,6 @@
 #1. 데이터
 import numpy as np
-x = np.transpose([range(1, 101), range(311, 411), range(100)])  # python의 list
+x = np.transpose([range(1, 101), range(311, 411), range(100)])  # python의 list : data 구조 자체가 잘못되어있기 때문에 전환 필요
 # x = np.array([range(1, 101), range(311, 411), range(100)]).T
 # x = np.swapaxes([range(1, 101), range(311, 411), range(100)], 0, 1)
 # x = np.array([range(1, 101), range(311, 411), range(100)]).reshape(100, 3)

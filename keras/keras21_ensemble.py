@@ -47,16 +47,16 @@ merge1 = concatenate([dense1_2, dense2_2])   # 각 모델의 마지막 layer를 
                                              # concatenate에서는 param연산이 이루어 지지 않는다. 
 
 middle1 = Dense(30)(merge1)
-middle1 = Dense(5)(middle1) # 병합 후 새로운 layer 설정 가능
+middle1 = Dense(5)(middle1)      # 병합 후 새로운 layer 설정 가능
 middle1 = Dense(7)(middle1)
 
 ######### output 모델 구성 ###########
 
-output1 = Dense(30)(middle1)   # 상단 레이어를 input에 넣는다.
+output1 = Dense(30)(middle1)     # 상단 레이어를 input에 넣는다.
 output1_2 = Dense(7)(output1)
 output1_3 = Dense(3)(output1_2)  # 모델 1의 마지막 output
 
-output2 = Dense(25)(middle1)   # 상단 레이어를 input를 넣는다.
+output2 = Dense(25)(middle1)     # 상단 레이어를 input를 넣는다.
 output2_2 = Dense(5)(output2)
 output2_3 = Dense(3)(output2_2)  # 모델 2의 마지막 output
 
