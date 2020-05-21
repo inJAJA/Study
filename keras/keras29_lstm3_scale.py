@@ -46,13 +46,7 @@ model.add(Dense(1))
 
 model.summary()
 
-'''
-LSTM_parameter 계산
-num_params = 4 * ( num_units   +   input_dim   +   1 )  *  num_units
-                (output node값)  (잘라준 data)   (bias)  (output node값)
-           = 4 * (    5        +       1       +   1 )  *     5          = 140     
-                    역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)
-'''
+
 
 
 # # EarlyStopping
