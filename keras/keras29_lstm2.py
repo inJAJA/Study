@@ -36,8 +36,12 @@ batch_size   1   2   3  | 4     : x의 한 행에 들어간 값을 몇개씩 자
 #2. 모델구성
 model = Sequential()
 # model.add(LSTM(10, activation='relu', input_shape = (3, 1)))
-model.add(LSTM(5, input_length =3, input_dim= 1))                # input_length : time_step (열)
-model.add(Dense(3))   
+model.add(LSTM(100, input_length =3, input_dim= 1))                # input_length : time_step (열)
+model.add(Dense(100))   
+model.add(Dense(100))   
+model.add(Dense(80))   
+model.add(Dense(50))   
+model.add(Dense(10))   
 model.add(Dense(1))
 
 
@@ -51,13 +55,9 @@ num_params = 4 * ( num_units   +   input_dim   +   1 )  *  num_units
 '''
 
 
-# EarlyStopping
-from keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
-
 #3. 실행
 model.compile(optimizer='adam', loss = 'mse')
-model.fit(x, y, epochs =2000, batch_size = 1, callbacks = [es] )                
+model.fit(x, y, epochs =500, batch_size = 1 )                
 
 #4. 예측
 x_predict = array([5, 6, 7])               # (3, )
