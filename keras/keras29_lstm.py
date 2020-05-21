@@ -34,26 +34,26 @@ LSTM_parameter 계산
 num_params = 4 * ( num_units   +   input_dim   +   1 )  *  num_units
                 (output node값)  (잘라준 data)   (bias)  (output node값)
            = 4 * (    10       +       1       +   1 )  *     10          = 480  
-                     역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자귀회귀)   
+                     역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)   
 '''
 
 
 # EarlyStopping
 from keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
+es = EarlyStopping(monitor = 'loss', patience=50, mode = 'min')
 
 #3. 실행
 model.compile(optimizer='adam', loss = 'mse')
-model.fit(x, y, epochs =1000, batch_size = 1, callbacks = [es] )                # batch_size는 LSTM에는 적용 X, Dense에 적용 O
+model.fit(x, y, epochs =1000, batch_size = 1, callbacks = [es] )               
 
 
 #4. 예측
-x_input = array([5, 6, 7])               # (3, )
-x_input = x_input.reshape(1, 3, 1)       # x값 (4, 3, 1)와 동일한 shape로 만들어 주기 위함
+x_predict = array([5, 6, 7])               # (3, )
+x_predict = x_predict.reshape(1, 3, 1)     # x값 (4, 3, 1)와 동일한 shape로 만들어 주기 위함
                                          # (1, 3, 1) : 확인 1 * 3 * 1 = 3
-# x_input = x_input.reshape(1, x_input.shape[0], 1)
+# x_predict = x_predict.reshape(1, x_predict.shape[0], 1)
 
-print(x_input)
+print(x_predict)
 
-y_predict = model.predict(x_input)
+y_predict = model.predict(x_predict)
 print(y_predict)

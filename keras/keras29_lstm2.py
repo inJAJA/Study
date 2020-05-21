@@ -46,8 +46,8 @@ model.summary()
 LSTM_parameter 계산
 num_params = 4 * ( num_units   +   input_dim   +   1 )  *  num_units
                 (output node값)  (잘라준 data)   (bias)  (output node값)
-           = 4 * (    5      +       1       +   1 )  *     5          = 140     
-                    역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자귀회귀)
+           = 4 * (    5        +       1       +   1 )  *     5          = 140     
+                    역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)
 '''
 
 
@@ -61,7 +61,7 @@ model.fit(x, y, epochs =2000, batch_size = 1, callbacks = [es] )
 
 #4. 예측
 x_predict = array([5, 6, 7])               # (3, )
-x_predict = x_predict.reshape(1, 3, 1)       # x값 (4, 3, 1)와 동일한 shape로 만들어 주기 위함
+x_predict = x_predict.reshape(1, 3, 1)     # x값 (4, 3, 1)와 동일한 shape로 만들어 주기 위함
                                          # (1, 3, 1) : 확인 1 * 3 * 1 = 3
 # x_predict = x_predict.reshape(1, x_predict.shape[0], 1)
 
