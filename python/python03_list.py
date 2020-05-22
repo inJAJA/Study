@@ -43,6 +43,7 @@ print(a[2] + int(f))   # 8
 
 
 ######## 리스트 관련 함수 ########
+#1. .apppend
 a = [1, 2, 3]
 a.append(4)            # a에다가 덧붙인다.
 print(a)               # [1, 2, 3, 4]
@@ -50,21 +51,26 @@ print(a)               # [1, 2, 3, 4]
 # a = a.append(5)      # 문법 error : 다시 자기 자신한데 넣으면 안됌
 # print(a)             # None
 
+#2. .sort 
 a = [1, 3, 4, 2]
 a.sort()               # 차례대로 정렬
 print(a)               # [1, 2, 3, 4]
 
+#3. reverse
 a.reverse()            # 뒤집다
 print(a)               # [4, 3, 2, 1]
-           
+
+#4. index        
 print(a.index(3))      # == a[3]
 print(a.index(1))      # == a[1]
 
+#5. insert
 a.insert(0, 7)         # 0의 자리에 7을 삽입
 print(a)               # [7, 4, 3, 2, 1]
 a.insert(3, 3)
 print(a)               # [7, 4, 3, 3, 2, 1]
 
+#6. remove
 a.remove(7)            # 7이라는 인자 값 삭제
 print(a)               # [4, 3, 3, 2, 1]
 a.remove(3)            # 먼저 걸린 인자만 지워짐
