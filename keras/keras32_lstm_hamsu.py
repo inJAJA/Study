@@ -39,9 +39,14 @@ print(x.shape)                            # (13, 3, 1)
 
 input1 = Input(shape = (3, 1))
 
-dense1 = LSTM(10)(input1)
-dense2 = Dense(5)(dense1)
-dense3 = Dense(3)(dense2)
+dense1 = LSTM(500)(input1)
+dense2 = Dense(80)(dense1)
+dense2 = Dense(50)(dense2)
+dense2 = Dense(30)(dense2)
+dense2 = Dense(30)(dense2)
+dense2 = Dense(30)(dense2)
+dense2 = Dense(20)(dense2)
+dense3 = Dense(15)(dense2)
 
 output1 = Dense(1)(dense3)
 
@@ -57,7 +62,7 @@ model.summary()
 
 #3. 실행
 model.compile(optimizer='adam', loss = 'mse')
-model.fit(x, y, epochs =800, batch_size = 32 #,callbacks = [es] 
+model.fit(x, y, epochs =800, batch_size = 16 #,callbacks = [es] 
           )                
 
 #4. 예측

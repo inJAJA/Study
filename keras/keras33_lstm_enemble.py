@@ -47,33 +47,39 @@ print(x2.shape)                               # ( 13, 3, 1)
 # model.add(Dense(51))   # 5 
 # model.add(Dense(1))
 
-# 모델 1
+# Input 1
 input1 = Input(shape = (3, 1))
-input1_2 = LSTM(10)(input1)
-input1_3 = Dense(5)(input1_2)
+input1_1 = LSTM(700)(input1)         # LSTM 사용 : 700
+input1_1 = Dense(50)(input1_1)      # 100 
+input1_2 = Dense(30)(input1_1)       
+input1_3 = Dense(10)(input1_2)
 
-# 모델 2
+# Input 2
 input2 = Input(shape = (3, 1))
-input2_2 = LSTM(10)(input2)
-input2_3 = Dense(5)(input2_2)
+input2_1 = LSTM(700)(input2)         # LSTM 사용 : 700
+input2_1 = Dense(50)(input2_1)      # 100  
+input2_2 = Dense(30)(input2_1)         
+input2_3 = Dense(10)(input2_2)
 
-# 병합
+# Merge
 from keras.layers.merge import concatenate
 merge1 = concatenate([input1_3, input2_3])
 
-middle1 = Dense(10)(merge1)
-middle2 = Dense(10)(middle1)
-middle3 = Dense(10)(middle2)
+middle1 = Dense(50)(merge1)
+middle1 = Dense(50)(middle1)
+middle1 = Dense(50)(middle1)
+middle2 = Dense(50)(middle1)
+middle3 = Dense(20)(middle2)
 
-# output
-output1 = Dense(5)(middle3)
-output1_2 = Dense(5)(output1)
+# Output 1
+output1 = Dense(20)(middle3)
+output1_1 = Dense(20)(output1)
+output1_2 = Dense(10)(output1_1)
 output1_3 = Dense(1)(output1_2)
 
 model = Model(inputs = [input1, input2], outputs = output1_3)
 
 model.summary()
-
 
 
 # # EarlyStopping
@@ -82,7 +88,7 @@ model.summary()
 
 #3. 실행
 model.compile(optimizer='adam', loss = 'mse')
-model.fit([x1, x2], y, epochs =800, batch_size = 32 #,callbacks = [es] 
+model.fit([x1, x2], y, epochs =700, batch_size = 32 #,callbacks = [es] 
           )                
 
 #4. 예측
