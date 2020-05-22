@@ -36,11 +36,26 @@ model.add(Dense(1))
 
 model.summary()
 '''
-GRU_parameter 계산
-num_params = 3 * ( num_units   +   input_dim   +   1 )  *  num_units
-                (output node값)  (잘라준 data)   (bias)  (output node값)
-           = 3 * (    5        +       1       +   1 )  *     5          = 105     
-                    역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)
+# x.shape = (4, 3, 1)
+
+Layer (type)                 Output Shape              Param #
+=================================================================
+gru_1 (GRU)                  (None, 5)                   105
+_________________________________________________________________
+dense_1 (Dense)              (None, 10)                  60
+_________________________________________________________________
+dense_2 (Dense)              (None, 3)                   33 
+_________________________________________________________________
+dense_3 (Dense)              (None, 1)                   4
+=================================================================
+
+# GRU_parameter 계산
+ : num_params = 3 * ( num_units   +   input_dim   +   1 )  *  num_units
+                   (output node값)  (잘라준 data)   (bias)  (output node값)
+              = 3 * (    5        +       1       +   1 )  *     5          = 105     
+                       역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)
+
+                3 : GRU_gate연산 ( update, reset_gate / hidden_state) 
 '''
 
 # # EarlyStopping

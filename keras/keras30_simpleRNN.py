@@ -32,11 +32,24 @@ model.add(Dense(1))
 
 model.summary()
 '''
-SimpleRNN_parameter 계산
-num_params =  ( num_units   +   input_dim   +   1 )  *  num_units
-                (output node값)  (잘라준 data)   (bias)  (output node값)
-           =  (    10       +       1       +   1 )  *     10         = 120     
-               역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)
+# x.shape = (4, 3, 1)
+
+Layer (type)                 Output Shape              Param #
+=================================================================
+gru_1 (GRU)                  (None, 5)                   120
+_________________________________________________________________
+dense_1 (Dense)              (None, 10)                  60
+_________________________________________________________________
+dense_2 (Dense)              (None, 3)                   33 
+_________________________________________________________________
+dense_3 (Dense)              (None, 1)                   4
+=================================================================
+
+# SimpleRNN_parameter 계산
+: num_params =  ( num_units   +   input_dim   +   1 )  *  num_units
+               (output node값)  (잘라준 data)   (bias)  (output node값)
+             =  (    10       +       1       +   1 )  *     10         = 120     
+                   역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)
 '''
 
 

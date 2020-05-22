@@ -30,11 +30,25 @@ model.add(Dense(1))
 
 model.summary()
 '''
-LSTM_parameter 계산
-num_params = 4 * ( num_units   +   input_dim   +   1 )  *  num_units
-                (output node값)  (잘라준 data)   (bias)  (output node값)
-           = 4 * (    10       +       1       +   1 )  *     10          = 480  
-                     역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)   
+# x.shape = (4, 3, 1)
+
+Layer (type)                 Output Shape              Param #
+=================================================================
+gru_1 (GRU)                  (None, 10)                  480
+_________________________________________________________________
+dense_1 (Dense)              (None, 10)                  110
+_________________________________________________________________
+dense_2 (Dense)              (None, 3)                   33 
+_________________________________________________________________
+dense_3 (Dense)              (None, 1)                   4
+=================================================================
+
+# LSTM_parameter 계산
+ : num_params = 4 * ( num_units   +   input_dim   +   1 )  *  num_units
+                   (output node값)  (잘라준 data)   (bias)  (output node값)
+              = 4 * (    10       +       1       +   1 )  *     10          = 480  
+                       역전파 : 나온 '출력' 값이 다시 '입력'으로 들어감(자기회귀)   
+                4 : LSTM_gate연산 ( forget, input, output_gate / cell_state)
 '''
 
 
