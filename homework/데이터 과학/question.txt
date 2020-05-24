@@ -1,0 +1,110 @@
+p018
+for i in [1, 2, 3, 4, 5]:
+    
+    # 빈 줄이 있다는 것을 확인하자.
+    print(i)
+
+=> 아무 이상없지 출력됌
+
+===========================================================================
+
+p020
+# 파이썬 함수들은 변수로 할당되거나 함수의 인자로 전달할 수 있다는 점에서 
+# 일금 함수(first-class)의 특성을 가짐
+def apply_to_one(f):
+    """인자가 1인 함수 f를 호출"""
+    return f(1)
+
+my_double = double                # 방금 정의한 함수를 나타낸다.
+x = apply_to_one(my_double)       # 2
+print(x)
+
+=> 인자가 1인 함수 f를 호출 이 무슨 뜻인지 모르겠음
+
+===========================================================================
+
+p029_1
+word_counts = Counter(document)
+
+=>  document가 뭐야?
+
+===========================================================================
+
+p035
+
+=> class만드는법
+
+===========================================================================
+
+p037
+
+tuple = () 로 만들면
+
+=> <generator object <genexpr> at 0x0000012B16B59CC8> error
+
+===========================================================================
+p044
+
+=> 뭔 내용인지 모르겠음
+
+===========================================================================
+
+p045
+
+# list와 generator는 모두 Iterable이다.
+if lazy:
+    evens : Iterable[int] = (x for x in range(10) if x % 2 == 0)
+else:
+    evens = [0, 2, 4, 6, 8]
+
+=> lazy가 뭐야 
+===========================================================================
+
+p055
+
+for label, friend_count, minute_count in zip(labels, friends, minutes):
+    plt.annotate(label,
+        xy= (friend_count, minute_count),     # 레이블을 데이터 포인트 근처에 두되
+        xytext =(5, -5),                      # 약간 떨어져 있게 하자
+        textcoords = 'offset points')
+
+=> xytext, textcoords = 'offset points'가 뭘까
+
+===========================================================================
+
+p074
+
+from scratch.linear_algebra import sum_of_squares
+
+=> scratch 모듈이 없다고 뜸
+
+===========================================================================
+
+p083 ~ p084
+p086 ~ p088
+p107 ~ p110
+읽어보기
+
+=========================================================================
+
+p115
+
+from scratch.linear_algebra import distance, add, scalar_multiply
+
+def gradient_step(v: Vector, gradient: Vector, step_size: float) -> Vector:
+    """v에서 step_size만큼 이동하기"""
+    assert len(v) == len(gradient)
+    step = scalar_multiply(step_size, gradient)
+    retrun add(v, step)
+
+
+=> from scratch.linear_algebra import distance, add, scalar_multiply
+   이게 대체 뭐야...
+
+=========================================================================
+
+p117
+
+from scratch.linear_algebra import vector_mean
+
+=> vector_mean이 뭘까
