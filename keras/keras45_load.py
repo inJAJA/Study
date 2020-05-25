@@ -1,6 +1,3 @@
-
-
-
 import numpy as np
 from keras.models import Sequential, Model
 from keras.layers import Dense, LSTM
@@ -54,7 +51,7 @@ from keras.models import load_model
 model = load_model('./model/save_keras44.h5')
 
 
-model.add(Dense(1, name ='new'))                    # 가져온 모델의 layer에서 이미 쓴 이름이 나오기 때문에
+model.add(Dense(1, name ='new'))                    # 가져온 모델의 layer에서 이미 쓴 이름이 나오기 때문에 (중복)
                                                     # 이름을 다르게 지정해 줘야 한다.
 
 model.summary()
@@ -70,9 +67,6 @@ model.compile(loss = 'mse', optimizer='adam', metrics= ['mse'])
 model.fit(x, y, epochs =3000, batch_size = 32,
          callbacks = [es])                
 
-""" shape의 batch_size는 총 데이터 갯수
-      fit의 batch_size는 한번에 가져와 훈현시키는 양
-"""
 
 #4. 평가, 예측
 loss, mse = model.evaluate(x, y, batch_size= 32)

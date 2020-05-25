@@ -1,4 +1,9 @@
 
+"""실습 1. train, test 분리할 것.                 (90행) 8 : 2 비율
+   실습 2. 마지막 6개의 행을 predict로 만들고 싶다.
+   실습 3. validatoion 을 넣을 것                 (train의 20%)
+"""
+
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
@@ -24,31 +29,29 @@ print(dataset.shape)                           # (96, 5)
 print(type(dataset))                           # numpy.ndarray
 
 
-"""실습 1. train, test 분리할 것.                 (90행) 8 : 2 비율
-   실습 2. 마지막 6개의 행을 predict로 만들고 싶다.
-   실습 3. validatoion 을 넣을 것                 (train의 20%)
-"""
 '''
-## x, y 값 나누기
+## train, test, predict 값 나누기 : slicing이용
+# x, y 나누기
 x = dataset[:90, 0:4]                            # [ : ] 모든행 가져오고, [0 : 4] 0~3까지
 y = dataset[:90, 4]                              # [ : ] 모든행 가져오고, [  : 4] 4번째
 print(x.shape)                          
 print(y.shape)
 
+# x_predict 값
 x_predict = dataset[-6:, 0:4]
 # y_predict = dataset[-6:, 4]                    # model로 에측 할 것이기 때문에 필요 없다.
 print(x_predict.shape)
 
+# train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8)
 
-# reshape( , , )
-# x = x.reshape(90, 4, 1)
-# x_predict = x_predict.reshape(6, 4, 1)
 '''
-
+## train, test, predict 값 나누기 : train_test_split이용
+# x, y 나누기
 x = dataset[:, 0:4]
 y = dataset[:, 4]
 
-# train_predict_split
+# x_predict 값
 from sklearn.model_selection import train_test_split
 x1, x_predict, y1, y_predict = train_test_split(x, y, train_size = 90/96)
 
@@ -56,10 +59,12 @@ x1, x_predict, y1, y_predict = train_test_split(x, y, train_size = 90/96)
 x_train, x_test, y_train, y_test = train_test_split(x1, y1, train_size = 0.8)
 
 
+# reshape( , , )
+# x = x.reshape(90, 4, 1)
+# x_predict = x_predict.reshape(6, 4, 1)
 print(x_train.shape)
 print(x_test.shape)
 print(x_predict.shape)
-
 
 
 #==================================================================================================
