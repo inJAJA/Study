@@ -32,10 +32,6 @@ y = dataset[:, 4]                              # [ : ] 모든행 가져오고, [
 x = x.reshape(x.shape[0], x.shape[1], 1)
 # x = np.reshape(x, (6, 4, 1))
 # x = x.reshape(6, 4, 1)
-
-x_predict = x_predict.reshape(1, 4, 1)   # x값 (6, 4, 1)와 동일한 shape로 만들어 주기 위함
-                                         # (1, 4, 1) : 확인 1 * 4 * 1 = 4
-# x_predict = x_predict.reshape(1, x_predict.shape[0], 1)
 '''
 print(x.shape)                          
 print(y.shape)
