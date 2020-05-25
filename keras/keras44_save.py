@@ -5,17 +5,14 @@ from keras.layers import Dense, LSTM
 
 
 #==================================================================================================
-
-# 모델
+#2. 모델
 
 model = Sequential()
 # model.add(LSTM(10, activation='relu', input_shape = (4, 1)))
-model.add(LSTM(400, input_length =4, input_dim= 1))                # input_length : time_step (열)
-model.add(Dense(300))   
-model.add(Dense(200))   
-model.add(Dense(100))   
-model.add(Dense(100))   
-model.add(Dense(50))   
+model.add(LSTM(100, input_length =4, input_dim= 1))                # input_length : time_step (열)
+model.add(Dense(50))     
+model.add(Dense(30))   
+model.add(Dense(20))     
 model.add(Dense(10))
 
 model.summary()
