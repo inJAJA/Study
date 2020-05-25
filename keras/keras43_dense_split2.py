@@ -58,6 +58,11 @@ x1, x_predict, y1, y_predict = train_test_split(x, y, train_size = 90/96)
 # train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x1, y1, train_size = 0.8)
 
+#-----------------------------------------------------------------------------
+# 두 개의 성능은 동일하다.
+# 다만, slicing은 원론적으로 알 수 있고, 
+#      train_test_split는 percentage(%)로 나눌 수 있어서 좀 더 편리하다.
+
 
 # reshape( , , )
 # x = x.reshape(90, 4, 1)
