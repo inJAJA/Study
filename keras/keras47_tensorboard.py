@@ -6,7 +6,6 @@ from keras.layers import Dense, LSTM
 a = np.array(range(1,11))
 size = 5                                         
 
-x_predict = np.array([11, 12, 13, 14])
 
 # LSTM 모델을 완성하시오.
 def split_x(seq, size):
@@ -28,12 +27,8 @@ y = dataset[:, 4]                              # [ : ] 모든행 가져오고, [
 
 
 # reshape( , , )
-x = x.reshape(x.shape[0], x.shape[1], 1)
+x = x.reshape(x.shape[0], x.shape[1], 1)       # (6, 5, 1)
 
-
-x_predict = x_predict.reshape(1, 4, 1)   # x값 (6, 4, 1)와 동일한 shape로 만들어 주기 위함
-                                         # (1, 4, 1) : 확인 1 * 4 * 1 = 4
-# x_predict = x_predict.reshape(1, x_predict.shape[0], 1)
 
 
 #==================================================================================================
@@ -106,6 +101,6 @@ print('loss :',loss )
 print('mse :',mse )
 
 
-y_predict = model.predict(x_predict)
+y_predict = model.predict(x)
 print(y_predict)
 '''

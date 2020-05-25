@@ -7,7 +7,6 @@ from keras.layers import Dense, LSTM
 a = np.array(range(1,11))
 size = 5                                         
 
-x_predict = np.array([11, 12, 13, 14])
 
 # LSTM 모델을 완성하시오.
 """
@@ -106,5 +105,5 @@ print('loss :',loss )
 print('mse :',mse )
 
 
-y_predict = model.predict(x_predict)
+y_predict = model.predict(x)
 print(y_predict)
