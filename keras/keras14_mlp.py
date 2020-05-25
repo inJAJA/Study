@@ -48,7 +48,7 @@ print(x_test )
 from keras.models import Sequential
 from keras.layers import Dense
 model = Sequential()
-model.add(Dense(5, input_dim = 3 ))                   # input layer 
+model.add(Dense(5, input_shape = (3, )))                   # input layer 
 model.add(Dense(10))
 model.add(Dense(17))
 model.add(Dense(3))                                   # output layer

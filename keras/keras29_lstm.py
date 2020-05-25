@@ -19,6 +19,7 @@ print(x.shape)                            # (4, 3, 1)      / rehape확인 : 모�
 
 #2. 모델구성
 model = Sequential()
+# model.add(LSTM(10, activation='relu', input_length = 3, input_dim = 1)) 
 model.add(LSTM(10, activation='relu', input_shape = (3, 1))) # LSTM설정 : ( 열, 몇개씩 짤라서 작업할 것인가)
 model.add(Dense(11))                       # Hidden layer
 model.add(Dense(17))    
@@ -30,6 +31,8 @@ model.add(Dense(1))
 
 model.summary()
 '''
+# x.shape = (batch_size, time_steps, feature)
+                           lnegth      dim
 # x.shape = (4, 3, 1)
 
 Layer (type)                 Output Shape              Param #

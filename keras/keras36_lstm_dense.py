@@ -1,5 +1,6 @@
 
-## LSTM_Sequence : LSTM을 2개 연결하기
+### LSTM -> Dense형 model
+# Dense가 LSTM보다 param이 적어서 더 빠르게 실행된다.
 
 from numpy import array
 from keras.models import Model
@@ -29,7 +30,7 @@ print(x.shape)                              # (13, 3, 1)
 input1 = Input(shape = (3,))
 
 # LSTM1 = LSTM(10, return_sequences= True)(input1)
-# LSTM2 = LSTM(10)(LSTM1, return_sequences= True)(LSTM1)  # return_sequences를 썼으면 무조건 LSTM사용
+# LSTM2 = LSTM(10)(LSTM1, return_sequences= True)(LSTM1)  # return_sequences를 썼으면 다음 layer 무조건 LSTM사용
 # LSTM2 = LSTM(10)(LSTM1)           
 dense1 = Dense(200)(input1)
 dense2 = Dense(100)(dense1)  

@@ -6,9 +6,16 @@ x_test = np.array([11,12,13,14,15])
 y_test = np.array([11,12,13,14,15])
 # x_pred = np.array([16, 17, 18])
   
-x_val = np.array([101,102,103,104,105])                      # validation형성
+x_val = np.array([101,102,103,104,105])                       # validation형성
 y_val = np.array([101,102,103,104,105])
-
+'''
+validation_data
+: 모델의 fit부분에서 사용되어 진다.
+  모델을 x_train에서 훈련을 시키고 x_val을 가지고 검증한다.
+: x_val  : 컴퓨터용 검증 -> model에 적용 O
+  x_test : 사람용 평가   -> model에 적용 X
+: data양 : x_train > x_val
+'''
 
 #2. 모델구성
 from keras.models import Sequential

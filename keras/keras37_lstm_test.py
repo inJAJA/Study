@@ -1,5 +1,5 @@
 
-## 실습 : LSTM 레이어를 5개 엮어서 Dense 결과를 이겨내시오!
+###### 실습 : LSTM 레이어를 5개 엮어서 Dense 결과를 이겨내시오!
 
 from numpy import array
 from keras.models import Model
@@ -29,11 +29,14 @@ print(x.shape)                            # (13, 3, 1)
 input1 = Input(shape = (3, 1))
 
 LSTM1 = LSTM(50, return_sequences= True)(input1)
-LSTM2 = LSTM(20, return_sequences= True)(LSTM1)    # 명확하진 않지만 input 되는 값이 순차적 data가 아닐 수 있다.
-LSTM3 = LSTM(20, return_sequences= True)(LSTM2)    # LSTM을 많이 써도 안좋을 수 있는 이유이다.       
+LSTM2 = LSTM(20, return_sequences= True)(LSTM1) 
+LSTM3 = LSTM(20, return_sequences= True)(LSTM2)        
 LSTM4 = LSTM(10, return_sequences= True)(LSTM3)           
 LSTM5 = LSTM(10)(LSTM4)           
-
+'''
+---- LSTM을 많이 써도 안좋을 수 있는 이유----
+: 명확하진 않지만 input(이전layer_output) 되는 값이 순차적인 data가 아닐 수 있다.
+'''
 # dense1 = Dense(30)(LSTM5)     
 # dense2 = Dense(20)(dense1)                     
 dense3 = Dense(150)(LSTM5)                     

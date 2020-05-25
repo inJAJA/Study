@@ -48,9 +48,9 @@ Dense = (  ,  )    : 2 차원
 # return_sequences : 들어온 원래 차원으로 output  
                      ex) x.shape = (13, 3, 1)
                          LSTM1 = LSTM(  10  )(dense1)
-                                     2차원으로 output
+                                    ' 2 '차원으로 output
                          LSTM1 = LSTM( 10,   return_sequence = True   )(LSTM2)
-                                          (받아 들인) 3차원으로 output
+                                          (받아 들인) ' 3 '차원으로 output
 
 
 Layer (type)                 Output Shape              Param #
