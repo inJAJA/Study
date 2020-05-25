@@ -44,12 +44,12 @@ from keras.models import load_model
 model = load_model('./model/save_keras44.h5')
 
 
-model.add(Dense(90, name ='new_1'))                  # 가져온 모델의 layer에서 이미 쓴 이름이 나오기 때문에 (중복)
-model.add(Dense(90, name ='new_2'))                  # 이름을 다르게 지정해 줘야 한다.
-model.add(Dense(70, name ='new_3'))
-model.add(Dense(50, name ='new_4'))
-model.add(Dense(30, name ='new_5'))
-model.add(Dense(1, name ='new_6'))
+model.add(Dense(50, name ='new1'))                  # 가져온 모델의 layer에서 이미 쓴 이름이 나오기 때문에 (중복)
+model.add(Dense(90, name ='new2'))                  # 이름을 다르게 지정해 줘야 한다.
+model.add(Dense(80, name ='new3'))
+model.add(Dense(50, name ='new4'))
+model.add(Dense(30, name ='new5'))
+model.add(Dense(1, name ='new6'))
 
 
 
@@ -65,7 +65,7 @@ es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
 """ 가중치(W) 저장 방법 """
 #3. 실행
 model.compile(loss = 'mse', optimizer='adam', metrics= ['acc'])
-hist = model.fit(x, y, epochs =100, batch_size = 32, verbose =1,   
+hist = model.fit(x, y, epochs =2000, batch_size = 8, verbose =1,   
                  validation_split = 0.2,
                  callbacks = [es])                
 # hist = model.fit에 훈련시키고 난 loss, metrics안에 있는 값들을 반환한다.
@@ -88,7 +88,7 @@ plt.xlabel('epoch')
 plt.legend(['train loss','val loss','train acc','val acc'])    # 선에 대한 색깔과 설명이 나옴
 plt.show()                                          # 그래프 보여주기
 
-'''
+
 #4. 평가, 예측
 loss, mse = model.evaluate(x, y)
 
@@ -98,4 +98,3 @@ print('mse :',mse )
 
 y_predict = model.predict(x)
 print(y_predict)
-'''
