@@ -27,12 +27,7 @@ print(type(dataset))                           # numpy.ndarray
 x = dataset[:, 0:4]                            # [ : ] 모든행 가져오고, [0 : 4] 0~3까지
 y = dataset[:, 4]                              # [ : ] 모든행 가져오고, [  : 4] 4번째
 
-'''
-# reshape( , , )
-x = x.reshape(x.shape[0], x.shape[1], 1)
-# x = np.reshape(x, (6, 4, 1))
-# x = x.reshape(6, 4, 1)
-'''
+
 print(x.shape)                          
 print(y.shape)
 
