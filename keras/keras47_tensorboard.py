@@ -60,7 +60,7 @@ tb_hist = TensorBoard(log_dir='graph', histogram_freq= 0 ,              # log_di
  1. d:
  2. cd Study                                # 경로가 제일 많이 틀린다.
  3. cd graph
- 4. tnsorboard --logdir=.                   # 내 컴퓨터에서 tensorboard를 쓰겠다.
+ 4. tensorboard --logdir=.                   # 내 컴퓨터에서 tensorboard를 쓰겠다.
  =>  127.0.0.1:6006 를 웹주소에 친다.
      127.0.0.1 : 내 컴퓨터 IP
      6006      : 포트 번호    -> 내 pc의 6006번 포트를 사용하겠다.
@@ -70,7 +70,7 @@ tb_hist = TensorBoard(log_dir='graph', histogram_freq= 0 ,              # log_di
 # 가중치(W) 저장 방법 
 #3. 실행
 model.compile(loss = 'mse', optimizer='adam', metrics= ['acc'])
-hist = model.fit(x, y, epochs =100, batch_size = 32, verbose =1,   
+hist = model.fit(x, y, epochs =100, batch_size = 1, verbose =1,   
                  validation_split = 0.2,
                  callbacks = [es, tb_hist])                              # Tensorboard 사용
 # hist = model.fit에 훈련시키고 난 loss, metrics안에 있는 값들을 반환한다.
