@@ -71,7 +71,7 @@ es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
 
 #3. 실행
 model.compile(loss = 'mse', optimizer='adam', metrics= ['mse'])
-model.fit(x_train, y_train, epochs =800, batch_size = 16 , validation_split= 0.25,
+model.fit(x_train, y_train, epochs =800, batch_size = 16 , validation_split= 0.2,
          callbacks = [es])                
 
 
