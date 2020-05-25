@@ -40,18 +40,21 @@ print(y.shape)
 
 #==================================================================================================
 #2. 모델
-""" 저장한 model 불러오기 """
+""" 저장한 model 불러오기 """ 
 input = Dense(10)
-from keras.models import load_model
-model = load_model('./model/save_keras44.h5')
+from keras.models import load_model                 # load_model 가져오기
+model = load_model('./model/save_keras44.h5')       # load_model( '경로 / 저장한 파일 이름' ) : model 불러오기 
 
 
-model.add(Dense(1, name ='new'))                    # 가져온 모델의 layer에서 이미 쓴 이름이 나오기 때문에 (중복)
-                                                    # 이름을 다르게 지정해 줘야 한다.
+model.add(Dense(40, name ='new1'))                  # 가져온 모델의 layer에서 이미 쓴 이름이 나오기 때문에 (중복)
+model.add(Dense(30, name ='new2'))                  # 이름을 다르게 지정해 줘야 한다.
+model.add(Dense(20, name ='new3'))
+model.add(Dense(10, name ='new4'))
+model.add(Dense(1, name ='new5'))
 
 model.summary()
 
-'''
+
 # EarlyStopping
 from keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
@@ -70,6 +73,5 @@ print('loss :',loss )
 print('mse :',mse )
 
 
-y_predict = model.predict(x_predict)
+y_predict = model.predict(x)
 print(y_predict)
-'''
