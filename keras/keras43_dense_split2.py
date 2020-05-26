@@ -53,10 +53,10 @@ y = dataset[:, 4]
 
 # x_predict 값
 from sklearn.model_selection import train_test_split
-x1, x_predict, y1, y_predict = train_test_split(x, y, train_size = 90/96)
+x1, x_predict, y1, y_predict = train_test_split(x, y, random_state = 66, train_size = 90/96)
 
 # train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x1, y1, train_size = 0.8)
+x_train, x_test, y_train, y_test = train_test_split(x1, y1, random_state = 66, train_size = 0.8)
 
 #-----------------------------------------------------------------------------
 # 두 개의 성능은 동일하다.
@@ -91,8 +91,9 @@ es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
 
 #3. 실행
 model.compile(loss = 'mse', optimizer='adam', metrics= ['mse'])
-model.fit(x_train, y_train, epochs =800, batch_size = 16 , validation_split= 0.25,
-         callbacks = [es])                
+model.fit(x_train, y_train, epochs =800, batch_size = 16 , 
+          validation_split= 0.25, shuffle = True,         # fit에 shuffle 추가 가능, random_state는 사용 불가
+          callbacks = [es])                
 
 
 
