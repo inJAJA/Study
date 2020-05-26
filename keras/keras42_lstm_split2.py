@@ -46,7 +46,7 @@ x_predict = x_predict.reshape(6, 4, 1)
 
 # train_test_split
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y,  train_size = 0.8)
+x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 66,  train_size = 0.8)
 
 
 print(x_train.shape)
@@ -71,7 +71,8 @@ es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
 
 #3. 실행
 model.compile(loss = 'mse', optimizer='adam', metrics= ['mse'])
-model.fit(x_train, y_train, epochs =800, batch_size = 16 , validation_split= 0.2,
+model.fit(x_train, y_train, epochs =800, batch_size = 16 , validation_split= 0.2, 
+         shuffle= True,
          callbacks = [es])                
 
 
