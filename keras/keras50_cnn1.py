@@ -41,7 +41,7 @@ model.summary()
  : side를 '0'으로 채워 side data도 동일하게 훈련될 수 있도록 해준다. 
   -> 홀수로 채울시 padding을 입히는 위치는 머신이 정한다.                                                 
   = 'same' : kernal_size와 상관없이 input_shape와 동일한 shape로 전달해준다.
-  = 'valid' : default
+  = 'valid' : default, (유효한 영역만 출력, 따라서 출력 이미지 사이즈는 입력 사이즈보다 작다)
 
 # strides
  : 필터의 이동 간격 
@@ -56,7 +56,8 @@ model.summary()
      0 15 27 26    =>  15  27
      0  4  7  8        5   13
      0  5  6 13
-
+ 
+ : heigth(width) / pool_size = MaxPooling (나누고 난 후의 소수점은 버린다.)
 
 
 # Flatten
