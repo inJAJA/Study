@@ -40,12 +40,13 @@ print(y.shape)
 
 #==================================================================================================
 #2. 모델
-""" 저장한 model 불러오기 """ 
+""" 전위 학습 : 저장한 model 불러오기 """ 
 input = Dense(10)
 from keras.models import load_model                 # load_model 가져오기
 model = load_model('./model/save_keras44.h5')       # load_model( '경로 / 저장한 파일 이름' ) : model 불러오기 
-
-
+                            
+                
+'''남의 모델을 가져와서 사용해도 내가 가지고 있는 데이터가 다르기 때문에 튜닝해 줘야 한다.'''
 model.add(Dense(40, name ='new1'))                  # 가져온 모델의 layer에서 이미 쓴 이름이 나오기 때문에 (중복)
 model.add(Dense(30, name ='new2'))                  # 이름을 다르게 지정해 줘야 한다.
 model.add(Dense(20, name ='new3'))
