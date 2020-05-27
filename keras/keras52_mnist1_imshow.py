@@ -17,7 +17,9 @@ print(y_test.shape)                                       # (10000,)
 
 
 print(x_train[0].shape)                                   # (28, 28)
-plt.imshow(x_train[59999], 'gray')                            # '2차원'을 집어넣어주면 수치화된 것을 이미지로 볼 수 있도록 해줌    
+plt.imshow(x_train[59999], 'gray')                        # '2차원'을 집어넣어주면 수치화된 것을 이미지로 볼 수 있도록 해줌    
 # plt.imshow(x_train[0])                                  # 색깔로 나옴
+                                                          # plt.imshow를 두번 쓸 경우 맨 나중에 쓴 코드의 그림만 보여진다.
+
 plt.show()                                                # 그림으로 보여주기
 
