@@ -41,7 +41,8 @@ from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D
 from keras.layers import Dropout                   
 """
-# Dropout : random 하게 지정한 ' % '만큼의 노드를 탈락시킨다.(overfitting 방지 가능)
+# Dropout 
+: random 하게 지정한 ' % '만큼의 노드를 탈락시킨다.(overfitting 방지 가능)
 : node의 숫자를 직접 줄이는 것과 동일하지만 dropout이 조금 더 좋다고 한다.
 """
 

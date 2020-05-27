@@ -36,8 +36,10 @@ model.add(Dense(20,activation = 'relu'))
 model.add(Dense(10,activation = 'relu'))     
 model.add(Dense(1,activation = 'sigmoid'))
 """ 
-- 계산된 함수가 activation을 통해 다음 layer에 넘어간다.
-- 가장 마지막 output layer값이 가중치와 '활성화 함수'와 곱해져서 반환된다. 
+# 활성화 함수
+: 계산된 함수(가중치)가 activation을 통해 다음 layer에 넘어간다. ( 가중치 x 활성화 함수 )
+: 가장 마지막 output layer값이 [ 가중치 x sigmoid ]로  반환된다.
+
 # sigmoid : 출력 값을 0과 1사이의 값으로 조정하여 반환한다.
 """
 
@@ -67,10 +69,9 @@ print('acc :', acc)
 x_pred = np.array([1, 2, 3])
 y_pred = model.predict(x_pred)
 print('y_pred :', y_pred)
-# sigmoid 함수를 거치지 않은 걸로 보여짐
 
 
-
+# y_pred 값이 0과 1로만 나오도록 해주는 방법 
 y1_pred = np.where(y_pred >= 0.5, 1, 0)     
 print('y_pred :', y1_pred)
 """

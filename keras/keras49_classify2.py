@@ -51,7 +51,6 @@ model.add(Dense(10,activation = 'relu'))
 model.add(Dense(5,activation = 'softmax'))
 """ 다중 분류는 'softmax' 사용
   : output들의 합이 1이 되도록 출력하는 함수
-   : 가장 큰 수 빼고는 전부 0으로 나옴
 """
 
 
@@ -75,8 +74,6 @@ y_pred = model.predict(x_pred)
 print('y_pred :', y_pred)
 print(y_pred.shape)                               # (3, 5)
 """ x 하나 집어 넣으면 [ 5 ]개가 나옴 (one_hot_encoding때문)
-
-# 'softmax'가 적용되지 않은 모습으로 나옴
 y_pred : [[0.20067349 0.19978711 0.19959101 0.2001942  0.19975421]
          [0.20067349 0.19978711 0.19959101 0.2001942  0.19975421]
          [0.20067349 0.19978711 0.19959101 0.2001942  0.19975421]]
