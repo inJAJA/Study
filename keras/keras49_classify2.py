@@ -1,3 +1,4 @@
+# 다중 분류 
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
@@ -15,8 +16,8 @@ y = np_utils.to_categorical(y)
 # y = to_categorical(y)
 """ 
 - 다중분류 모델은 반드시 one_hot_encoding사용
-- 다중 클래스 분류 문제가 각 클래스 간의 관계가 균등하기 때문에
-  ex) y가 1 과 5로 분류된다면 5에 값이 치중된다.
+- 다중 클래스 분류 문제가 각 클래스 간의 관계가 균등해야 하기 떄문에
+  ex) 원핫인코딩 사용안할 시  : y가 1 과 5로 분류된다면 5에 값이 치중된다.
 
 - 해당 숫자에 해당되는 자리만 1이고 나머지는 0으로 채운다. 
 - '0'부터 인덱스가 시작이다.
@@ -97,7 +98,7 @@ for i in range(y_pred.shape[0]):                   # y_pred.shape[0] = 3, i = [0
 
 #2.
 y3_pred = np.argmax(y_pred, axis= 1) + 1           # 뒤로 한자리씩 넘겨준다.
-print(y3_pred)
+print(y3_pred)                                     # y3_pred = [1, 2, 3]
 
 """ 과제
 1. dim을 6에서 5로 변경
