@@ -104,7 +104,7 @@ for i in range(y_pred.shape[0]):                   # y_pred.shape[0] = 3, i = [0
     y2_pred = decode( y_pred[i])       
     print('y2_pred:', y2_pred + 1)
 
-#2.
+#2. axis 사용               # 열 하나하나로 비교하겠다.
 y3_pred = np.argmax(y_pred, axis= 1) + 1           # 뒤로 한자리씩 넘겨준다.
 print(y3_pred)                                     # y3_pred = [1, 2, 3]
 
