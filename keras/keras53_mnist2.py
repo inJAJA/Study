@@ -16,11 +16,6 @@ print(y_train.shape)                                      # (60000,)        : 10
 print(y_test.shape)                                       # (10000,)
 
 
-print(x_train[0].shape)                                   # (28, 28)
-# plt.imshow(x_train[0], 'gray')                          # '2차원'을 집어넣어주면 수치화된 것을 이미지로 볼 수 있도록 해줌    
-# plt.imshow(x_train[0])                                  # 색깔로 나옴
-# plt.show()                                              # 그림으로 보여주기
-
 
 # 데이터 전처리 1. 원핫인코딩 : 당연하다              => y 값  
 from keras.utils import np_utils
@@ -57,7 +52,7 @@ model.summary()
 
 #3. 훈련                      # 다중 분류
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics= ['acc']) 
-model.fit(x_train, y_train, epochs= 32, batch_size= 64, 
+model.fit(x_train, y_train, epochs= 16, batch_size= 64, 
                  validation_split=0.2, verbose = 1)
 
 
@@ -66,5 +61,18 @@ loss, acc = model.evaluate(x_test, y_test, batch_size= 64)
 print('loss: ', loss)
 print('acc: ', acc)
 
+
+
+#자습 : x_test를 10행 가져와서 x_predict로 써보기
+x_pred = x_test[:10]
+print(x_pred.shape)                                       # (10, 28, 28, 1)
+y_pred = y_test[:10]
+
+y1_pred = np.argmax(y_test[:10], axis=1)                  # x_predict값에 매칭되는 실제 y_predict값
+print('실제값: ',y1_pred)                                 # 실제값:  [7 2 1 0 4 1 4 9 5 9]
+
+y2_pred = model.predict(x_pred)                           # x_predict값을 가지고 예측한 y_predict값
+y2_pred = np.argmax(y2_pred, axis =1)
+print('예측값: ', y2_pred)                                # 예측값:  [7 2 1 0 4 1 4 9 5 9]       
 
 # acc:  0.98580002784729
