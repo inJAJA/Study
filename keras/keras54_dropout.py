@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 from keras.datasets import mnist                          # keras에서 제공되는 예제 파일 
 
@@ -15,11 +14,6 @@ print(x_test.shape)                                       # (10000, 28, 28)
 print(y_train.shape)                                      # (60000,)        : 10000개의 xcalar를 가진 vector(1차원)
 print(y_test.shape)                                       # (10000,)
 
-
-print(x_train[0].shape)                                   # (28, 28)
-# plt.imshow(x_train[0], 'gray')                          # '2차원'을 집어넣어주면 수치화된 것을 이미지로 볼 수 있도록 해줌    
-# plt.imshow(x_train[0])                                  # 색깔로 나옴
-# plt.show()                                              # 그림으로 보여주기
 
 
 # 데이터 전처리 1. 원핫인코딩 : 당연하다              => y 값  
@@ -63,17 +57,23 @@ model.add(Conv2D(40, (2, 2),padding = 'same'))
 model.add(Dropout(0.3))                                             # Dropout 사용
 
 model.add(Conv2D(20, (2, 2),padding = 'same'))
+model.add(Dropout(0.3))                                             # Dropout 사용
+
 model.add(Conv2D(10, (2, 2), padding='same'))
 model.add(Flatten())
 model.add(Dense(10, activation='softmax'))               
 
 model.summary()
 
+# EarlyStopping
+from keras.callbacks import EarlyStopping
+es = EarlyStopping(monitor = 'val_loss', patience = 50, mode = 'auto', verbose = 1)
 
 #3. 훈련                     
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics= ['acc']) 
-model.fit(x_train, y_train, epochs= 32, batch_size= 64, 
-                 validation_split=0.2, verbose = 2)
+model.fit(x_train, y_train, epochs= 100, batch_size= 64, verbose = 2,
+                 validation_split=0.2,
+                 callbacks = [es] )
 
 
 
