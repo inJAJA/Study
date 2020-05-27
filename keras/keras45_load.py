@@ -41,7 +41,6 @@ print(y.shape)
 #==================================================================================================
 #2. 모델
 """ 전위 학습 : 저장한 model 불러오기 """ 
-input = Dense(10)
 from keras.models import load_model                 # load_model 가져오기
 model = load_model('./model/save_keras44.h5')       # load_model( '경로 / 저장한 파일 이름' ) : model 불러오기 
                             
