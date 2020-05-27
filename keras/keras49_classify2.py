@@ -1,4 +1,8 @@
 # 다중 분류 
+
+""" 과제  1. y이의 dim을 6에서 5로 변경하시오
+          2. y_pred를 숫자로 바꿔라!
+"""
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
@@ -105,7 +109,14 @@ for i in range(y_pred.shape[0]):                   # y_pred.shape[0] = 3, i = [0
 y3_pred = np.argmax(y_pred, axis= 1) + 1           # 뒤로 한자리씩 넘겨준다.
 print(y3_pred)                                     # y3_pred = [1, 2, 3]
 
-""" 과제
-1. dim을 6에서 5로 변경
-2. y_pred를 숫자로 바꿔라!
+"""
+x = [[1, 1],
+     [2, 2]] 이고 sum을 실행 한다고 하면
+
+# aixs = 0             # axis = 1 
+: 행에 대한 연산         : 열에 대한 연산      sum
+     [[ 1, 1 ],               [[ 1, 1 ],  = [ 2    
+      [ 2, 2 ]]                [ 2, 2 ]]  =   4 ]
+      --------
+sum = [ 3  4 ]                     
 """
