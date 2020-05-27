@@ -5,7 +5,7 @@ from keras.layers import Dense, Flatten
 
 """
 # CNN
-:이미지를 잘라서 
+:이미지를 자른후, 여러 데이터를 이어붙여 data를 증폭시킨 후 연관성을 찾는다.
 """
 
 model = Sequential() # 이미지를 가로, 세로 2, 2로 자르겠다.  
@@ -24,7 +24,7 @@ model.summary()
 #Conv2D( 10,     (2, 2),     input_shape = (   10,    10,      1  ))
        filter  kernal_size 
                자르는 size  x = ( batch_size, heigth, width, channel )  4차원
-                                 행(장수)     세로    가로     색깔   = 1 (흑백)
+                                 행(장수)     세로    가로     색깔   = 1 (흑백), 3(컬러)
                                                               색깔끼리 나눠준다.
 # CNN_Output_Size
  : (N - F) / stride + 1 
@@ -46,7 +46,8 @@ model.summary()
 # strides
  : 필터의 이동 간격 
  : 가로, 세로 따로 지정 가능 => strides = (2,1) : 세로 2칸, 가로 1칸 (),[] 둘다 가능
- : default = 1
+ : 값이 커지면 data_size가 작아짐
+ : default = 1 
 
 # MaxPooling
  : 필요없는 쓰레기 값을 버리고 중요부분(가장 큰 값)만 가져온다.
@@ -66,7 +67,8 @@ model.summary()
 
 # CNN_parameter
  :  ( channel * kernal_size  * filter ) + ( bias * filter)
- ex) (   1    *   (2 * 2)    *   10   ) + (  1   *   10  )
+   = ( input_dim * kernal_size +  1 ) * output
+ ex) (     1     *  (2 * 2)    +  1 ) *   10  
 
 """
 
