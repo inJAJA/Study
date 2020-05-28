@@ -41,25 +41,25 @@ from keras.layers import Dropout
 """
 
 model = Sequential()
-model.add(Conv2D(100, (2, 2), input_shape  = (28, 28, 1), padding = 'same'))
+model.add(Conv2D(200, (3, 3), input_shape  = (28, 28, 1), padding = 'same'))
 model.add(MaxPooling2D(pool_size=2))
 model.add(Dropout(0.2))                                             # Dropout 사용
+
+model.add(Conv2D(100, (2, 2), padding = 'same'))
+model.add(MaxPooling2D(pool_size=2))
+model.add(Dropout(0.3))                                             # Dropout 사용
 
 model.add(Conv2D(80, (2, 2), padding = 'same'))
 model.add(MaxPooling2D(pool_size=2))
 model.add(Dropout(0.3))                                             # Dropout 사용
 
-model.add(Conv2D(60, (2, 2), padding = 'same'))
-model.add(MaxPooling2D(pool_size=2))
+model.add(Conv2D(60, (2, 2),padding = 'same'))
 model.add(Dropout(0.3))                                             # Dropout 사용
 
 model.add(Conv2D(40, (2, 2),padding = 'same'))
 model.add(Dropout(0.3))                                             # Dropout 사용
 
-model.add(Conv2D(20, (2, 2),padding = 'same'))
-model.add(Dropout(0.3))                                             # Dropout 사용
-
-model.add(Conv2D(10, (2, 2), padding='same'))
+model.add(Conv2D(20, (2, 2), padding='same'))
 model.add(Flatten())
 model.add(Dense(10, activation='softmax'))               
 
@@ -71,7 +71,7 @@ es = EarlyStopping(monitor = 'val_loss', patience = 50, mode = 'auto', verbose =
 
 #3. 훈련                     
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics= ['acc']) 
-model.fit(x_train, y_train, epochs= 100, batch_size= 64, verbose = 2,
+model.fit(x_train, y_train, epochs= 200, batch_size= 64, verbose = 2,
                  validation_split=0.2,
                  callbacks = [es] )
 

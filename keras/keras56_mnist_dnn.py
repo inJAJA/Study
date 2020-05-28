@@ -68,3 +68,4 @@ loss, acc = model.evaluate(x_test, y_test, batch_size= 64)
 print('loss: ', loss)
 print('acc: ', acc)
 
+# acc:  0.9785000085830688

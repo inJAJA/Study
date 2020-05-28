@@ -23,7 +23,7 @@ y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
 print(y_train.shape)                                      #  (60000, 10)
 
-# 데티어 전처리 2. 정규화( MinMaxScalar )    => x 값                                           
+# 데이터 전처리 2. 정규화( MinMaxScalar )    => x 값                                           
 x_train = x_train.reshape(60000, 28, 28, 1).astype('float32') /255  
 x_test = x_test.reshape(10000, 28, 28, 1).astype('float32') /255.   # 뒤에 ' . '을 써도 된다.                                  
 #             cnn 사용을 위한 4차원       # 타입 변환       # (x - min) / (max - min) : max =255, min = 0                                      

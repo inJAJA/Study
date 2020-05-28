@@ -1,0 +1,3 @@
+binary_crossentropy를 쓰면서 from_logits옵션을 따로 주지 않는 경우에는 ouput layer에 sigmoid를 추가해주어야 한다
+
+from_logits option= LOGIT_OUTPUT 으로 한다면 마지막에 sigmoid activation을 하지 않아야한다.

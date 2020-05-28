@@ -57,8 +57,8 @@ print(x_train.shape)
 
 model = Sequential()
 model.add(LSTM(200, input_shape= (4, 1)))                # input_length : time_step (열)
-model.add(Dense(102))   
-model.add(Dense(100))   
+model.add(Dense(90))   
+model.add(Dense(90))   
 model.add(Dense(80))   
 model.add(Dense(50))   
 model.add(Dense(10))   
@@ -72,8 +72,8 @@ es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
 #3. 실행
 model.compile(loss = 'mse', optimizer='adam', metrics= ['mse'])
 model.fit(x_train, y_train, epochs =800, batch_size = 16 , validation_split= 0.2, 
-         shuffle= True,
-         callbacks = [es])                
+         shuffle= True,                                  # fit에 shuffle 추가 가능, random_state는 사용 불가
+         callbacks = [es])                 
 
 
 
