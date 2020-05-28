@@ -32,34 +32,40 @@ print(y_train.shape)                 # (50000, 10)
 #2. model
 input1 = Input(shape = (32*32*3, ))
 
-dense1 = Dense(10, activation = 'relu')(input1)
+dense1 = Dense(100, activation = 'relu')(input1)
 drop1 = Dropout(0.2)(dense1)
 
-dense2 = Dense(10, activation = 'relu')(drop1)
+dense2 = Dense(50, activation = 'relu')(drop1)
 drop2 = Dropout(0.2)(dense2)
 
+dense2 = Dense(50, activation = 'relu')(drop2)
+drop2 = Dropout(0.2)(dense2)
 
-dense3 = Dense(10, activation = 'relu')(drop2)
+dense2 = Dense(50, activation = 'relu')(drop2)
+drop2 = Dropout(0.2)(dense2)
+
+dense3 = Dense(40, activation = 'relu')(drop2)
 drop3 = Dropout(0.2)(dense3)
 
-dense4 = Dense(10, activation = 'relu')(drop3)
-dense5 = Dense(10,  activation = 'relu')(dense4)
+dense4 = Dense(35, activation = 'relu')(drop3)
+dense5 = Dense(20,  activation = 'relu')(dense4)
 
 output1 = Dense(10, activation = 'softmax')(dense5)
 
 model = Model(inputs = input1, outputs = output1)
 
-# EarlyStopping
+# ealrystopping
 from keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor = 'val_loss', mode = 'auto', patience = 50, verbose =1)
+es = EarlyStopping(monitor = 'val_loss', mode='auto', patience =50, verbose =1)
+
 
 #3. fit
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['acc'])
-model.fit(x_train, y_train, epochs= 1, batch_size = 64,
+model.fit(x_train, y_train, epochs= 100, batch_size = 256, callbacks = [es],
               validation_split =0.2, shuffle = True, verbose =2)
 
 
 #4. evaluate
-loss, acc = model.evaluate(x_test, y_test, batch_size = 64)
+loss, acc = model.evaluate(x_test, y_test, batch_size = 256)
 print('loss: ', loss)
 print('acc: ', acc)

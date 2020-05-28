@@ -50,9 +50,6 @@ output1 = Dense(10, activation = 'softmax')(dense5)
 model = Model(inputs = input1, outputs = output1)
 
 
-# EarlyStopping
-from keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor = 'val_loss', mode = 'auto', patience = 50, verbose =1)
 
 #3. fit
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['acc'])

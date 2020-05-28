@@ -56,7 +56,7 @@ input1 = Input(shape = (32, 32, 3))
 
 dense1 = Conv2D(200, (3, 3), activation = 'relu',padding = 'same')(input1)
 max1 = MaxPooling2D(pool_size = 2)(dense1)
-drop1 = Dropout(0.2)(max1)
+drop1 = Dropout(0.3)(max1)
 
 dense2 = Conv2D(100, (3, 3), activation = 'relu',padding = 'same')(drop1)
 max2= MaxPooling2D(pool_size = 2)(dense2)
@@ -67,7 +67,7 @@ dense3 = Conv2D(80, (3, 3), activation = 'relu',padding = 'same')(drop2)
 max3 =  MaxPooling2D(pool_size = 2)(dense3)
 drop3 = Dropout(0.2)(max3)
 
-dense4 = Conv2D(40, (3, 3), activation = 'relu',padding = 'same')(drop3)
+dense4 = Conv2D(40, (3, 3), activation = 'relu', padding = 'same')(drop3)
 drop3 = Dropout(0.2)(dense4)
 
 dense5 = Conv2D(20, (3, 3), activation = 'relu')(drop3)
@@ -77,13 +77,12 @@ output1 = Dense(10, activation = 'softmax')(flat)
 
 model = Model(inputs = input1, outputs = output1)
 
-# EarlyStopping
-from keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor = 'val_loss', mode = 'auto', patience = 50, verbose =1)
+model.summary()
+
 
 #3. fit
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['acc'])
-model.fit(x_train, y_train, epochs= 200, batch_size = 256,
+model.fit(x_train, y_train, epochs= 140, batch_size = 256,
               validation_split =0.2, shuffle = True, verbose =2)
 
 
@@ -91,3 +90,5 @@ model.fit(x_train, y_train, epochs= 200, batch_size = 256,
 loss, acc = model.evaluate(x_test, y_test, batch_size = 256)
 print('loss: ', loss)
 print('acc: ', acc)
+
+# acc:  0.8070999979972839

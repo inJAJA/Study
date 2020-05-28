@@ -52,10 +52,10 @@ model.add(Dense(10, activation = 'softmax'))
 
 model.summary()
 
+
 # EarlyStopping
 from keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor = 'val_loss', mode = 'auto', patience = 50, verbose = 1 )
-
 
 #3. 훈련
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['acc'] )
