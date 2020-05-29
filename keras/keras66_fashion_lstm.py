@@ -41,6 +41,8 @@ model.add(Dense(50, activation = 'relu'))
 model.add(Dropout(0.2))
 model.add(Dense(40, activation = 'relu'))
 model.add(Dropout(0.2))
+model.add(Dense(20, activation = 'relu'))
+model.add(Dropout(0.2))
 model.add(Dense(10, activation = 'softmax'))
 
 model.summary()
@@ -48,11 +50,11 @@ model.summary()
 
 #3. fit
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['acc'])
-model.fit(x_train, y_train, epochs = 100, batch_size =128,
+model.fit(x_train, y_train, epochs = 100, batch_size =64,
           validation_split =0.2, shuffle = True, verbose = 2)
 
 #4. evaluate
-loss, acc = model.evaluate(x_test, y_test, batch_size =128)
+loss, acc = model.evaluate(x_test, y_test, batch_size =64)
 print('loss: ', loss)
 print('acc: ', acc)
 
