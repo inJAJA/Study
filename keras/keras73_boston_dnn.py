@@ -18,17 +18,24 @@ print(x[0,-1])
 
 # train_test
 from sklearn.model_selection import train_test_split
-x_train, x_test , y_train, y_test = train_test_split(x, y, random_state = 30,
+x_train, x_test , y_train, y_test = train_test_split(x, y, random_state = 66,
                                     test_size = 101/506)
 
 #2. model
 model = Sequential()
 model.add(Dense(10, activation = 'relu', input_shape = (13,)))
+model.add(Dense(80, activation = 'relu'))
 model.add(Dense(100, activation = 'relu'))
+model.add(Dense(140, activation = 'relu'))
+model.add(Dense(200, activation = 'relu'))
+model.add(Dense(300, activation = 'relu'))
+model.add(Dense(600, activation = 'relu'))
+model.add(Dense(500, activation = 'relu'))
+model.add(Dense(300, activation = 'relu'))
+model.add(Dense(150, activation = 'relu'))
+model.add(Dense(120, activation = 'relu'))
 model.add(Dense(100, activation = 'relu'))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dense(100, activation = 'relu'))
+model.add(Dense(60, activation = 'relu'))
 model.add(Dense(1, activation = 'relu'))
 
 model.summary()
@@ -49,7 +56,7 @@ ts_board = TensorBoard(log_dir = 'graph', histogram_freq =0,
 
 #3. compile, fit 
 model.compile(loss = 'mse', optimizer = 'adam', metrics = ['mse'])
-hist = model.fit(x_train, y_train, epochs =100, batch_size = 64,
+hist = model.fit(x_train, y_train, epochs =1000, batch_size = 64,
                             validation_split = 0.2, verbose =2,
                             callbacks = [es, cp, ts_board])
 
@@ -95,3 +102,5 @@ plt.ylabel('mse')
 plt.legend()
 
 plt.show()
+
+# R2:  0.8558000745611529

@@ -1,4 +1,4 @@
-
+import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Dropout,  LSTM
 from sklearn.datasets import load_boston
@@ -27,9 +27,13 @@ x_train, x_test , y_train, y_test = train_test_split(x, y, random_state = 30,
 model = Sequential()
 model.add(LSTM(10, activation = 'relu', input_shape = (13,1)))
 model.add(Dense(100, activation = 'relu'))
+model.add(Dropout(0.2))
 model.add(Dense(100, activation = 'relu'))
+model.add(Dropout(0.2))
 model.add(Dense(100, activation = 'relu'))
+model.add(Dropout(0.2))
 model.add(Dense(100, activation = 'relu'))
+model.add(Dropout(0.2))
 model.add(Dense(100, activation = 'relu'))
 model.add(Dense(1, activation = 'relu'))
 
@@ -49,12 +53,12 @@ ts_board = TensorBoard(log_dir = 'graph', histogram_freq =0,
 
 #3. compile, fit 
 model.compile(loss = 'mse', optimizer = 'adam', metrics = ['mse'])
-hist = model.fit(x_train, y_train, epochs =100, batch_size = 64,
+hist = model.fit(x_train, y_train, epochs =300, batch_size = 16,
                             validation_split = 0.2, verbose =2,
                             callbacks = [es, cp, ts_board])
 
 #4. evaluate
-loss_acc = model.evaluate(x_test, y_test, batch_size =64)
+loss_acc = model.evaluate(x_test, y_test, batch_size =16)
 print('loss_acc :', loss_acc)
 
 y_pred = model.predict(x_test)
@@ -95,3 +99,5 @@ plt.ylabel('mse')
 plt.legend()
 
 plt.show()
+
+# R2:  0.744981538124726

@@ -1,4 +1,4 @@
-
+import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2D 
 from sklearn.datasets import load_boston
@@ -20,7 +20,7 @@ print(x.shape)
 from sklearn.decomposition import PCA
 pca = PCA(n_components = 8)
 pca.fit(x)
-x = pca.transform(x).reshape(x.shape[0], 2, 2, 2)
+x = pca.transform(x).reshape(x.shape[0], 8, 1, 1)
 print(x.shape)
 
 # train_test
@@ -31,16 +31,28 @@ x_train, x_test , y_train, y_test = train_test_split(x, y, random_state = 30,
 
 #2. model
 model = Sequential()
-model.add(Conv2D(10,(2, 2), activation = 'relu', padding ='same', input_shape = (2,2, 2)))
-model.add(Conv2D(100,(2, 2), activation = 'relu', padding ='same'))
+model.add(Conv2D(10,(2, 2), activation = 'relu', padding ='same', input_shape = (8, 1, 1)))
+model.add(Conv2D(30,(2, 2), activation = 'relu', padding ='same'))
+# model.add(Dropout(0.2))
+model.add(Conv2D(50,(2, 2), activation = 'relu', padding ='same'))
+# model.add(Dropout(0.2))
+model.add(Conv2D(80,(2, 2), activation = 'relu', padding ='same'))
+model.add(Dropout(0.2))
+model.add(Conv2D(120,(2, 2), activation = 'relu', padding ='same'))
+model.add(Dropout(0.2))
+model.add(Conv2D(250,(2, 2), activation = 'relu', padding ='same'))
+model.add(Dropout(0.2))
+model.add(Conv2D(400,(2, 2), activation = 'relu', padding ='same'))
+model.add(Dropout(0.2))
+model.add(Conv2D(300,(2, 2), activation = 'relu', padding ='same'))
+model.add(Dropout(0.2))
+model.add(Conv2D(200,(2, 2), activation = 'relu', padding ='same'))
+model.add(Dropout(0.2))
+model.add(Conv2D(150,(2, 2), activation = 'relu', padding ='same'))
 model.add(Dropout(0.2))
 model.add(Conv2D(100,(2, 2), activation = 'relu', padding ='same'))
 model.add(Dropout(0.2))
-model.add(Conv2D(100,(2, 2), activation = 'relu', padding ='same'))
-model.add(Dropout(0.2))
-model.add(Conv2D(100,(2, 2), activation = 'relu', padding ='same'))
-model.add(Dropout(0.2))
-model.add(Conv2D(100,(2, 2), activation = 'relu', padding ='same'))
+model.add(Conv2D(80,(2, 2), activation = 'relu', padding ='same'))
 model.add(Flatten())
 model.add(Dense(1, activation = 'relu'))
 
@@ -62,7 +74,7 @@ ts_board = TensorBoard(log_dir = 'graph', histogram_freq =0,
 
 #3. compile, fit 
 model.compile(loss = 'mse', optimizer = 'adam', metrics = ['mse'])
-hist = model.fit(x_train, y_train, epochs =100, batch_size = 64,
+hist = model.fit(x_train, y_train, epochs =300, batch_size = 64,
                             validation_split = 0.2, verbose =2,
                             callbacks = [es, cp, ts_board])
 
