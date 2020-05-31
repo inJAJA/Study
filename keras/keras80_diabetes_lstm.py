@@ -1,4 +1,4 @@
-# 이진 분류
+
 import numpy as np
 #1. 데이터 
 from sklearn.datasets import load_diabetes
@@ -28,49 +28,69 @@ plt.axis('equal')
 plt.legend()
 plt.show()
 
+
+
 # x
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
+#'Sex' one hot encoding
+x_max = np.max(x[:, 1])   
+x_min = np.min(x[:, 1])
+print(x_max)                   # 0.0506801187398187
+print(x_min)                  # -0.044641636506989
+
+for i in range(np.size(x, 0)):
+    if x[i, 1]==x_min:
+        x[i, 1]=0
+    else:
+        x[i, 1]=1
+print(x[:, ])
+
+# scaler
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
 scaler.fit(x)
 x = scaler.transform(x)
+
+# reshape
+x = x.reshape(x.shape[0], x.shape[1], 1)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state =100, 
                                                   train_size = 0.8)
 
-x_train1 = x_train[:,:4]
-x_test1 = x_test[:, :4]
+# x1
+x_train1 = x_train[:,:4, :]
+x_test1 = x_test[:, :4, :]
 
-x_train2 = x_train[:,4:]
-x_test2 = x_test[:, 4:]
+# x2
+x_train2 = x_train[:,4:, :]
+x_test2 = x_test[:, 4:, :]
+
 
 #2. model
 from keras.models import Model
-from keras.layers import Dense, Dropout, Input
+from keras.layers import Dense, Dropout, Input, LSTM
 # 1
-input1 = Input(shape =(4, ))
-dense1 = Dense(100, activation = 'relu')(input1)
-desen1 = Dropout(0.1)(dense1)
-dense1 = Dense(200, activation = 'relu')(dense1)
-desen1 = Dropout(0.1)(dense1)
-dense1 = Dense(200, activation = 'relu')(dense1)
-desen1 = Dropout(0.1)(dense1)
-dense1 = Dense(200, activation = 'relu')(dense1)
-desen1 = Dropout(0.1)(dense1)
+input1 = Input(shape =(4, 1 ))
+dense1 = LSTM(100, activation = 'relu')(input1)
+desen1 = Dropout(0.2)(dense1)
+dense1 = Dense(150, activation = 'relu')(dense1)
+dense1 = Dropout(0.2)(dense1)
+dense1 = Dense(100, activation = 'relu')(dense1)
+desen1 = Dropout(0.2)(dense1)
 
 # 2 
-input2 = Input(shape = (6, ))
-dense2 = Dense(200, activation = 'relu')(input2)
-desen2 = Dropout(0.1)(dense2)
-dense2 = Dense(200, activation = 'relu')(dense2)
-desen2 = Dropout(0.1)(dense2)
-dense2 = Dense(50, activation = 'relu')(dense2)
+input2 = Input(shape = (6, 1 ))
+dense2 = LSTM(100, activation = 'relu')(input2)
+desen2 = Dropout(0.2)(dense2)
+dense2 = Dense(150, activation = 'relu')(dense2)
+dense2 = Dropout(0.2)(dense2)
+dense2 = Dense(100, activation = 'relu')(dense2)
 
 # concentrate
 from keras.layers.merge import concatenate   
 merge1 = concatenate([dense1, dense2])
-middle1 = Dense(50, activation='relu')(merge1)
-middle1 = Dense(50, activation='relu')(middle1)
+middle1 = Dense(100, activation='relu')(merge1)
+middle1 = Dense(100, activation='relu')(middle1)
 middle1 = Dense(50, activation='relu')(middle1)
 
 # output
@@ -134,3 +154,11 @@ plt.xlabel('epoch')
 plt.ylabel('mse')
 plt.legend()
     
+plt.show()
+
+"""
+loss:  2867.002710235253
+mse:  2867.002685546875
+RMSE:  53.54439916804581
+R2:  0.4604840357868515
+"""
