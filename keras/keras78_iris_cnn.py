@@ -12,7 +12,7 @@ print(y.shape)      # (150, )
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 scaler.fit(x)
-x = scaler.transform(x)
+x = scaler.transform(x).reshape(150, 2, 2, 1)
 
 # y : one hot encoding
 from keras.utils.np_utils import to_categorical
@@ -25,25 +25,26 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size =0.8,random
 
 #2. model
 from keras.models import Sequential
-from keras.layers import Dense, Dropout
+from keras.layers import Dense, Dropout, Conv2D, MaxPool2D, Flatten
 model = Sequential()
-model.add(Dense(10, input_shape = (4, ), activation = 'relu'))
-model.add(Dense(50, activation = 'relu'))
+model.add(Conv2D(10, (2, 2), input_shape = (2, 2,1 ), activation = 'relu', padding = 'same'))
+model.add(Conv2D(50, (2, 2),activation = 'relu', padding = 'same'))
 model.add(Dropout(0.1))
-model.add(Dense(50, activation = 'relu'))
+model.add(Conv2D(50, (2, 2),activation = 'relu', padding = 'same'))
 model.add(Dropout(0.1))
-model.add(Dense(50, activation = 'relu'))
+model.add(Conv2D(50, (2, 2),activation = 'relu', padding = 'same'))
 model.add(Dropout(0.1))
-model.add(Dense(50, activation = 'relu'))
+model.add(Conv2D(50,(2, 2), activation = 'relu', padding = 'same'))
 model.add(Dropout(0.1))
-model.add(Dense(50, activation = 'relu'))
+model.add(Conv2D(50, (2, 2),activation = 'relu', padding = 'same'))
 model.add(Dropout(0.1))
-model.add(Dense(50, activation = 'relu'))
+model.add(Conv2D(50,(2, 2), activation = 'relu', padding = 'same'))
 model.add(Dropout(0.1))
-model.add(Dense(50, activation = 'relu'))
+model.add(Conv2D(50, (2, 2),activation = 'relu', padding = 'same'))
 model.add(Dropout(0.1))
-model.add(Dense(50, activation = 'relu'))
+model.add(Conv2D(50, (2, 2),activation = 'relu', padding = 'same'))
 model.add(Dropout(0.1))
+model.add(Flatten())
 model.add(Dense(3, activation = 'softmax'))
 
 
@@ -93,8 +94,8 @@ plt.xlabel('epochs')
 plt.ylabel('acc')
 plt.legend()
 
-
+plt.show()
 """
-loss:  0.07134652137756348
-acc:  0.9666666388511658
+loss:  0.021012894809246063
+acc:  1.0
 """

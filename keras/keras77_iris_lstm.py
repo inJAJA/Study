@@ -12,7 +12,7 @@ print(y.shape)      # (150, )
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 scaler.fit(x)
-x = scaler.transform(x)
+x = scaler.transform(x).reshape(150, 4, 1)
 
 # y : one hot encoding
 from keras.utils.np_utils import to_categorical
@@ -25,9 +25,9 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size =0.8,random
 
 #2. model
 from keras.models import Sequential
-from keras.layers import Dense, Dropout
+from keras.layers import Dense, Dropout, LSTM
 model = Sequential()
-model.add(Dense(10, input_shape = (4, ), activation = 'relu'))
+model.add(LSTM(10, input_shape = (4,1 ), activation = 'relu'))
 model.add(Dense(50, activation = 'relu'))
 model.add(Dropout(0.1))
 model.add(Dense(50, activation = 'relu'))
@@ -95,6 +95,6 @@ plt.legend()
 
 
 """
-loss:  0.07134652137756348
-acc:  0.9666666388511658
+loss:  0.13752256333827972
+acc:  0.9333333373069763
 """
