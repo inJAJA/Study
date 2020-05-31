@@ -13,7 +13,7 @@ print(y.shape) # (442,)
 print(diabetes.feature_names)     
 # ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
 
-print(np.size(x, 1))          # 열의 개수 구하기
+print(np.size(x, 1))          # 열의 개수 구하기 : 10
 
 # scatter graph
 import matplotlib.pyplot as plt
@@ -43,6 +43,42 @@ for i in range(np.size(x, 0)):        # np.size(x, 0) : 의 행의 크기
     else:
         x[i, 1]=1
 
+plt.figure(figsize = (20, 10))
+plt.scatter(x[:, 1], y)
+plt.title(diabetes.feature_names[1])
+plt.xlabel('S4')
+plt.ylabel('target')
+plt.legend()
+plt.show()
+
+# # 'S4' 0, 1, 2, 3, 4, 5로 분류
+# s4_max = np.max(x[:, -3])
+# s4_min = np.min(x[:, -3])
+# print(s4_max)
+# print(s4_min)
+# term = (0.1- s4_min)/10 
+
+# for i in range(np.size(x, 0)):
+#     if  x[i, -3] < (s4_min + term):
+#         x[i, -3] = 0
+#     elif (x[i, -3] >= (s4_min + term)) & (x[i, -3] < (s4_min + term*2)):
+#         x[i, -3] = 1 
+#     elif (x[i, -3] >= (s4_min + term*2)) & (x[i, -3] < (s4_min + term*3)):
+#         x[i, -3] = 2
+#     elif (x[i, -3] >= (s4_min + term*3)) & (x[i, -3] < (s4_min + term*4)):
+#         x[i, -3] = 3 
+#     elif (x[i, -3] >= (s4_min + term*4)) & (x[i, -3] < (s4_min + term*5)):
+#         x[i, -3] = 4 
+#     else:
+#         x[i, -3] = 5
+
+plt.figure(figsize = (20, 10))
+plt.scatter(x[:, -3], y)
+plt.title(diabetes.feature_names[-3])
+plt.xlabel('S4')
+plt.ylabel('target')
+plt.legend()
+plt.show()
 
 
 # scaler
@@ -69,7 +105,7 @@ from keras.models import Model
 from keras.layers import Dense, Dropout, Input
 # 1
 input1 = Input(shape =(4, ))
-dense1 = Dense(100, activation = 'relu')(input1)
+dense1 = Dense(80, activation = 'relu')(input1)
 desen1 = Dropout(0.2)(dense1)
 dense1 = Dense(150, activation = 'relu')(dense1)
 dense1 = Dropout(0.2)(dense1)
@@ -87,7 +123,7 @@ dense2 = Dense(100, activation = 'relu')(dense2)
 # concentrate
 from keras.layers.merge import concatenate   
 merge1 = concatenate([dense1, dense2])
-middle1 = Dense(100, activation='relu')(merge1)
+middle1 = Dense(300, activation='relu')(merge1)
 middle1 = Dense(100, activation='relu')(middle1)
 middle1 = Dense(50, activation='relu')(middle1)
 
