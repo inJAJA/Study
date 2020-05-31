@@ -38,29 +38,45 @@ from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state =100, 
                                                   train_size = 0.8)
 
+x_train1 = x_train[:,:4]
+x_test1 = x_test[:, :4]
+
+x_train2 = x_train[:,4:]
+x_test2 = x_test[:, 4:]
+
 #2. model
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
-model = Sequential()
-model.add(Dense(100, input_shape= (10, ), activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(200, activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(300, activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(500, activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(250, activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(150, activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(90, activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(0, activation = 'relu'))
-model.add(Dropout(0.1))
-model.add(Dense(1, activation = 'relu'))
+from keras.models import Model
+from keras.layers import Dense, Dropout, Input
+# 1
+input1 = Input(shape =(4, ))
+dense1 = Dense(100, activation = 'relu')(input1)
+desen1 = Dropout(0.1)(dense1)
+dense1 = Dense(200, activation = 'relu')(dense1)
+desen1 = Dropout(0.1)(dense1)
+dense1 = Dense(200, activation = 'relu')(dense1)
+desen1 = Dropout(0.1)(dense1)
+dense1 = Dense(200, activation = 'relu')(dense1)
+desen1 = Dropout(0.1)(dense1)
+
+# 2 
+input2 = Input(shape = (6, ))
+dense2 = Dense(200, activation = 'relu')(input2)
+desen2 = Dropout(0.1)(dense2)
+dense2 = Dense(200, activation = 'relu')(dense2)
+desen2 = Dropout(0.1)(dense2)
+dense2 = Dense(50, activation = 'relu')(dense2)
+
+# concentrate
+from keras.layers.merge import concatenate   
+merge1 = concatenate([dense1, dense2])
+middle1 = Dense(50, activation='relu')(merge1)
+middle1 = Dense(50, activation='relu')(middle1)
+middle1 = Dense(50, activation='relu')(middle1)
+
+# output
+output1 = Dense(1, activation = 'relu')(middle1)
+
+model = Model(inputs =[input1, input2], outputs = output1)
 
 
 # callbacks
@@ -78,16 +94,16 @@ ckpoint = ModelCheckpoint(filepath = modelpath, monitor = 'val_loss',
 
 #3. complie, fit
 model.compile(loss = 'mse', optimizer = 'adam', metrics = ['mse'])
-hist = model.fit(x_train, y_train, epochs = 100, batch_size = 64,
+hist = model.fit([x_train1 ,x_train2] ,y_train, epochs = 100, batch_size = 64,
                 validation_split = 0.2, verbose =2,
                 callbacks = [es])
 
 #4. evaluate, predict
-loss, mse = model.evaluate(x_test, y_test, batch_size = 64) 
+loss, mse = model.evaluate([x_test1, x_test2], y_test, batch_size = 64) 
 print('loss: ', loss)
 print('mse: ', mse)
 
-y_pred = model.predict(x_test)
+y_pred = model.predict([x_test1, x_test2])
 
 # RMSE
 from sklearn.metrics import mean_squared_error
