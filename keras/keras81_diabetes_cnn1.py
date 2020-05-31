@@ -71,8 +71,8 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Input, Conv2D, MaxPooling2D, Flatten
 model = Sequential()
 model.add(Conv2D(50, (2, 2), input_shape = (5, 2, 1), padding = 'same', activation = 'relu'))
-model.add(MaxPooling2D(pool_size = 2))
 model.add(Dropout(0.2))
+model.add(MaxPooling2D(pool_size = 2))
 model.add(Conv2D(100, (2, 2),padding = 'same',activation = 'relu'))
 model.add(Dropout(0.2))
 model.add(Conv2D(100,(2, 2), padding = 'same',activation = 'relu'))
