@@ -72,13 +72,13 @@ plt.show()
 #     else:
 #         x[i, -3] = 5
 
-plt.figure(figsize = (20, 10))
-plt.scatter(x[:, -3], y)
-plt.title(diabetes.feature_names[-3])
-plt.xlabel('S4')
-plt.ylabel('target')
-plt.legend()
-plt.show()
+# plt.figure(figsize = (20, 10))
+# plt.scatter(x[:, -3], y)
+# plt.title(diabetes.feature_names[-3])
+# plt.xlabel('S4')
+# plt.ylabel('target')
+# plt.legend()
+# plt.show()
 
 
 # scaler
