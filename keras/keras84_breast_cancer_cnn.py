@@ -19,7 +19,7 @@ scaler = StandardScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 # reshape
-x = x.reshape(x.shape[0], 6, 5, 1)
+x = x.reshape(x.shape[0], 5, 3, 2)
 
 # y
 # 0과 1로만 이루어졌는지 확인
@@ -39,7 +39,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 30,
 
 #2. model
 model = Sequential()
-model.add(Conv2D(10,(3, 3), input_shape =(6, 5, 1), activation = 'relu', padding = 'same'))
+model.add(Conv2D(10,(3, 3), input_shape =(5, 3, 2), activation = 'relu', padding = 'same'))
 model.add(Dropout(0.2))
 model.add(MaxPooling2D(pool_size = 2))
 model.add(Conv2D(50,(3, 3), activation = 'relu', padding = 'same'))
@@ -112,6 +112,6 @@ plt.legend()
 plt.show()
 
 """
-loss:  0.10535024342600975
-acc:  0.9561403393745422
+loss:  0.08278497759448855
+acc:  0.9649122953414917
 """
