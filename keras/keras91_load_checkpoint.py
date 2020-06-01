@@ -62,9 +62,10 @@ hist = model.fit(x_train, y_train, epochs= 10, batch_size= 64, callbacks = [es, 
                                    validation_split=0.2, verbose = 1)
 
 '''
-from keras.models import load_model
-model = load_model('./model/check-08-0.0540.hdf5')      # model과 weight가 같이 저장되어 있음
-
+from keras.models import load_model                     # (save_wights_only = False)
+model = load_model('./model/check-08-0.0540.hdf5')      # model과 weight가 같이 저장되어 있음 
+                                                        # model, compile, fit부분이 필요없다.
+                                                        
 
 #4. 평가
 loss_acc = model.evaluate(x_test, y_test, batch_size= 64)

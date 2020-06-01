@@ -53,13 +53,14 @@ modelpath = './model/check-{epoch:02d}-{val_loss:.4f}.hdf5'
 checkpoint = ModelCheckpoint(filepath = modelpath, monitor = 'val_loss', 
                             verbose =1,
                             save_best_only= True, save_weights_only= False)
-                                                 # 가중치만 저장하겠다 : False
+                                                 # 가중치만 저장하겠다 : False = ( model도 저장 )
 
 
 #3. 훈련                      
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics= ['acc']) # metrics=['accuracy']
-hist = model.fit(x_train, y_train, epochs= 10, batch_size= 64, callbacks = [es, checkpoint],
-                                   validation_split=0.2, verbose = 1)
+hist = model.fit(x_train, y_train, epochs= 10, batch_size= 64, 
+                                   callbacks = [es, checkpoint],        # 훈련 중에 나오는 가중치 저장
+                                   validation_split=0.2, verbose = 1)   # : save_weight와 결과값을 비교하여 더 좋은 것 사용한다.
 
 
 
