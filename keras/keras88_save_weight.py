@@ -65,7 +65,8 @@ hist = model.fit(x_train, y_train, epochs= 10, batch_size= 64, callbacks = [es],
 model.save('./model/model_test01.h5')
 # fit한 다음에 저장하면 '가중치'가 저장된다.(compile, fit할 필요 X)
 
-model.save_weights('./model/test_weight1.h5')
+""" save_weights """
+model.save_weights('./model/test_weight1.h5')     # 각각의 레이어의 weight 저장 (모델 저장 X)
 
 
 #4. 평가
