@@ -42,18 +42,17 @@ print(datasets.shape) # index_col = None : (150, 5)   header = 0
 
                       # header = None    : (151, 5)   index_col = None
 print(datasets)
-'''
+
 print(datasets.head())          # '위'에서 부터 5행만 보여준다.
 print(datasets.tail())          # '아래'서 부터 5행만 보여준다.
 
 print("=============")
-'''
+
 print(datasets.values)          # pandas를 numpy로 바꾼다.
-'''
+
 aaa = datasets.values
 print(type(aaa))                # <class 'numpy.ndarray'>
 
 
 # np로 저장
 np.save('./data/iris_save.npy', arr = aaa)
-'''
