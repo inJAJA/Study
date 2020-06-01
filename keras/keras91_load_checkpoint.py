@@ -83,7 +83,7 @@ loss_acc:  [0.041936698463978246, 0.9876999855041504]
 
 1. model.save( '경로/ 파일명' )
   1) fit 전 
-    : model을 저장한다.                 -> compile, fit 필요 O
+    : model을 저장한다.                 -> compile, fit 필요 O, layer추가 가능
   2) fit 후 
     : model과 최종 weight을 저장한다.    -> compile, fit 필요 X
 
@@ -92,7 +92,7 @@ loss_acc:  [0.041936698463978246, 0.9876999855041504]
 
 
 2. model.save_weights( '경로/ 파일명' ) 
-   : 각 레이어의 weight를 저장한다.      -> model, compile, fit 필요 O
+   : 각 레이어의 weight를 저장한다.      -> model, compile 필요 O
                                           : weight를 저장한 model과 구성이 같아야 한다.
                                             -> 저장된 각 레이어의 weight가 model과 매치되어야 하기 때문에  
     
@@ -104,7 +104,7 @@ loss_acc:  [0.041936698463978246, 0.9876999855041504]
     : 각 epoch마다의 weight를 저장한다  
    2)      ,,           = False
     : model과 각 epoch마다의 weight를 저장한다. 
-                                        -> model, compile, fit 필요 O
+                                        -> model, compile, fit 필요 X
     
     # from keras.models import load_model                     # (save_wights_only = False)
       model = load_model('./model/check-08-0.0540.hdf5') 

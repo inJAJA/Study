@@ -56,14 +56,14 @@ es = EarlyStopping(monitor = 'loss', patience = 20, mode= 'auto')
 #3. 훈련                      
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics= ['acc']) # metrics=['accuracy']
 '''
-hist = model.fit(x_train, y_train, epochs= 10, batch_size= 64, callbacks = [es],
+model.fit(x_train, y_train, epochs= 10, batch_size= 64, callbacks = [es],
                                    validation_split=0.2, verbose = 1)
-'''
 
+'''
 
 """ load_weight """
 model.load_weights('./model/test_weight1.h5')   # 각각의 레이어의 weight가 save된걸 가져온다 (model 불러오기 X)     
-                                                # model구성, compile, fit부분이 필요 O  
+                                                # model구성, compile 필요 O  
                                                 # weight가 저장된 모델과 구성이 동일해야 한다. 
                                                 # : 저장된 weight수 만큼 node와 layer가 매칭되어야 하기 때문
 
