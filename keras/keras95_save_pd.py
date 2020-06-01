@@ -1,12 +1,21 @@
 import numpy as np
 import pandas as pd
 
-datasets = pd.read_csv('./data/csv/iris.csv', # default  = None
-                      index_col = None,      # None = index_column을 새로 생성, 기존 데이터에서 인덱스 column을 주지 않겠다.
-                                             # 숫자 = 해당 열의 data사라지고 index_column생성됌
-                      header = 0, sep=',')   # 0번째 행은 header로 보겠다.(데이터로 인식X) / None =  0행부터 data로 인식하겠다.    
-#  header : defalut = 'infer'   # sep = seperate : 구분해주는 기준 / csv는 값이 ' , '로 나뉘어져 있다. 
-#                     미루다     #                : default = ‘,’   
+datasets = pd.read_csv('./data/csv/iris.csv', index_col = None, header = 0, sep=',')    
+## index_col 
+# : None = index_column을 새로 생성          / 기존 data를 인덱스 column으로 주지 않겠다.
+# : 숫자 = 해당 열을 index_column으로 보겠다. / data로 인식 X (data가 날아감) 
+# : default  = None
+
+## header  
+# : None = 0번째 행부터 data로 보겠다.  
+# :  0   = 0번째 행은 header로 보겠다. / data로 인식X (data가 날아감) 
+# : defalut = 'infer'( 미루다 ) 
+
+## sep 
+# : seperate : 각 열을 구분해주는 기준 
+# : sep =',' : csv는 값이 ' , '로 나뉘어져 있다. 
+# : default = ‘,’   
                                 
 #    index_column \  150    4  setosa  versicolor  virginica -> 0행 = header
 #               0    5.1  3.5     1.4         0.2          0
