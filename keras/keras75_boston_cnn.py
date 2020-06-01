@@ -18,7 +18,7 @@ print(x.shape)
 
 # PCA
 from sklearn.decomposition import PCA
-pca = PCA(n_components = 8)
+pca = PCA(n_components = 8)                            # n_components = : output되는 column의 개수를 지정해줌   
 pca.fit(x)
 x = pca.transform(x).reshape(x.shape[0], 8, 1, 1)
 print(x.shape)

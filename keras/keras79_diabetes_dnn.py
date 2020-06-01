@@ -17,7 +17,7 @@ print(np.size(x, 1))          # 열의 개수 구하기 : 10
 
 # scatter graph
 import matplotlib.pyplot as plt
-plt.figure(figsize = (20, 10))
+plt.figure(figsize = (14, 7))
 for i in range(np.size(x, 1)):
     plt.subplot(2, 5, i+1)
     plt.scatter(x[:, i], y)
@@ -43,7 +43,7 @@ for i in range(np.size(x, 0)):        # np.size(x, 0) : 의 행의 크기
     else:
         x[i, 1]=1
 
-plt.figure(figsize = (20, 10))
+plt.figure(figsize = (10, 5))
 plt.scatter(x[:, 1], y)
 plt.title(diabetes.feature_names[1])
 plt.xlabel('S4')
@@ -107,8 +107,6 @@ from keras.layers import Dense, Dropout, Input
 input1 = Input(shape =(4, ))
 dense1 = Dense(80, activation = 'relu')(input1)
 desen1 = Dropout(0.2)(dense1)
-dense1 = Dense(150, activation = 'relu')(dense1)
-dense1 = Dropout(0.2)(dense1)
 dense1 = Dense(100, activation = 'relu')(dense1)
 desen1 = Dropout(0.2)(dense1)
 
