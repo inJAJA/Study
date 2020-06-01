@@ -56,7 +56,7 @@ ts_board = TensorBoard(log_dir = 'graph', histogram_freq= 0,
                       write_graph = True, write_images=True)
 # Checkpoint
 modelpath = './model/{epoch:02d}-{val_loss:.4f}.hdf5'
-ckecpoint = ModelCheckpoint(filepath = modelpath, monitor = 'val_loss',
+checkpoint = ModelCheckpoint(filepath = modelpath, monitor = 'val_loss',
                             save_best_only= True)
 
 
@@ -64,7 +64,7 @@ ckecpoint = ModelCheckpoint(filepath = modelpath, monitor = 'val_loss',
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['acc'])
 hist = model.fit(x_train, y_train, epochs =100, batch_size= 64,
                 validation_split = 0.2, verbose = 2,
-                callbacks = [es])
+                callbacks = [es, ts_board, checkpoint])
 
 # evaluate
 loss, acc = model.evaluate(x_test, y_test, batch_size = 64)
@@ -93,7 +93,7 @@ plt.xlabel('epochs')
 plt.ylabel('acc')
 plt.legend()
 
-
+plt.show()
 """
 loss:  0.13752256333827972
 acc:  0.9333333373069763
