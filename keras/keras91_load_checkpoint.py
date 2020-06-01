@@ -76,3 +76,42 @@ print('loss_acc: ', loss_acc)
 '''     
 loss_acc:  [0.041936698463978246, 0.9876999855041504]
 '''
+
+
+"""
+# model, weight 저장 방법들:
+
+1. model.save( '경로/ 파일명' )
+  1) fit 전 
+    : model을 저장한다.                 -> compile, fit 필요 O
+  2) fit 후 
+    : model과 최종 weight을 저장한다.    -> compile, fit 필요 X
+
+    # from keras.models import load_model
+      model = load_model('./model/model_test01.h5')
+
+
+2. model.save_weights( '경로/ 파일명' ) 
+   : 각 레이어의 weight를 저장한다.      -> model, compile, fit 필요 O
+                                          : weight를 저장한 model과 구성이 같아야 한다.
+                                            -> 저장된 각 레이어의 weight가 model과 매치되어야 하기 때문에  
+    
+    # model.load_weights('./model/test_weight1.h5')
+
+
+3. Modelcheckpoint
+   1) save_weights_only = True
+    : 각 epoch마다의 weight를 저장한다  
+   2)      ,,           = False
+    : model과 각 epoch마다의 weight를 저장한다. 
+                                        -> model, compile, fit 필요 O
+    
+    # from keras.models import load_model                     # (save_wights_only = False)
+      model = load_model('./model/check-08-0.0540.hdf5') 
+
+
+
+### model.save & model.save_weight 과 ModelCheckpoint 중 뭐가 더 좋은 지는 정확하지 않다.
+### => 결과 값( loss, acc)을 보고 더 좋은 것을 사용한다. 
+
+"""
