@@ -54,8 +54,8 @@ x_hit = pca.transform(x_hit).reshape(x_hit.shape[0], )
 print(x_hit.shape)                                    # (509, )
 
 # split
-x_hit = split_x(x_hit, 5)                          # x_sam의 행과 모양 맞춰주기 위함
-print(x_hit.shape)                                 # (504, 6)
+x_hit = split_x(x_hit, size)                          # x_sam의 행과 모양 맞춰주기 위함
+print(x_hit.shape)                                    # (504, 6)
 
 
 # LSTM을 위한 reshape
@@ -69,18 +69,18 @@ x1 = LSTM(70)(input1)
 x1 = Dropout(0.1)(x1)
 x1 = Dense(110)(x1)
 x1 = Dropout(0.1)(x1)
-x1 = Dense(130)(x1)         # x_sam -> y_sam
+x1 = Dense(130)(x1)
 x1 = Dropout(0.1)(x1)
 x1 = Dense(150)(x1)
 x1 = Dropout(0.1)(x1)
 x1 = Dense(170)(x1)
 
 
-input2 = Input(shape = (5, 1))     
+input2 = Input(shape = (6, 1))     
 x2 = LSTM(50)(input2) 
 x2 = Dropout(0.1)(x2)
 x2 = Dense(70)(x2)
-x2 = Dropout(0.1)(x2)       # x_hit -> y_sam
+x2 = Dropout(0.1)(x2)
 x2 = Dense(90)(x2)
 x2 = Dropout(0.1)(x2)
 x2 = Dense(130)(x2)
