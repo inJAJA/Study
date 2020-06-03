@@ -55,7 +55,7 @@ print('----------')
 print(sm.head())
 print(h.head())
 
-sm = sm.sort_values('일자',ascending = True)
+sm = sm.sort_values('일자',ascending = True)              # 오름차순으로 정렬
 h = h.sort_values('일자',ascending = True)
 
 print(sm.head())
@@ -66,7 +66,7 @@ print(h.shape)                 # (509, 5)
 
 
 for i in range(len(sm.index)): 
-    sm.iloc[i,0] = int(sm.iloc[i,0].replace(',',''))
+    sm.iloc[i,0] = int(sm.iloc[i,0].replace(',',''))      # 'Nan'값이 존재할 경우, 'str'형이 아닌경우 적용 X
   
 
 for i in range(len(h.index)):
