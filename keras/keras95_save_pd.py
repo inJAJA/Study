@@ -3,13 +3,14 @@ import pandas as pd
 
 datasets = pd.read_csv('./data/csv/iris.csv', index_col = None, header = 0, sep=',')    
 ## index_col 
-# : None = index_column을 새로 생성          / 기존 data를 인덱스 column으로 주지 않겠다.
-# : 숫자 = 해당 열을 index_column으로 보겠다. / data로 인식 X (data가 날아감) 
+# : None = index_column을 새로 생성             / 기존 data를 인덱스 column으로 주지 않겠다.
+# :   n  = n번째 열까지 index_column으로 보겠다. / data로 인식 X (data가 날아감) 
 # : default  = None
 
 ## header  
 # : None = 0번째 행부터 data로 보겠다.  
 # :  0   = 0번째 행은 header로 보겠다. / data로 인식X (data가 날아감) 
+# :  n   = n번째 행까지 header로 보겠다 / data로 인식X (data가 날아감) 
 # : defalut = 'infer'( 미루다 ) 
 
 ## sep 
