@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 datasets = pd.read_csv('./data/csv/iris.csv', index_col = None, header = 0, sep=',')    
+'''
 ## index_col 
 # : None = index_column을 새로 생성             / 기존 data를 인덱스 column으로 주지 않겠다.
 # :   n  = n번째 열까지 index_column으로 보겠다. / data로 인식 X (data가 날아감) 
@@ -45,7 +46,7 @@ datasets = pd.read_csv('./data/csv/iris.csv', index_col = None, header = 0, sep=
 #               6.5  3.0     5.2         2.0          2
 #               6.2  3.4     5.4         2.3          2
 #               5.9  3.0     5.1         1.8          2
-
+'''
 
 print(datasets.shape) # index_col = None : (150, 5)   header = 0 
                       # index_col = 0    : (150, 4)   header = 0

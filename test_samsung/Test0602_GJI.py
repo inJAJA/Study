@@ -20,10 +20,10 @@ print(sm.head())
 print(h.head())
 
 print(sm.shape)                 # (700, 1)
-print(h.shape)                 # (720, 5)
+print(h.shape)                  # (720, 5)
 
 print(sm.tail())                # Nan
-print(h.tail())                # Nan
+print(h.tail())                 # Nan
 
 
 sm = sm.dropna(how='all')
@@ -32,8 +32,8 @@ h = h.dropna(how='all')
 # print(h.iloc[0, 1:])
 h1= h.iloc[1:, :].copy()
 
-for i in range(len(h1.index)):
-    for j in range(len(h1.iloc[i])):
+for i in range(len(h1.index)):            # 행 순서로 움직임
+    for j in range(len(h1.iloc[i])):      # 열 순서로 움직이고
         h1.iloc[i,j] = int(h1.iloc[i,j].replace(',','') )
                                                         
 print(h1[['고가','저가','종가','거래량']].mean())         # 평균 값  
@@ -216,7 +216,7 @@ plt.show()
 
 print(x1[-1,:])
 a = x1_1[-1, :].reshape(1, 5, 1)
-b = x2_1[-1, :].reshape(1, 5,5)
+b = x2_1[-1, :].reshape(1, 5, 5)
 y_predict = model.predict([a, b])
 print('2020.06.03 :', y_predict)
 

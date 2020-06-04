@@ -7,12 +7,12 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.decomposition import PCA
 
 
-def split_x(seq, size):                    # 
+def split_x(seq, size):                    
     aaa = []
-    for i in range(len(seq) - size + 1):
-        subset = seq[i: (i+size)]
-        aaa.append([j for j in subset])          
-    return np.array(aaa)
+    for i in range(len(seq) - size + 1):    # i= [0, ...503]           
+        subset = seq[i: (i+size)]           # samsung[0: 6]   = 0 ~ 5  / smasung[1: 7] = 1, 2, 3...6
+        aaa.append([j for j in subset])     # aaa.append[[0, 1, 2, 3, 4, 5]  
+    return np.array(aaa)                    #            [1, 2, 3, 4, 5, 6]]
 
 size = 6                      
 

@@ -54,7 +54,7 @@ print('samsung_data:', samsung)
 print('samsung: ',x1_pred)
 print('hite: ',x2_pred)
 
-'''
+
 #2. 모델 구성: LSTM 1, Dense2
 input1 = Input(shape = (5, 1))
 x1 = LSTM(70)(input1)             # 시계열은 LSTM이 좋다
@@ -80,7 +80,7 @@ x2 = Dropout(0.1)(x2)
 x2 = Dense(150)(x2)
 
 
-merge
+# merge
 merge = concatenate([x1, x2])
 middle = Dense(80)(merge)
 middle = Dropout(0.1)(middle)
@@ -102,4 +102,3 @@ model.summary()
 model.compile(loss ='mse', optimizer = 'adam')
 model.fit([x_sam, x_hit], y_sam, epochs = 5)
 
-'''
