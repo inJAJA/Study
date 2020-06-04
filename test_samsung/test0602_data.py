@@ -35,8 +35,8 @@ print(type(samsung))                                            # <class 'pandas
 samsung = samsung.dropna(axis =0)                                  # dropna = default ‘any’ : Nan이 들어간 모든 행을 삭제
 # print(samsung)                                                   # axis = default 0 
 print(samsung.shape)                                               # (509, 1)
-hite = hite.fillna(method = 'bfill')                               # bfill = back fill  : 이후 행의 값으로 채워줌 ( 0행 <- 1행 )
-hite = hite.dropna(axis = 0)                                       # ffill = front fill : 이전 행의 값으로 채워줌 ( 0행 -> 1행 )
+hite = hite.fillna(method = 'bfill')                               # bfill = back fill    : 이후 행의 값으로 채워줌 ( 0행 <- 1행 )
+hite = hite.dropna(axis = 0)                                       # ffill = forward fill : 이전 행의 값으로 채워줌 ( 0행 -> 1행 )
 # print(hite)
 
 

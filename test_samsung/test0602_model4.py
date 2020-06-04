@@ -46,7 +46,6 @@ scaler.fit(hite)
 x_hit = scaler.transform(hite)
 
 
-
 # PCA
 pca =PCA(n_components = 1)          # 1열: 각 '행'별로 '열'을 압축 -> 차원 축소
 pca.fit(x_hit)                      # hite의 행이 시간별로 이루워져 있기 때문에 PCA를 돌리면 시계열 데이터가 된다(smasung과 같은 형태의 데이터)
