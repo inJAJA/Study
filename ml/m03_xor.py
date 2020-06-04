@@ -20,6 +20,6 @@ acc = accuracy_score([0, 1, 1, 0], y_predict)     # evaluate = score()
                      #  y_data
 
 print(x_test, '의 예측 결과: ', y_predict)
-print('add = ', acc)
+print('acc = ', acc)
 # [[0, 0], [1, 0], [0, 1], [1, 1]] 의 예측 결과:  [0 0 0 0]    
 # add =  0.5

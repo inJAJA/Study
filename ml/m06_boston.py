@@ -22,8 +22,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 1, trai
 # model =SVC()                                        # ValueError
 # model = LinearSVC()                                 # ValueError       
 # model = KNeighborsClassifier(n_neighbors = 1)       # ValueError
-model = RandomForestClassifier()                      # ValueError : 분류모델
-# model = KNeighborsRegressor(n_neighbors = 1)
+# model = RandomForestClassifier()                    # ValueError : 분류모델
+model = KNeighborsRegressor(n_neighbors = 1)
 # model = RandomForestRegressor()
 
 
@@ -33,22 +33,30 @@ model.fit(x_train, y_train)
 #4. predict
 y_pred = model.predict(x_test)
 
-r2 = r2_score(y_test, y_pred)
-print('R2: ', r2)
-# ValueError: Unknown label type: 'continuous'
-# ValueError: Unknown label type: 'continuous'
-# ValueError: Unknown label type: 'continuous'
-# ValueError: Unknown label type: 'continuous'
-# R2:  0.7894467162891708
-# R2:  0.910737124510854
 
 score = model.score(x_test, y_test)
 print('score: ', score)
+
+
+r2 = r2_score(y_test, y_pred)
+print('R2: ', r2)
+
 # ValueError: Unknown label type: 'continuous'
 # ValueError: Unknown label type: 'continuous'
+
 # ValueError: Unknown label type: 'continuous'
 # ValueError: Unknown label type: 'continuous'
+
+# ValueError: Unknown label type: 'continuous'
+# ValueError: Unknown label type: 'continuous'
+
+# ValueError: Unknown label type: 'continuous'
+# ValueError: Unknown label type: 'continuous'
+
 # score:  0.7894467162891708
+# R2:  0.7894467162891708
+
 # score:  0.910737124510854
+# R2:  0.910737124510854
 
 

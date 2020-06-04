@@ -25,11 +25,11 @@ print(y.shape)
 #2. model
 # model =SVC()                                     # 원 핫 인코딩 필요 없음
 # model = LinearSVC()                                       
-# model = KNeighborsClassifier(n_neighbors = 1)
+model = KNeighborsClassifier(n_neighbors = 1)
 # model = RandomForestClassifier() 
 # model = KNeighborsRegressor(n_neighbors = 1)                
-model = RandomForestRegressor()                    # ValueError : accuracy_score를 지우면 사용할 수 있다.
-        # 분류를 회귀 모델로 돌릴 수 는 있지만 정확한 값이 
+# model = RandomForestRegressor()                  # ValueError : accuracy_score를 지우면 사용할 수 있다.
+        # 분류를 회귀 모델로 돌릴 수는 있지만 정확한 값이 
 
 #3. fit
 model.fit(x_train, y_train)
@@ -37,21 +37,33 @@ model.fit(x_train, y_train)
 #4. predict
 y_pred = model.predict(x_test)
 
-acc = accuracy_score(y_test, y_pred)
-# print('acc: ', acc)
-# acc:  0.8
-# acc:  0.9666666666666667
-# acc:  1.0
-# acc:  0.9666666666666667
-# acc:  1.0
-# ValueError: Classification metrics can't handle a mix of multiclass and continuous targets
-  # gh
 
 score = model.score(x_test, y_test)                # 회귀 모델이면 R2 값
 print('score: ', score)                            # 분류 모델이면 ACC 값 반환
+
+acc = accuracy_score(y_test, y_pred)
+print('acc: ', acc)
+
+r2 = r2_score(y_test, y_pred)
+print('R2: ', r2)
+
+# score:  0.9666666666666667
+# acc:  0.9666666666666667
+# R2:  0.9381443298969072
+
 # score:  0.8
-# score:  0.9666666666666667
+# acc:  0.8
+# R2:  0.6288659793814433
+
 # score:  1.0                                      # 운이 좋게 acc와 r2값이 동일하게 나온 것
+# acc:  1.0
+# R2:  1.0
+
 # score:  0.9666666666666667
+# acc:  0.9666666666666667
+
 # score:  1.0
+# acc:  1.0
+
+# ValueError: Classification metrics can't handle a mix of multiclass and continuous targets
 # ValueError: Classification metrics can't handle a mix of multiclass and continuous targets
