@@ -7,3 +7,12 @@ import numpy as np
 
 arr = np.array([2, 4, 6, 7])
 print(arr[np.array([True, True, True, False])])      # [2 4 6]
+
+print(arr[arr % 3 == 1])                             # [4 7]   : 논리 연산의 결과가 True에 해닫되는 값 반환 
+
+
+arr = np.array([2, 3, 4, 5, 6, 7])
+
+print(arr % 2 == 0)                                  # [ True False  True False  True False] : 각 요소가 2로 나누어 떨어지는지
+ 
+print(arr[arr % 2 == 0])                             # [2 4 6] : 각 요소 중 3로 나누어떨어지는 요소
