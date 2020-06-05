@@ -22,15 +22,16 @@ y = iris.iloc[:, 4]
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 44)  # train, test
 
 parameters = [ 
-    {"C": [1, 10, 100, 1000], "kernel" : ["linear"]},                             # 
-    {"C": [1, 10, 100, 1000], "kernel" : ["rbf"], "gamma":[0.001, 0.0001]},      # 
-    {"C": [1, 10, 100, 1000], "kernel" : ["sigmoid"], "gamma":[0.001, 0.0001]}   # 
-]       # 가중치 인수                                  # = running rate
+    {"C": [1, 10, 100, 1000], "kernel" : ["linear"]},                           
+    {"C": [1, 10, 100, 1000], "kernel" : ["rbf"], "gamma":[0.001, 0.0001]},      
+    {"C": [1, 10, 100, 1000], "kernel" : ["sigmoid"], "gamma":[0.001, 0.0001]}    
+]       # 가중치 인수         # 커널 트릭              # = running rate
 
-kfold = KFold(n_splits = 5, shuffle = True)                                                  # train, validation
-
+kfold = KFold(n_splits = 5, shuffle = True)                                                     # train, validation
+    
+        #  진짜 모델,     그 모델의 파라미터 , cross_validtion 수
 model = GridSearchCV(SVC(), parameters, cv =  kfold)  # SVC()모델을 가지고 parameters를 조정하고, kfold만큼 
-     #  진짜 모델,     그 모델의 파라미터 , cross_validtion 수
+     
 
 
 model.fit(x_train, y_train)

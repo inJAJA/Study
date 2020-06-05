@@ -44,13 +44,12 @@ print('최적의 매개변수 : ', model.best_estimator_)
 y_pred = model.predict(x_test)
 print("최종 정답률 = ", accuracy_score(y_test, y_pred) )
 
-"""
-criterion='gini',
-            max_depth=None, max_features='auto', max_leaf_nodes=None,        
-            min_impurity_decrease=0.0, min_impurity_split=None,
-            min_samples_leaf=1, min_samples_split=5,
-            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=None,      
-            oob_score=False, random_state=None, verbose=0,
-            warm_start=False)
-최종 정답률 =  0.9122807017543859
-"""
+
+# criterion='gini',
+#             max_depth=None, max_features='auto', max_leaf_nodes=None,        
+#             min_impurity_decrease=0.0, min_impurity_split=None,
+#             min_samples_leaf=1, min_samples_split=5,
+#             min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=None,      
+#             oob_score=False, random_state=None, verbose=0,
+#             warm_start=False)
+# 최종 정답률 =  0.9122807017543859
