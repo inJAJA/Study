@@ -10,7 +10,7 @@ print(dot)                              # [[ 15  18  21][ 42  54  66][ 69  90 11
 print(dot.shape)                        # (3, 3)
 
 # np.linalg.norm(a) : norm을 반환
-vector = arr.
+vector = arr.reshape(9)
 norm = np.linalg.norm(arr)
 print(norm)                             # 14.2828568570857
 
