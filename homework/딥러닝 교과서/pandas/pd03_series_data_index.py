@@ -5,6 +5,12 @@ data = [10, 5, 8, 12, 3]
 
 series = pd.Series(data, index = index)
 print(series)
+# apple         10
+# orange         5
+# banana         8
+# strawberry    12
+# kiwifruit      3
+# dtype: int64
 
 
 ''' data, index 추출 '''
