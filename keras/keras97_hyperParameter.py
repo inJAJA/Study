@@ -40,7 +40,7 @@ def build_model(drop=0.5, optimizer = 'adam'):
 def create_hyperparameters():
     batches = [10, 20, 30, 40, 50]
     optimizers = ['rmsprop', 'adam', 'adadelta']
-    dropout = np.linspace(0.1, 0.5, 5)                           # 
+    dropout = np.linspace(0.1, 0.5, 5)                           # start = 0.1, end = 0.5, 5개 생성
     return{'batch_size' : batches, 'optimizer': optimizers, 
            'drop': dropout}                                       # dictionary형태
 
@@ -52,10 +52,12 @@ hyperparameters = create_hyperparameters()
 
 # gridsearch
 from sklearn.model_selection import GridSearchCV,  RandomizedSearchCV
-search = GridSearchCV(model, hyperparameters, cv = 3)            # cv = cross_validation
+search = GridSearchCV(model, hyperparameters, cv = 3)             # cv = cross_validation
+# batches * optimizers * dropout * cv
+#   5     *     3      *    5    *  3 = 225번의 model이 돌아감 
 
 # fit
 search.fit(x_train, y_train)
 
-print(serch.best_params_)   # serch.best_estimator_
+print(search.best_params_)   # serch.best_estimator_
 
