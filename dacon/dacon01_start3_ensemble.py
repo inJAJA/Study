@@ -1,0 +1,148 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
+from keras.models import Sequential, Model
+from keras.layers import Dense, Dropout, Input
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
+from keras.callbacks import EarlyStopping
+from sklearn.decomposition import PCA
+from keras.layers.merge import concatenate  
+
+#1. data
+train = pd.read_csv('./data/dacon/comp1/train.csv', index_col= 0 , header = 0)
+test = pd.read_csv('./data/dacon/comp1/test.csv', index_col= None , header = 0)
+submission = pd.read_csv('./data/dacon/comp1/sample_submission.csv', index_col= 0 , header = 0)
+
+print('train.shape: ', train.shape)              # (10000, 75)  = x_train, test
+print('test.shape: ', test.shape)                # (10000, 71)  = x_predict
+print('submission.shape: ', submission.shape)    # (10000, 4)   = y_predict
+
+print(train.isnull().sum())                      
+
+
+train = train.interpolate()                       
+print(train.isnull().sum())                       
+
+test = test.interpolate()
+
+x = train.iloc[:, :71]                           
+y = train.iloc[:, -4:]
+print(x.shape)                                   # (10000, 71)
+print(y.shape)                                   # (10000, 4)
+
+
+x = x.fillna(method = 'bfill')
+test = test.fillna(method = 'bfill')
+
+# print(x.info())
+# print(test.info())
+
+x = x.values
+y = y.values
+x_pred = test.drop('id', axis = 1)
+x_pred = x_pred.values
+
+x1 = x[:, 0].reshape(x.shape[0], 1)
+x2 = x[:, 1:37]
+x3 = x[:, 37:]
+print(x1.shape)              # (10000,)
+print(x2.shape)              # (10000, 36)
+print(x3.shape)              # (10000, 34)
+
+
+x_pred1 = x_pred[:, 0].reshape(x_pred.shape[0], 1)
+x_pred2 = x_pred[:, 1:37]
+x_pred3 = x_pred[:, 37:]
+
+# scaler
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+scaler = RobustScaler()
+scaler.fit(x1)
+x1 = scaler.transform(x1)
+x_pred1 = scaler.transform(x_pred1)
+
+scaler.fit(x2)
+x2 = scaler.transform(x2)
+x_pred2 = scaler.transform(x_pred2)
+
+scaler.fit(x3)
+x3 = scaler.transform(x3)
+x_pred3 = scaler.transform(x_pred3)
+
+
+# PCA
+# pca = PCA(n_components = 10)
+# pca.fit(x)
+# x = pca.transform(x)
+# x_pred = pca.transform(x_pred)
+
+
+# train, test
+x1_train, x1_test, y_train, y_test = train_test_split(x1, y, train_size = 0.8, random_state = 30)
+
+x2_train, x2_test, x3_train, x3_test = train_test_split(x2, x3, train_size = 0.8, random_state = 30)
+
+
+#2. model
+input1 = Input(shape = (1, ))
+x1 = Dense(50, activation = 'elu')(input1)
+x1 = Dropout(0.2)(x1)
+x1 = Dense(120, activation = 'elu')(x1)
+x1 = Dropout(0.2)(x1)
+
+input2 = Input(shape = (36, ))
+x2 = Dense(100, activation = 'elu')(input2)
+x2 = Dropout(0.2)(x2)
+x2 = Dense(150, activation = 'elu')(x2)
+x2 = Dropout(0.2)(x2)
+
+input3 = Input(shape = (34, ))
+x3 = Dense(100, activation = 'elu')(input3)
+x3= Dropout(0.2)(x3)
+x3 = Dense(100, activation = 'elu')(x3)
+x3= Dropout(0.2)(x3)
+
+merge = concatenate([x1, x2, x3])
+middle = Dense(50, activation = 'elu')(merge)
+middle = Dense(50, activation = 'elu')(middle)
+
+outputs = Dense(4, activation = 'elu')(middle)
+model = Model(inputs = [input1, input2, input3], outputs = outputs)
+
+
+# earlystopping
+es = EarlyStopping(monitor = 'val_loss', mode = 'auto', patience = 50) 
+
+#3. compile, fit
+model.compile(loss = 'mae', optimizer = 'adam', metrics = ['mae'])
+model.fit([x1_train, x2_train, x3_train], y_train, epochs = 500, batch_size = 64, verbose = 2,
+         validation_split = 0.2, callbacks = [es])
+
+#4. evaluate, predict
+loss_mae = model.evaluate([x1_test, x2_test, x3_test],y_test, batch_size = 64)
+print('loss_mae: ', loss_mae)
+
+y_pred = model.predict([x_pred1, x_pred2, x_pred3])
+print('y_pred: ', y_pred)
+
+
+a = np.arange(10000,20000)
+y_pred = pd.DataFrame(y_pred,a)
+y_pred.to_csv('./dacon/y_pred4.csv', 
+              index = True, header=['hhb','hbo2','ca','na'],index_label='id')
+
+# sibmit파일
+# y_pred.to_csv(경로)
+
+'''
+loss_mae:  [1.6898496789932251, 1.6898494958877563] 
+y_pred:  [[3.5748956 3.3686323 6.9966373 2.2605565] 
+ [3.1582272 3.438317  7.171153  2.3042784]
+ [5.0822406 3.4805655 7.4849043 2.3881085]
+ ...
+ [3.0626209 3.33351   6.7968307 2.258009 ]
+ [2.1190577 4.0426445 9.141554  2.779194 ]
+ [3.6889172 3.3834476 7.0326495 2.2775798]]
+'''
