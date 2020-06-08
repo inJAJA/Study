@@ -3,10 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
-from keras.callbacks import EarlyStopping
-from sklearn.decomposition import PCA
+from keras.layers import Dense, Dropout, Input
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from keras.wrappers.scikit_learn import KerasRegressor
+from keras.losses import MeanAbsoluteError
 
 #1. data
 train = pd.read_csv('./data/dacon/comp1/train.csv', index_col= 0 , header = 0)
@@ -53,71 +53,73 @@ y = train.iloc[:, -4:]
 print(x.shape)                                   # (10000, 71)
 print(y.shape)                                   # (10000, 4)
 
-
 x = x.fillna(method = 'bfill')
 test = test.fillna(method = 'bfill')
 
 # print(x.info())
 # print(test.info())
 
+
 x = x.values
 y = y.values
 x_pred = test.drop('id', axis = 1)
-x_pred = x_pred.values
+x_pre = x_pred.values
 
 # scaler
-# scaler = MinMaxScaler()
-# scaler = StandardScaler()
-scaler = RobustScaler()
+scaler = MinMaxScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 x_pred = scaler.transform(x_pred)
-
-# PCA
-# pca = PCA(n_components = 10)
-# pca.fit(x)
-# x = pca.transform(x)
-# x_pred = pca.transform(x_pred)
-
 
 # train, test
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, random_state = 30)
 
 #2. model
-model = Sequential()
-model.add(Dense(50, input_shape = (71, ), activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.3))
-model.add(Dense(150, activation = 'relu'))
-model.add(Dropout(0.3))
-model.add(Dense(200, activation = 'relu'))
-model.add(Dropout(0.3))
-model.add(Dense(180, activation = 'relu'))
-model.add(Dropout(0.3))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.3))
-model.add(Dense(80, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(50, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(4, activation = 'relu'))
+def build_model(drop = 0.2, optimizer = 'adam', activation = 'relu'):
+    inputs = Input(shape = (71, ))
+    x = Dense(50, activation = activation)(inputs)
+    x = Dropout(drop)(x)
+    x = Dense(120, activation = activation)(x)
+    x = Dropout(drop)(x)
+    x = Dense(100, activation = activation)(x)
+    x = Dropout(drop)(x)
+    x = Dense(150, activation = activation)(x)
+    x = Dropout(drop)(x)
+    x = Dense(100, activation = activation)(x)
+    x = Dropout(drop)(x)
+    outputs = Dense(4, activation = activation)(x)
+    model = Model(inputs = inputs, outputs = outputs)
+    model.compile(loss = MeanAbsoluteError, optimizer = optimizer, metrics = [MeanAbsoluteError])
 
+def create_hyperparameter():
+    batches = [16, 32, 64, 128]
+    epochs = [50, 100, 150, 200]
+    # dropout = np.linspace(0.1, 0.5, 5)
+    activation = ['relu', 'elu']
+    optimizers = ['rmsprop', 'adam', 'adadelta']
+    return {'batch_size': batches, 'epochs':epochs, 'activation':activation,
+            'optimizer': optimizers}
 
-# earlystopping
-es = EarlyStopping(monitor = 'val_loss', mode = 'auto', patience = 50) 
+# wrapper    
+model = KerasRegressor(build_fn = build_model, verbose =2)
 
-#3. compile, fit
-model.compile(loss = 'mae', optimizer = 'adam', metrics = ['mae'])
-model.fit(x_train, y_train, epochs = 500, batch_size = 64, verbose = 2,
-         validation_split = 0.2, callbacks = [es])
+parameter = create_hyperparameter()
+
+# Search
+search = RandomizedSearchCV(model, parameter, cv = 3)
+
+# fit
+search.fit(x_train, y_train)
 
 #4. evaluate, predict
-loss_mae = model.evaluate(x_test, y_test, batch_size = 64)
-print('loss_mae: ', loss_mae)
+print(search.best_params_)
 
-y_pred = model.predict(x_pred)
+y_pred = search.predict(x_pred)
 print('y_pred: ', y_pred)
+
+from sklearn.metrics import mean_absolute_error 
+mae = mean_absolute_error(x_test, y_test)
+print('mae: ', mae)
 
 y_pred = pd.DataFrame({
   'id' : test['id'],
@@ -126,31 +128,6 @@ y_pred = pd.DataFrame({
   'ca': y_pred[:, 2],
   'na':y_pred[:, 3]
 })
-# y_pred = pd.DataFrame({
-#   'id' : np.array(range(10000, 20000)),
-#   'hhb': y_pred[:,0],
-#   'hbo2': y_pred[:, 1],
-#   'ca': y_pred[:, 2],
-#   'na':y_pred[:, 3]
-# })
-# y_pred = pd.DataFrame(y_pred)
-y_pred.to_csv('./dacon/y_pred4.csv', index = False )
-
-# a = np.arange(10000,20000)
-# y_pred = pd.DataFrame(y_pred,a)
-# y_pred.to_csv('./data/dacon/comp1/sample_submission.csv', 
-#               index = True, header=['hhb','hbo2','ca','na'],index_label='id')
-
+y_pred.to_csv('./dacon/y_pred2.csv', index = False )
 # sibmit파일
 # y_pred.to_csv(경로)
-
-'''
-loss_mae:  [1.6898496789932251, 1.6898494958877563] 
-y_pred:  [[3.5748956 3.3686323 6.9966373 2.2605565] 
- [3.1582272 3.438317  7.171153  2.3042784]
- [5.0822406 3.4805655 7.4849043 2.3881085]
- ...
- [3.0626209 3.33351   6.7968307 2.258009 ]
- [2.1190577 4.0426445 9.141554  2.779194 ]
- [3.6889172 3.3834476 7.0326495 2.2775798]]
-'''
