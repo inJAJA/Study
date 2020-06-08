@@ -31,9 +31,12 @@ y = train.iloc[:, -4:]
 print(x.shape)                                   # (10000, 71)
 print(y.shape)                                   # (10000, 4)
 
+x = x.replace(0, np.nan)
+test = test.replace(0, np.nan)
 
-x = x.fillna(method = 'bfill')
-test = test.fillna(method = 'bfill')
+
+x = x.fillna(x.mean())
+test = test.fillna(test.mean())
 
 # print(x.info())
 # print(test.info())
@@ -87,7 +90,7 @@ x2_train, x2_test, x3_train, x3_test = train_test_split(x2, x3, train_size = 0.8
 
 #2. model
 input1 = Input(shape = (1, ))
-x1 = Dense(50, activation = 'elu')(input1)
+x1 = Dense(80, activation = 'elu')(input1)
 x1 = Dropout(0.2)(x1)
 x1 = Dense(120, activation = 'elu')(x1)
 x1 = Dropout(0.2)(x1)
@@ -95,18 +98,21 @@ x1 = Dropout(0.2)(x1)
 input2 = Input(shape = (36, ))
 x2 = Dense(100, activation = 'elu')(input2)
 x2 = Dropout(0.2)(x2)
-x2 = Dense(150, activation = 'elu')(x2)
+x2 = Dense(120, activation = 'elu')(x2)
 x2 = Dropout(0.2)(x2)
 
 input3 = Input(shape = (34, ))
-x3 = Dense(100, activation = 'elu')(input3)
+x3 = Dense(150, activation = 'elu')(input3)
 x3= Dropout(0.2)(x3)
 x3 = Dense(100, activation = 'elu')(x3)
 x3= Dropout(0.2)(x3)
 
 merge = concatenate([x1, x2, x3])
-middle = Dense(50, activation = 'elu')(merge)
+middle = Dense(80, activation = 'elu')(merge)
+middle = Dropout(0.2)(middle)
 middle = Dense(50, activation = 'elu')(middle)
+middle = Dropout(0.2)(middle)
+
 
 outputs = Dense(4, activation = 'elu')(middle)
 model = Model(inputs = [input1, input2, input3], outputs = outputs)
@@ -130,19 +136,30 @@ print('y_pred: ', y_pred)
 
 a = np.arange(10000,20000)
 y_pred = pd.DataFrame(y_pred,a)
-y_pred.to_csv('./dacon/y_pred4.csv', 
+y_pred.to_csv('./dacon/y_pred6.csv', 
               index = True, header=['hhb','hbo2','ca','na'],index_label='id')
 
 # sibmit파일
 # y_pred.to_csv(경로)
 
 '''
-loss_mae:  [1.6898496789932251, 1.6898494958877563] 
-y_pred:  [[3.5748956 3.3686323 6.9966373 2.2605565] 
- [3.1582272 3.438317  7.171153  2.3042784]
- [5.0822406 3.4805655 7.4849043 2.3881085]
+y_pred4 > fiilna(.mean())
+loss_mae:  [1.7042060174942018, 1.7042056322097778]
+y_pred:  [[ 7.5994396  4.1149335  7.530348   3.1847575]
+ [ 2.802721   3.8907096  8.441036   3.177924 ]
+ [ 9.247631   3.977002  10.134867   3.2490606]
  ...
- [3.0626209 3.33351   6.7968307 2.258009 ]
- [2.1190577 4.0426445 9.141554  2.779194 ]
- [3.6889172 3.3834476 7.0326495 2.2775798]]
+ [ 9.600287   4.104522   9.561552   2.9032116]
+ [ 7.7655177  3.8562138  7.9755325  2.8738363]
+ [ 6.9554534  4.049231   9.3153105  3.4014254]]
+
+y_pred5> replace(0, np.nan)
+loss_mae:  [1.6680248699188231, 1.6680248975753784]
+y_pred:  [[ 7.319393   3.9981236 10.035536   3.2743578]
+ [ 7.3792095  4.042411   7.6629663  2.4153123]
+ [ 9.0385275  4.352636  10.4958725  3.5976198]
+ ...
+ [ 8.37895    4.0257854  8.902025   3.3368092]
+ [ 7.732162   4.0153484  9.157072   3.4481657]
+ [ 9.206911   4.2622156  8.983343   2.9925706]]
 '''
