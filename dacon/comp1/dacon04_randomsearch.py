@@ -70,6 +70,7 @@ scaler = MinMaxScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 x_pred = scaler.transform(x_pred)
+print(x_pred.shape)
 
 # train, test
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, random_state = 30)
@@ -114,10 +115,11 @@ search.fit(x_train, y_train)
 print(search.best_params_)
 
 y_pred = search.predict(x_pred)
-print('y_pred: ', y_pred)
+
+y1_pred = search.predict(x_test)
 
 from sklearn.metrics import mean_absolute_error 
-mae = mean_absolute_error(x_test, y_test)
+mae = mean_absolute_error(y1_pred, y_test)
 print('mae: ', mae)
 
 y_pred = pd.DataFrame({
