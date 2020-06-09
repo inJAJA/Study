@@ -7,9 +7,15 @@ import pandas as pd
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from keras.callbacks import EarlyStopping
 from keras.wrappers.scikit_learn import KerasRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.pipeline import Pipeline, make_pipeline
 
 from keras.layers import LeakyReLU
 leaky = LeakyReLU(alpha = 0.2)
+
+import warnings                                
+
+warnings.filterwarnings('ignore')  
 
 #1. data
 x = pd.read_csv('./data/dacon/comp3/train_features.csv', index_col =0, header = 0)
@@ -33,12 +39,15 @@ scaler.fit(x)
 x = scaler.transform(x)
 x_pred = scaler.transform(x_pred)
 
-x = x.reshape(-1, 375, 5)
-x_pred = x_pred.reshape(-1, 375, 5)
 
-print(x.shape)                      # (2800, 375, 4)
+print(x.shape)                      # (1050000, 5)
 print(x_pred.shape)                 # (700, 375, 4)
 print(y.shape)                      # (2800, 4)
+
+
+x = x.reshape(-1, 375*5)
+y = y.reshape(-1, 4)
+x_pred = x_pred.reshape(-1, 375*5)
 
 
 
@@ -47,55 +56,25 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 10, tra
 
 
 #2. model
-def build_model(drop = 0.2, optimizer = 'adam'):
-    input1 = Input(shape=(375, 5))
-    x = Conv1D(100, 2, activation = 'relu')(input1)
-    x = Dropout(drop)(x)
-    x = Conv1D(150, 2, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Flatten()(x)
-    x = Dense(200, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(250, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(300, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(270, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(210, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(130, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(110, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(50, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(30, activation = 'relu')(x) 
-    x = Dropout(drop)(x)
-    output = Dense(4, activation = 'relu')(x)
+param_grid = {
+    "regressor__n_estimators" : [100, 200],      
+    "regressor__max_depth": [6, 8, 10, 20],      
+    "regressor__min_samples_leaf":[3, 5, 7, 10], 
+    "regressor__min_samples_split": [2,3, 5],     
+    'regressor__max_features': ['auto', 'sqrt', 'log2'] ,                
+    "regressor__n_jobs" : [-1]
+}     
 
-    model = Model(inputs = input1, outputs = output)
-    model.compile(loss = 'mse', optimizer = optimizer , metrics = ['mse'])
-    return model
+pipe = Pipeline([("scaler", MinMaxScaler()), ('regressor', RandomForestRegressor())])
 
-def hyper_params():
-    batches = [32, 64, 128]
-    epochs = [100, 200 ]
-    optimizer = ['rmsprop', 'adam', 'adadelta']
-    drop = np.linspace(0.1, 0.5, 5)
-    return {'batch_size': batches, 'epochs': epochs, 'optimizer': optimizer}
 
-model = KerasRegressor(build_fn = build_model, verbose = 1)
-
-params = hyper_params()
-
-search = RandomizedSearchCV(model, params, cv = 3)
+search = RandomizedSearchCV(estimator= pipe, param_distributions = param_grid , cv = 5)
 
 search.fit(x_train, y_train)
 
 print(search.best_params_)  
 
-score = model.score(x_test, y_test)
+score = search.score(x_test, y_test)
 print('score: ', score)
 
 
@@ -150,7 +129,7 @@ print(E2(y_test, y_pred1))
 
 a = np.arange(2800, 3500)
 submission = pd.DataFrame(y_pred, a)
-submission.to_csv('./dacon/comp3/submission_2.csv', index = True, index_label= ['id'], header = ['X', 'Y', 'M', 'V'])
+submission.to_csv('./dacon/comp3/submission_5.csv', index = True, index_label= ['id'], header = ['X', 'Y', 'M', 'V'])
 '''
 
 '''
