@@ -8,6 +8,9 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from keras.wrappers.scikit_learn import KerasRegressor
 from keras.losses import MeanAbsoluteError
 
+from keras.layers import LeakyReLU
+leaky = LeakyReLU(alpha = 0.2)
+
 #1. data
 train = pd.read_csv('./data/dacon/comp1/train.csv', index_col= 0 , header = 0)
 test = pd.read_csv('./data/dacon/comp1/test.csv', index_col= None , header = 0)
@@ -67,20 +70,21 @@ scaler = MinMaxScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 x_pred = scaler.transform(x_pred)
+print(x_pred.shape)
 
 # train, test
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, random_state = 30)
 
 #2. model
-def build_model(drop=0.5, optimizer = 'adam'):
+def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
     inputs = Input(shape= (71, ))
-    x = Dense(51, activation ='relu')(inputs)
+    x = Dense(51, activation =act)(inputs)
     x = Dropout(drop)(x)
-    x = Dense(256, activation = 'relu')(x)
+    x = Dense(256, activation = act)(x)
     x = Dropout(drop)(x)
-    x = Dense(128, activation = 'relu')(x)
+    x = Dense(128, activation = act)(x)
     x = Dropout(drop)(x)
-    outputs = Dense(4, activation = 'relu')(x)
+    outputs = Dense(4, activation = act)(x)
     model = Model(inputs = inputs, outputs = outputs)
     model.compile(optimizer = optimizer, metrics = ['mae'],
                   loss = 'mae')
@@ -91,9 +95,9 @@ def create_hyperparameter():
     batches = [16, 32, 64, 128]
     epochs = [50, 100, 150, 200]
     dropout = np.linspace(0.1, 0.5, 5)
-    act= ['relu', 'elu']
+    activation= ['relu', 'elu', leaky]
     optimizers = ['rmsprop', 'adam', 'adadelta']
-    return {'batch_size': batches, 'epochs':epochs, 
+    return {'batch_size': batches, 'epochs':epochs, 'act': activation,
             'optimizer': optimizers}
 
 # wrapper    
@@ -111,10 +115,11 @@ search.fit(x_train, y_train)
 print(search.best_params_)
 
 y_pred = search.predict(x_pred)
-print('y_pred: ', y_pred)
+
+y1_pred = search.predict(x_test)
 
 from sklearn.metrics import mean_absolute_error 
-mae = mean_absolute_error(x_test, y_test)
+mae = mean_absolute_error(y1_pred, y_test)
 print('mae: ', mae)
 
 y_pred = pd.DataFrame({
