@@ -16,8 +16,8 @@ y = pd.read_csv('./data/dacon/comp3/train_target.csv', index_col = 0, header = 0
 test = pd.read_csv('./data/dacon/comp3/test_features.csv', index_col = 0, header = 0)
 
 
-# x = x.drop('Time', axis =1)
-# test = test.drop('Time', axis =1)
+x = x.drop('Time', axis =1)
+test = test.drop('Time', axis =1)
 
 
 x = x.values
@@ -32,8 +32,8 @@ scaler.fit(x)
 x = scaler.transform(x)
 x_pred = scaler.transform(x_pred)
 
-x = x.reshape(-1, 375, 5)
-x_pred = x_pred.reshape(-1, 375, 5)
+x = x.reshape(-1, 375, 4)
+x_pred = x_pred.reshape(-1, 375, 4)
 
 print(x.shape)                      # (2800, 375, 4)
 print(x_pred.shape)                 # (700, 375, 4)
@@ -46,7 +46,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 10, tra
 
 
 #2. model
-input1 = Input(shape=(375, 5))
+input1 = Input(shape=(375, 4))
 x = Conv1D(100, 2, activation = 'relu')(input1)
 x = Dropout(0.2)(x)
 # x = Conv1D(150, 2, activation = 'relu')(x)

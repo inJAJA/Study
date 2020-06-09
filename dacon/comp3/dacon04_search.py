@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from keras.callbacks import EarlyStopping
 from keras.wrappers.scikit_learn import KerasRegressor
+from sklearn.decomposition import PCA
 
 from keras.layers import LeakyReLU
 leaky = LeakyReLU(alpha = 0.2)
@@ -17,8 +18,8 @@ y = pd.read_csv('./data/dacon/comp3/train_target.csv', index_col = 0, header = 0
 test = pd.read_csv('./data/dacon/comp3/test_features.csv', index_col = 0, header = 0)
 
 
-# x = x.drop('Time', axis =1)
-# test = test.drop('Time', axis =1)
+x = x.drop('Time', axis =1)
+test = test.drop('Time', axis =1)
 
 
 x = x.values
@@ -32,9 +33,18 @@ scaler = StandardScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 x_pred = scaler.transform(x_pred)
+print(x_pred.shape)
 
-x = x.reshape(-1, 375, 5)
-x_pred = x_pred.reshape(-1, 375, 5)
+x = x.reshape(2800, 375*4)
+x_pred = x_pred.reshape(700, 375*4)
+
+pca = PCA(n_components = 15*4)
+pca.fit(x)
+x = pca.transform(x)
+x_pred = pca.transform(x_pred)
+
+x = x.reshape(-1, 15, 4)
+x_pred = x_pred.reshape(-1, 15, 4)
 
 print(x.shape)                      # (2800, 375, 4)
 print(x_pred.shape)                 # (700, 375, 4)
@@ -48,7 +58,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 10, tra
 
 #2. model
 def build_model(drop = 0.2, optimizer = 'adam'):
-    input1 = Input(shape=(375, 5))
+    input1 = Input(shape=(15, 4))
     x = Conv1D(100, 2, activation = 'relu')(input1)
     x = Dropout(drop)(x)
     x = Conv1D(150, 2, activation = 'relu')(x)
@@ -57,10 +67,6 @@ def build_model(drop = 0.2, optimizer = 'adam'):
     x = Dense(200, activation = 'relu')(x)
     x = Dropout(drop)(x)
     x = Dense(250, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(300, activation = 'relu')(x)
-    x = Dropout(drop)(x)
-    x = Dense(270, activation = 'relu')(x)
     x = Dropout(drop)(x)
     x = Dense(210, activation = 'relu')(x)
     x = Dropout(drop)(x)
@@ -82,18 +88,18 @@ def hyper_params():
     batches = [32, 64, 128]
     epochs = [100, 200 ]
     optimizer = ['rmsprop', 'adam', 'adadelta']
-    drop = np.linspace(0.1, 0.5, 5)
+    # dropout = np.linspace(0.1, 0.5, 5)
     return {'batch_size': batches, 'epochs': epochs, 'optimizer': optimizer}
 
 model = KerasRegressor(build_fn = build_model, verbose = 1)
 
 params = hyper_params()
 
-search = RandomizedSearchCV(model, params, cv = 3)
+search = RandomizedSearchCV(model, param_distributions = params, cv = 3)
 
 search.fit(x_train, y_train)
 
-print(search.best_params_)  
+print('best: ', search.best_params_)  
 
 score = model.score(x_test, y_test)
 print('score: ', score)

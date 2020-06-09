@@ -23,8 +23,8 @@ y = pd.read_csv('./data/dacon/comp3/train_target.csv', index_col = 0, header = 0
 test = pd.read_csv('./data/dacon/comp3/test_features.csv', index_col = 0, header = 0)
 
 
-# x = x.drop('Time', axis =1)
-# test = test.drop('Time', axis =1)
+x = x.drop('Time', axis =1)
+test = test.drop('Time', axis =1)
 
 
 x = x.values
@@ -40,14 +40,14 @@ x = scaler.transform(x)
 x_pred = scaler.transform(x_pred)
 
 
-print(x.shape)                      # (1050000, 5)
+print(x.shape)                      # (1050000, 4)
 print(x_pred.shape)                 # (700, 375, 4)
 print(y.shape)                      # (2800, 4)
 
 
-x = x.reshape(-1, 375*5)
+x = x.reshape(-1, 375*4)
 y = y.reshape(-1, 4)
-x_pred = x_pred.reshape(-1, 375*5)
+x_pred = x_pred.reshape(-1, 375*4)
 
 
 
