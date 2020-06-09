@@ -42,48 +42,58 @@ def split_xy2(dataset, time_steps, y_column):
 
 x_data, y_data = split_xy2(x, 5, 1)           
 print(x_data.shape)                    # (2800, 370, 5, 4)                    
-print(y_data.shape)                    # (2800, 370, 1, 4)     
+print(y_data.shape)                    # (2800, 370, 1, 4)   
 
-x_data = x_data.reshape(x_data.shape[0]*x_data.shape[1], 5*4)
+x_pred_data, y_pred_data = split_xy2(x_pred, 5, 1)
+print(x_pred_data.shape)
+print(y_pred_data.shape)
+
+x_data = x_data.reshape(x_data.shape[0]*x_data.shape[1], 5, 4)
 y_data = y_data.reshape(y_data.shape[0]*y_data.shape[1], 4)
 
 #2. model_lstm
-model = RandomForestRegressor()
-model.fit(x_data, y_data)
+model = Sequential()
+model.add(LSTM(50, input_shape = (5, 4), activation = 'relu'))
 
-x1 = model.predict(x_data)
 
 for i in np.arange(369, 370*2800, 370):
     xx = []
-    xx.append(x1[i,:])
+    xx.append(x[i,:])
 
 print(xx.shape)
-'''
-x_train, x_test, y_train, y_test = train_test_split(x1, y, random_state = 33, )
 
+x1 = model.predict(xx)
+
+x_train, x_test, y_train, y_test = train_test_split(xx, y, random_state = 33, )
 
 #3. model_dense
-model = Sequential()
-model.add(Dense(10, input_shape =(4, )))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(4, activation = 'relu'))
+deep = Sequential()
+deep.add(Dense(10, input_shape =(20, )))
+deep.add(Dropout(0.2))
+deep.add(Dense(100, activation = 'relu'))
+deep.add(Dropout(0.2))
+deep.add(Dense(100, activation = 'relu'))
+deep.add(Dropout(0.2))
+deep.add(Dense(100, activation = 'relu'))
+deep.add(Dropout(0.2))
+deep.add(Dense(100, activation = 'relu'))
+deep.add(Dropout(0.2))
+deep.add(Dense(100, activation = 'relu'))
+deep.add(Dropout(0.2))
+deep.add(Dense(100, activation = 'relu'))
+deep.add(Dropout(0.2))
+deep.add(Dense(100, activation = 'relu'))
+deep.add(Dropout(0.2))
+deep.add(Dense(100, activation = 'relu'))
+deep.add(Dropout(0.2))
+deep.add(Dense(4, activation = 'relu'))
 
 model.compile(loss= 'mse', optimizer = 'adam', metrics=['mse'])
-model.fit(x_train, y_train, epochs = 100, batch_size = 32, validation_split=0.2)
-'''
+model.fit(x_train, y_train, epochs = 100, batch_size = 128, validation_split=0.2)
+
+model.save('./dacon/comp3/model_lstm2.h5')
+
+loss_mse = model.evaluate(x_test, y_test, batch_size = 128)
+
+
+

@@ -41,11 +41,11 @@ x_pred = scaler.transform(x_pred)
 
 
 print(x.shape)                      # (1050000, 4)
-print(x_pred.shape)                 # (700, 375, 4)
+print(x_pred.shape)                 # (700*375, 4)
 print(y.shape)                      # (2800, 4)
 
 
-x = x.reshape(-1, 375*4)
+x = x.reshape(-1, 375*4)    # (1050000/375 , 375*4)
 y = y.reshape(-1, 4)
 x_pred = x_pred.reshape(-1, 375*4)
 
@@ -65,7 +65,7 @@ param_grid = {
     "regressor__n_jobs" : [-1]
 }     
 
-pipe = Pipeline([("scaler", MinMaxScaler()), ('regressor', RandomForestRegressor())])
+pipe = Pipeline([("scaler", StandardScaler()), ('regressor', RandomForestRegressor())])
 
 
 search = RandomizedSearchCV(estimator= pipe, param_distributions = param_grid , cv = 5)
@@ -131,5 +131,8 @@ a = np.arange(2800, 3500)
 submission = pd.DataFrame(y_pred, a)
 submission.to_csv('./dacon/comp3/submission_5.csv', index = True, index_label= ['id'], header = ['X', 'Y', 'M', 'V'])
 '''
-
+score:  0.9636587903852909
+0.8843999741435016
+0.15412237537378456
+1.6146775729132186
 '''

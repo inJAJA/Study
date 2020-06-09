@@ -44,16 +44,18 @@ y = y.values
 x_pred = test.drop('id', axis = 1)
 x_pred = x_pred.values
 
-x1 = x[:, 0].reshape(x.shape[0], 1)
-x2 = x[:, 1:37]
+# x1 = x[:, 0].reshape(x.shape[0], 1)
+x1 = x[:, :37]
+# x2 = x[:, 1:37]
 x3 = x[:, 37:]
 print(x1.shape)              # (10000,)
-print(x2.shape)              # (10000, 36)
+# print(x2.shape)              # (10000, 36)
 print(x3.shape)              # (10000, 34)
 
 
-x_pred1 = x_pred[:, 0].reshape(x_pred.shape[0], 1)
-x_pred2 = x_pred[:, 1:37]
+# x_pred1 = x_pred[:, 0].reshape(x_pred.shape[0], 1)
+x_pred1 = x_pred[:, :37]
+# x_pred2 = x_pred[:, 1:37]
 x_pred3 = x_pred[:, 37:]
 
 # scaler
@@ -64,9 +66,9 @@ scaler.fit(x1)
 x1 = scaler.transform(x1)
 x_pred1 = scaler.transform(x_pred1)
 
-scaler.fit(x2)
-x2 = scaler.transform(x2)
-x_pred2 = scaler.transform(x_pred2)
+# scaler.fit(x2)
+# x2 = scaler.transform(x2)
+# x_pred2 = scaler.transform(x_pred2)
 
 scaler.fit(x3)
 x3 = scaler.transform(x3)
@@ -83,21 +85,22 @@ x_pred3 = scaler.transform(x_pred3)
 # train, test
 x1_train, x1_test, y_train, y_test = train_test_split(x1, y, train_size = 0.8, random_state = 30)
 
-x2_train, x2_test, x3_train, x3_test = train_test_split(x2, x3, train_size = 0.8, random_state = 30)
+# x2_train, x2_test, x3_train, x3_test = train_test_split(x2, x3, train_size = 0.8, random_state = 30)
+x3_train, x3_test = train_test_split(x3, train_size = 0.8, random_state = 30)
 
 
 #2. model
-input1 = Input(shape = (1, ))
+input1 = Input(shape = (37, ))
 x1 = Dense(80, activation = 'elu')(input1)
 x1 = Dropout(0.2)(x1)
 x1 = Dense(120, activation = 'elu')(x1)
 x1 = Dropout(0.2)(x1)
 
-input2 = Input(shape = (36, ))
-x2 = Dense(100, activation = 'elu')(input2)
-x2 = Dropout(0.2)(x2)
-x2 = Dense(120, activation = 'elu')(x2)
-x2 = Dropout(0.2)(x2)
+# input2 = Input(shape = (36, ))
+# x2 = Dense(100, activation = 'elu')(input2)
+# x2 = Dropout(0.2)(x2)
+# x2 = Dense(120, activation = 'elu')(x2)
+# x2 = Dropout(0.2)(x2)
 
 input3 = Input(shape = (34, ))
 x3 = Dense(150, activation = 'elu')(input3)
@@ -105,7 +108,8 @@ x3= Dropout(0.2)(x3)
 x3 = Dense(100, activation = 'elu')(x3)
 x3= Dropout(0.2)(x3)
 
-merge = concatenate([x1, x2, x3])
+# merge = concatenate([x1, x2, x3])
+merge = concatenate([x1, x3])
 middle = Dense(80, activation = 'elu')(merge)
 middle = Dropout(0.2)(middle)
 middle = Dense(50, activation = 'elu')(middle)
@@ -113,7 +117,9 @@ middle = Dropout(0.2)(middle)
 
 
 outputs = Dense(4, activation = 'elu')(middle)
-model = Model(inputs = [input1, input2, input3], outputs = outputs)
+# model = Model(inputs = [input1, input2, input3], outputs = outputs)
+model = Model(inputs = [input1, input3], outputs = outputs)
+
 
 
 # earlystopping
@@ -121,20 +127,24 @@ es = EarlyStopping(monitor = 'val_loss', mode = 'auto', patience = 50)
 
 #3. compile, fit
 model.compile(loss = 'mae', optimizer = 'adam', metrics = ['mae'])
-model.fit([x1_train, x2_train, x3_train], y_train, epochs = 500, batch_size = 64, verbose = 2,
+# model.fit([x1_train, x2_train, x3_train], y_train, epochs = 500, batch_size = 64, verbose = 2,
+#          validation_split = 0.2, callbacks = [es])
+model.fit([x1_train, x3_train], y_train, epochs = 500, batch_size = 64, verbose = 2,
          validation_split = 0.2, callbacks = [es])
 
 #4. evaluate, predict
-loss_mae = model.evaluate([x1_test, x2_test, x3_test],y_test, batch_size = 64)
+# loss_mae = model.evaluate([x1_test, x2_test, x3_test],y_test, batch_size = 64)
+loss_mae = model.evaluate([x1_test, x3_test],y_test, batch_size = 64)
 print('loss_mae: ', loss_mae)
 
-y_pred = model.predict([x_pred1, x_pred2, x_pred3])
+# y_pred = model.predict([x_pred1, x_pred2, x_pred3])
+y_pred = model.predict([x_pred1,  x_pred3])
 print('y_pred: ', y_pred)
 
 
 a = np.arange(10000,20000)
 y_pred = pd.DataFrame(y_pred,a)
-y_pred.to_csv('./dacon/y_pred6.csv', 
+y_pred.to_csv('./dacon/comp1/y_pred6.csv', 
               index = True, header=['hhb','hbo2','ca','na'],index_label='id')
 
 # sibmit파일
@@ -152,12 +162,12 @@ y_pred:  [[ 7.5994396  4.1149335  7.530348   3.1847575]
  [ 6.9554534  4.049231   9.3153105  3.4014254]]
 
 y_pred5> replace(0, np.nan)
-loss_mae:  [1.6680248699188231, 1.6680248975753784]
-y_pred:  [[ 7.319393   3.9981236 10.035536   3.2743578]
- [ 7.3792095  4.042411   7.6629663  2.4153123]
- [ 9.0385275  4.352636  10.4958725  3.5976198]
+loss_mae:  [1.6567197589874267, 1.65671968460083]
+y_pred:  [[7.4663086 3.926025  8.890444  3.0593545]
+ [7.8958836 3.938304  8.7164345 2.9321501]
+ [9.946594  4.2685084 9.891247  3.714861 ]
  ...
- [ 8.37895    4.0257854  8.902025   3.3368092]
- [ 7.732162   4.0153484  9.157072   3.4481657]
- [ 9.206911   4.2622156  8.983343   2.9925706]]
+ [7.6045685 3.950648  8.90891   3.2338252]
+ [7.6376286 3.897931  8.427586  2.8123693]
+ [7.499691  3.9176478 8.738676  3.093008 ]]
 '''
