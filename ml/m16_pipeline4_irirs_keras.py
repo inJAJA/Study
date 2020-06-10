@@ -43,7 +43,7 @@ def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
 
 # parameter
 def create_hyperparameters(): # epochs, node, acivation 추가 가능
-    batches = [ 512]
+    batches = [64, 128, 512]
     optimizers = ['rmsprop', 'adam', 'adadelta']
     dropout = np.linspace(0.1, 0.5, 5).tolist()           
     activation = ['relu', 'elu', leaky]               
@@ -55,8 +55,9 @@ model = KerasClassifier(build_fn = build_model, verbose = 1)
 
 hyperparameters = create_hyperparameters()
 
-from sklearn.pipeline import Pipeline
+from sklearn.pipeline import Pipeline, make_pipeline
 pipe = Pipeline([('scaler', StandardScaler()), ('deep', model)])
+# pipe = make_pipeline(StandardScaler(), model)                        # kerasclassifier__ :
 
 # gridsearch
 from sklearn.model_selection import GridSearchCV,  RandomizedSearchCV
