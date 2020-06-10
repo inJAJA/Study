@@ -41,14 +41,22 @@ def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
                   loss = 'categorical_crossentropy')
     return model
 
-# parameter
-def create_hyperparameters(): # epochs, node, acivation 추가 가능
+# parameter                  # epochs, node, acivation 추가 가능
+def create_hyperparameters():                                        # pipeline  
     batches = [64, 128, 512]
     optimizers = ['rmsprop', 'adam', 'adadelta']
     dropout = np.linspace(0.1, 0.5, 5).tolist()           
     activation = ['relu', 'elu', leaky]               
     return {'deep__batch_size' : batches, 'deep__optimizer': optimizers, 'deep__act':activation,
-           'deep__drop': dropout}                                       
+           'deep__drop': dropout}     
+
+# def create_hyperparameters():                                       # make_pipeline
+#     batches = [64, 128, 512]
+#     optimizers = ['rmsprop', 'adam', 'adadelta']
+#     dropout = np.linspace(0.1, 0.5, 5).tolist()           
+#     activation = ['relu', 'elu', leaky]               
+#     return {'kerasclassifier__batch_size' : batches, 'kerasclassifier__optimizer': optimizers, 'kerasclassifier__act':activation,
+#            'kerasclassifier__drop': dropout}                                       
 
 # wrapper
 model = KerasClassifier(build_fn = build_model, verbose = 1)
