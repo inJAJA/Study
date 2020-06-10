@@ -18,11 +18,11 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8,
 
 # grid / random search에서 사용할 매개 변수                  
 parameters = {                               
-    'rf__n_estimators':[100, 200],
-    'rf__max_depth':[1, 3, 5],
-    'rf__min_samples_split': [2, 5, 10],
-    'rf__min_samples_leaf': [1, 5, 7],
-    'rf__max_features':[2, 'sqrt', 'log2'],  # auto = sqrt
+    'rf__n_estimators':[100, 200],                             # : 결정트리의 갯수를 지정, defalut = 10
+    'rf__max_depth':[1, 3, 5],                                 # : 트리의 최재 깊이, dsfalut = None
+    'rf__min_samples_split': [2, 5, 10],                       # : 노드를 분할하기 위한 최소한의 샘플 수, 작을 수록 과적합 가능성 증가
+    'rf__min_samples_leaf': [1, 5, 7],                         # : 리프노드가 되기 위해 필요한 최소한의 샘플 개수, 과적합 제어
+    'rf__max_features':[2, 'sqrt', 'log2'],  # auto = sqrt     # : 최적의 분할을 위해 고려할 최대 feature개수, default = 'auto'
     # 'rf__max_leaf_nodes' : [],
     # 'rf__min_impurity_decrease':[]
     # 'rf__min_impurity_split': []
