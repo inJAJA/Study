@@ -7,6 +7,7 @@ x_train, x_test, y_train, y_test = train_test_split(
     cancer.data, cancer.target, train_size = 0.8, random_state = 42
 )
 
+                                                  # tree 구조는 전처리가 필요 없다.
 model = DecisionTreeClassifier(max_depth =4)      # max_depth 몇 이상 올라가면 구분 잘 못함
                                                   
 model.fit(x_train, y_train)
