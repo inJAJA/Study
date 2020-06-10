@@ -10,8 +10,8 @@ from sklearn.decomposition import PCA
 from keras.layers.merge import concatenate  
 
 #1. data
-train = pd.read_csv('./data/dacon/comp1/train.csv', index_col= None, header = 0)
-test = pd.read_csv('./data/dacon/comp1/test.csv', index_col= None , header = 0)
+train = pd.read_csv('./data/dacon/comp1/train.csv', index_col= 0, header = 0)
+test = pd.read_csv('./data/dacon/comp1/test.csv', index_col= 0, header = 0)
 submission = pd.read_csv('./data/dacon/comp1/sample_submission.csv', index_col= 0 , header = 0)
 
 print('train.shape: ', train.shape)              # (10000, 75)  = x_train, test
@@ -69,7 +69,7 @@ train_rho = train_rho.values.reshape(train_rho.shape[0], 1)   # 붙는 두개의
 test_rho = test_rho.values.reshape(test_rho.shape[0], 1)
 
 y = train.iloc[:, -4:]                          # train데이터에서 y값을 설정해줌                                                                  
-
+y = y.values
 '''
 # print(x.info())
 # print(test.info())
@@ -143,6 +143,7 @@ y_pred.to_csv('./dacon/comp1/y_pred6.csv',
 # sibmit파일
 # y_pred.to_csv(경로)
 '''
+
 x1 = train_rho
 x3 = train_gap
 
@@ -223,3 +224,4 @@ a = np.arange(10000,20000)
 y_pred = pd.DataFrame(y_pred,a)
 y_pred.to_csv('./dacon/comp1/y_pred6.csv', 
               index = True, header=['hhb','hbo2','ca','na'],index_label='id')
+

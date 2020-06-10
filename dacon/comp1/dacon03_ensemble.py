@@ -45,18 +45,18 @@ x_pred = test.drop('id', axis = 1)
 x_pred = x_pred.values
 
 # x1 = x[:, 0].reshape(x.shape[0], 1)
-x1 = x[:, :37]
+x1 = x[:, :36]
 # x2 = x[:, 1:37]
-x3 = x[:, 37:]
-print(x1.shape)              # (10000,)
+x3 = x[:, 36:]
+print(x1.shape)                # (10000,)
 # print(x2.shape)              # (10000, 36)
-print(x3.shape)              # (10000, 34)
+print(x3.shape)                # (10000, 35)
 
 
 # x_pred1 = x_pred[:, 0].reshape(x_pred.shape[0], 1)
-x_pred1 = x_pred[:, :37]
+x_pred1 = x_pred[:, :36]
 # x_pred2 = x_pred[:, 1:37]
-x_pred3 = x_pred[:, 37:]
+x_pred3 = x_pred[:, 36:]
 
 # scaler
 # scaler = MinMaxScaler()
@@ -90,7 +90,7 @@ x3_train, x3_test = train_test_split(x3, train_size = 0.8, random_state = 30)
 
 
 #2. model
-input1 = Input(shape = (37, ))
+input1 = Input(shape = (36, ))
 x1 = Dense(80, activation = 'elu')(input1)
 x1 = Dropout(0.2)(x1)
 x1 = Dense(120, activation = 'elu')(x1)
@@ -102,7 +102,7 @@ x1 = Dropout(0.2)(x1)
 # x2 = Dense(120, activation = 'elu')(x2)
 # x2 = Dropout(0.2)(x2)
 
-input3 = Input(shape = (34, ))
+input3 = Input(shape = (35, ))
 x3 = Dense(150, activation = 'elu')(input3)
 x3= Dropout(0.2)(x3)
 x3 = Dense(100, activation = 'elu')(x3)
