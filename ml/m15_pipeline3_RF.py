@@ -43,6 +43,7 @@ parameters = {
 #2. model
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
+
 pipe = Pipeline([("scaler", MinMaxScaler()), ('rf', RandomForestClassifier())])    
 # pipe = make_pipeline(MinMaxScaler(), RandomForestClassifier())                  
 
