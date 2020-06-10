@@ -94,10 +94,10 @@ def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
 def create_hyperparameter():
     batches = [16, 32, 64, 128]
     epochs = [50, 100, 150, 200]
-    dropout = np.linspace(0.1, 0.5, 5)
+    dropout = np.linspace(0.1, 0.5, 5).tolist()
     activation= ['relu', 'elu', leaky]
     optimizers = ['rmsprop', 'adam', 'adadelta']
-    return {'batch_size': batches, 'epochs':epochs, 'act': activation,
+    return {'batch_size': batches, 'epochs':epochs, 'act': activation, 'drop': dropout,
             'optimizer': optimizers}
 
 # wrapper    
