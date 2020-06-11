@@ -1,5 +1,5 @@
 # 시계열에서 시작 시간이 맞지 않을 경우 '0'으로 채운다.
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from keras.models import Sequential, Model
 from keras.layers import LSTM, Dense, Input, Dropout, Conv1D, MaxPooling1D, Flatten
 import numpy as np
@@ -34,10 +34,10 @@ x_pred = test.values
 print(x.shape)                      # (1050000, 4)
 
 # scaler
-scaler = StandardScaler()
-scaler.fit(x)
-x = scaler.transform(x)
-x_pred = scaler.transform(x_pred)
+# scaler = StandardScaler()
+# scaler.fit(x)
+# x = scaler.transform(x)
+# x_pred = scaler.transform(x_pred)
 
 
 print(x.shape)                      # (1050000, 4)
@@ -65,10 +65,10 @@ param_grid = {
     "regressor__n_jobs" : [-1]
 }     
 
-pipe = Pipeline([("scaler", StandardScaler()), ('regressor', RandomForestRegressor())])
+pipe = Pipeline([("scaler", RobustScaler()), ('regressor', RandomForestRegressor())])
 
 
-search = RandomizedSearchCV(estimator= pipe, param_distributions = param_grid , cv = 5)
+search = RandomizedSearchCV(estimator= pipe, param_distributions = param_grid , cv = 3)
 
 search.fit(x_train, y_train)
 
@@ -131,8 +131,17 @@ a = np.arange(2800, 3500)
 submission = pd.DataFrame(y_pred, a)
 submission.to_csv('./dacon/comp3/submission_5.csv', index = True, index_label= ['id'], header = ['X', 'Y', 'M', 'V'])
 '''
-score:  0.9636587903852909
-0.8843999741435016
-0.15412237537378456
-1.6146775729132186
+{'regressor__n_jobs': -1, 'regressor__n_estimators': 100, 'regressor__min_samples_split': 5, 
+'regressor__min_samples_leaf': 3, 'regressor__max_features': 'sqrt', 'regressor__max_depth': 20}
+score:  0.9713160561852578
+0.8643769350557671
+0.1020722846111821
+1.626681585500352
+
+standard
+{'regressor__n_jobs': -1, 'regressor__n_estimators': 200, 'regressor__min_samples_split': 3, 'regressor__min_samples_leaf': 3, 'regressor__max_features': 'sqrt', 'regressor__max_depth': 10}
+score:  0.9633289315759098
+0.8990176732953805
+0.15451858016573855
+1.6435167664250225
 '''

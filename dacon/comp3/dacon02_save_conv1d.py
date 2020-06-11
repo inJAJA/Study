@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from keras.models import Model, Sequential
-from keras.layers import Dense, LSTM, Dropout
+from keras.layers import Dense, LSTM, Dropout, Conv1D, Flatten, MaxPooling1D
 from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
@@ -23,7 +23,10 @@ x = x.values
 y = y.values
 x_pred = test.values
 
-print(x_pred.shape)
+print(np.arange(0, len(x), 375))
+print(np.arange(0, 370))
+
+print(y.shape)
 
 def split_xy2(dataset, time_steps, y_column):
     x_data, y_data = list(), list()
@@ -55,16 +58,24 @@ y_data = y_data.reshape(y_data.shape[0]*y_data.shape[1], 4)
 x_pred_data = x_pred_data.reshape(x_pred_data.shape[0]*x_pred_data.shape[1], 5, 4)
 y_pred_data = y_pred_data.reshape(y_pred_data.shape[0]*y_pred_data.shape[1], 4)
 
+
+print(x_data[369,:])
+print(y_data[369,:])
+print(x_data[370,:])
+print(y_data[370, :])
+
 x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, random_state = 30, train_size = 0.8)
 
 #2. model_lstm
 model = Sequential()
-model.add(LSTM(50, input_shape = (5, 4), activation = 'relu'))
+model.add(Conv1D(50, input_shape = (5, 4), activation = 'relu'))
+model.add(Flatten())
 model.add(Dense(100, activation= 'relu'))
-model.add(Dense(120, activation= 'relu'))
-model.add(Dense(100, activation= 'relu'))
-model.add(Dense(100, activation= 'relu'))
-model.add(Dense(100, activation= 'relu'))
+model.add(Dropout(0.2))
+model.add(Dense(200, activation= 'relu'))
+# model.add(Dense(100, activation= 'relu'))
+# model.add(Dense(100, activation= 'relu'))
+model.add(Dense(150, activation= 'relu'))
 model.add(Dense(50, activation= 'relu'))
 model.add(Dense(4, activation= 'relu'))
 

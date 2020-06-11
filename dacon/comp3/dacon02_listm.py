@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from keras.models import Model, Sequential
-from keras.layers import Dense, LSTM, Dropout
+from keras.layers import Dense, LSTM, Dropout, Input
 from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
@@ -10,6 +10,10 @@ from sklearn.ensemble import RandomForestRegressor
 from keras.callbacks import EarlyStopping
 from keras.models import load_model
 from keras.callbacks import EarlyStopping
+from sklearn.pipeline import Pipeline
+
+from keras.layers import LeakyReLU
+leaky = LeakyReLU(alpha = 0.2)
 
 #1. data
 x = pd.read_csv('./data/dacon/comp3/train_features.csv', index_col =0, header = 0)
@@ -59,65 +63,79 @@ y_pred_data = y_pred_data.reshape(y_pred_data.shape[0]*y_pred_data.shape[1], 4)
 
 model = load_model('./dacon/comp3/model_save_lstm.h5') 
 
-def x1_data(data):
-    xx = []
-    for i in np.arange(369, len(data), 370):
-        xx.append(data[i,:,:])
-    return np.array(xx)
+def split_x_pred(dataset, time_steps):
+    x = []
+    for i in np.arange(0, len(dataset), 375):
+        start = i + 370
+        x_end_number = start + time_steps
+        tmp_x = dataset[start : x_end_number, :]
+        x.append(tmp_x)  
+    return np.array(x)
 
-x1 = x1_data(x_data)
-x_pred1 = x1_data(x_pred_data)
-print(x1.shape)
-print(x_pred1.shape)
-
-
-x2 = model.predict(x1)
-x_pred2 = model.predict(x_pred1)
-
-print(x2.shape)
-print(x_pred2.shape)
+x_ml = split_x_pred(x, 5)                 # id_0의 끝에서부터의 5개를 x_predict로 잡기 위한 함수                       
+x_ml_pred = split_x_pred(x_pred, 5)       # split_xy2에서 id_0의 끝값이 y값으로 빠짐으로 새로 만듦                 
+print(x_ml.shape)
+print(x_ml_pred.shape)
 
 
-x_train, x_test, y_train, y_test = train_test_split(x2, y, random_state = 33, )
-"""
-#3. model_dense
-deep = Sequential()
-deep.add(Dense(10, input_shape =(4, )))
-deep.add(Dropout(0.2))
-deep.add(Dense(50, activation = 'relu'))
-deep.add(Dropout(0.2))
-deep.add(Dense(100, activation = 'relu'))
-deep.add(Dropout(0.2))
-deep.add(Dense(120, activation = 'relu'))
-deep.add(Dropout(0.2))
-deep.add(Dense(200, activation = 'relu'))
-deep.add(Dropout(0.2))
-deep.add(Dense(300, activation = 'relu'))
-deep.add(Dropout(0.2))
-deep.add(Dense(150, activation = 'relu'))
-deep.add(Dropout(0.2))
-deep.add(Dense(90, activation = 'relu'))
-deep.add(Dropout(0.2))
-deep.add(Dense(40, activation = 'relu'))
-deep.add(Dropout(0.2))
-deep.add(Dense(4, activation = 'relu'))
+x_deep = model.predict(x_ml)
+x_deep_pred = model.predict(x_ml_pred)
 
+print(x_deep.shape)
+print(x_deep_pred.shape)
+
+x_train, x_test, y_train, y_test = train_test_split( x_deep, y, random_state = 33, train_size = 0.8 )
+
+#2. model
+# Deep_learning
+def build_model(act = 'relu', drop = 0.2, optimizer = 'adam'):
+    inputs = Input(shape = (4, ))
+    x = Dense(10, activation = act)(inputs)
+    x = Dropout(drop)(x)
+    x = Dense(50, activation = act)(x)
+    x = Dropout(drop)(x)
+    x = Dense(50, activation = act)(x)
+    x = Dropout(drop)(x)
+    x = Dense(50, activation = act)(x)
+    x = Dropout(drop)(x)
+    x = Dense(50, activation = act)(x)
+    output = Dense(4, activation = act)(x)
+
+    model = Model(inputs = inputs, outputs = output)
+    model.compile(loss= 'mse', optimizer = optimizer, metrics=['mse'])
+    return model
 # es
-es = EarlyStopping(monitor = 'val_loss', patience = 50, verbose =1)
+# es = EarlyStopping(monitor = 'val_loss', patience = 50, verbose =1)
 
-deep.compile(loss= 'mse', optimizer = 'adam', metrics=['mse'])
-deep.fit(x_train, y_train, epochs = 500, batch_size = 128, validation_split=0.2)
+def create_hyperparameter():
+    batches = [16, 32, 64, 128]
+    epochs = [50, 100, 150, 200]
+    dropout = np.linspace(0.1, 0.5, 5).tolist()
+    activation= ['relu', 'elu', leaky]
+    optimizers = ['rmsprop', 'adam', 'adadelta']
+    return {'deep__batch_size': batches, 'deep__epochs':epochs, 'deep__act': activation, 'deep__drop': dropout,
+            'deep__optimizer': optimizers}
 
-loss_mse = deep.evaluate(x_test, y_test, batch_size = 128)
-print('loss_mse: ', loss_mse)
+params = create_hyperparameter()
 
-y1_pred = deep.predict(x_test)
+# wrapper
+model = KerasRegressor(build_fn= build_model, verbose =2)
+
+# pipeline
+pipe = Pipeline([('scaler', StandardScaler()), ('deep', model)])
+
+# deep.fit(x_train, y_train, epochs = 500, batch_size = 64, validation_split=0.2)
+
+# loss_mse = deep.evaluate(x_test, y_test, batch_size = 64)
+# print('loss_mse: ', loss_mse)
+
+# y1_pred = deep.predict(x_test)
+
 """
-
-
+# Machine_learning
 params = {                            
     'rf__n_estimators':[100, 200],                             # : 결정트리의 갯수를 지정, defalut = 10
-    'rf__max_depth':[5, 10, 20, 40, 50],                                 # : 트리의 최재 깊이, dsfalut = None
+    'rf__max_depth':[5, 10, 20, 40, 50],                       # : 트리의 최재 깊이, dsfalut = None
     'rf__min_samples_split': [2, 5, 10],                       # : 노드를 분할하기 위한 최소한의 샘플 수, 작을 수록 과적합 가능성 증가
     'rf__min_samples_leaf': [5, 8, 10],                         # : 리프노드가 되기 위해 필요한 최소한의 샘플 개수, 과적합 제어
     'rf__max_features':[2, 'sqrt', 'log2'],  # auto = sqrt     # : 최적의 분할을 위해 고려할 최대 feature개수, default = 'auto'
@@ -127,20 +145,23 @@ params = {
 }
 
 from sklearn.pipeline import Pipeline
-pipe = Pipeline([('scaler', RobustScaler()), ('rf', RandomForestRegressor())])
+# pipe = Pipeline([('scaler', RobustScaler()), ('rf', RandomForestRegressor())])
 
-model2 = RandomizedSearchCV(pipe, params, cv = 3)
+search = RandomizedSearchCV(estimator = pipe, param_distributions= params, cv = 3)
+"""
+search = RandomizedSearchCV(pipe, params , cv = 3)
+search.fit(x_train, y_train)
 
-model2.fit(x_train, y_train)
+print('best: ', search.best_params_)
 
-print('best: ', model2.best_params_)
-
-score = model2.score(x_test, y_test)
+score = search.score(x_test, y_test)
 print('score: ', score)
 
-y_pred = model2.predict(x_pred2)
+y_pred = search.predict(x_deep_pred)
 print(y_pred.shape)
-y1_pred = model2.predict(x_test)
+y1_pred = search.predict(x_test)
+
+
 
 def kaeri_metric(y_true, y_pred):
     '''
