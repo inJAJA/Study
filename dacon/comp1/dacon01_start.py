@@ -133,7 +133,6 @@ y_pred = pd.DataFrame({
 #   'ca': y_pred[:, 2],
 #   'na':y_pred[:, 3]
 # })
-# y_pred = pd.DataFrame(y_pred)
 y_pred.to_csv('./dacon/y_pred4.csv', index = False )
 
 # a = np.arange(10000,20000)
