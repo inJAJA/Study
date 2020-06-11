@@ -68,7 +68,7 @@ x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, random_state
 
 #2. model_lstm
 model = Sequential()
-model.add(Conv1D(50, input_shape = (5, 4), activation = 'relu'))
+model.add(Conv1D(50, 2, input_shape = (5, 4), activation = 'relu'))
 model.add(Flatten())
 model.add(Dense(100, activation= 'relu'))
 model.add(Dropout(0.2))
@@ -86,7 +86,7 @@ model.compile(loss = 'mse', optimizer = 'adam', metrics=['mse'])
 model.fit(x_train, y_train, epochs = 50, batch_size = 128, validation_split = 0.2,
           callbacks = [es] )
 
-model.save('./dacon/comp3/model_save_lstm.h5')
+model.save('./dacon/comp3/model_save_conv1d.h5')
 
 loss_mse = model.evaluate(x_test, y_test)
 print('loss_mse : ', loss_mse)
