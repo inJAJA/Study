@@ -90,13 +90,15 @@ x_train, x_test, y_train, y_test = train_test_split( x_deep, y, random_state = 3
 # Deep_learning
 def build_model(act = 'relu', drop = 0.2, optimizer = 'adam'):
     inputs = Input(shape = (4, ))
-    x = Dense(10, activation = act)(inputs)
+    if act == 'leaky':                                   # leaky가 함수여서 에러가 뜸 
+        act = leaky                                      # 이렇게 함수로 바꿔줌
+    x = Dense(50, activation = act)(inputs)
     x = Dropout(drop)(x)
-    x = Dense(50, activation = act)(x)
+    x = Dense(100, activation = act)(x)
     x = Dropout(drop)(x)
-    x = Dense(50, activation = act)(x)
+    x = Dense(200, activation = act)(x)
     x = Dropout(drop)(x)
-    x = Dense(50, activation = act)(x)
+    x = Dense(100, activation = act)(x)
     x = Dropout(drop)(x)
     x = Dense(50, activation = act)(x)
     output = Dense(4, activation = act)(x)
@@ -108,13 +110,15 @@ def build_model(act = 'relu', drop = 0.2, optimizer = 'adam'):
 # es = EarlyStopping(monitor = 'val_loss', patience = 50, verbose =1)
 
 def create_hyperparameter():
-    batches = [16, 32, 64, 128]
-    epochs = [50, 100, 150, 200]
+    batches = [64, 128, 256]
+    epochs = [100, 200, 300]
     dropout = np.linspace(0.1, 0.5, 5).tolist()
-    activation= ['relu', 'elu', leaky]
+    activation=  ['relu','leaky', 'elu']
     optimizers = ['rmsprop', 'adam', 'adadelta']
-    return {'deep__batch_size': batches, 'deep__epochs':epochs, 'deep__act': activation, 'deep__drop': dropout,
-            'deep__optimizer': optimizers}
+    return {'deep__batch_size': batches, 'deep__epochs':epochs, 'deep__act': activation,
+             'deep__drop': dropout,
+            'deep__optimizer': optimizers
+            }
 
 params = create_hyperparameter()
 
@@ -206,3 +210,15 @@ print(kaeri_metric(y_test, y1_pred))
 print(E1(y_test, y1_pred))
 print(E2(y_test, y1_pred))
 
+a = np.arange(2800, 3500)
+submission = pd.DataFrame(y_pred, a)
+submission.to_csv('./dacon/comp3/submission_1.csv', index = True, index_label= ['id'], header = ['X', 'Y', 'M', 'V'])
+
+'''
+best:  {'deep__optimizer': 'rmsprop', 'deep__epochs': 150, 'deep__drop': 0.1, 'deep__batch_size': 64, 'deep__act': 'elu'}
+score:  -31279.58130580357
+(700, 4)
+4.07383519838973
+6.13556166343452
+2.012108733344941
+'''
