@@ -35,10 +35,10 @@ x_pred = test.values
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, random_state =33)
 
-model = DecisionTreeRegressor(max_depth =4)                     # max_depth 몇 이상 올라가면 구분 잘 못함
+# model = DecisionTreeRegressor(max_depth =4)                     # max_depth 몇 이상 올라가면 구분 잘 못함
 # model = RandomForestRegressor(n_estimators = 200, max_depth=3)
 # model = GradientBoostingRegressor()
-# model = XGBRegressor()
+model = XGBRegressor()
 
 ## feature_importances
 def plot_feature_importances(model):
@@ -89,8 +89,8 @@ def boost_fit_acc(y_train, y_test):
        y_predict.append(y_pred)     
     return np.array(y_predict)
 
-y_predict = tree_fit(y_train, y_test)
-# y_predict = boost_fit_acc(y_train, y_test).reshape(-1, 4) 
+# y_predict = tree_fit(y_train, y_test)
+y_predict = boost_fit_acc(y_train, y_test).reshape(-1, 4) 
 
 print(y_predict.shape)
 
@@ -99,13 +99,6 @@ print(y_predict.shape)
 a = np.arange(10000,20000)
 submission = pd.DataFrame(y_predict, a)
 submission.to_csv('D:/Study/dacon/comp1/sub_XG.csv',index = True, header=['hhb','hbo2','ca','na'],index_label='id')
-
-
-
-
-
-
-
 
 
 

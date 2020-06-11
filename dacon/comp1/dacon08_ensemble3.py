@@ -180,7 +180,7 @@ print('y_pred: ', y_pred)
 
 a = np.arange(10000,20000)
 y_pred = pd.DataFrame(y_pred,a)
-y_pred.to_csv('./dacon/comp1/y_pred6.csv', 
+y_pred.to_csv('./dacon/comp1/y_pred7.csv', 
               index = True, header=['hhb','hbo2','ca','na'],index_label='id')
 '''
 loss_mae:  [1.6452705392837523, 1.6452704668045044]

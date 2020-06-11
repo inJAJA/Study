@@ -132,3 +132,8 @@ y_pred = pd.DataFrame({
 y_pred.to_csv('./dacon/y_pred2.csv', index = False )
 # sibmit파일
 # y_pred.to_csv(경로)
+
+'''
+{'optimizer': 'adam', 'epochs': 150, 'drop': 0.1, 'batch_size': 64, 'act': 'relu'}  
+mae:  1.6582090205261113
+'''

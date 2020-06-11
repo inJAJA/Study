@@ -47,12 +47,19 @@ def isnull_data(data):
 train_time = isnull_data(features).reshape(-1, 4)
 test_time = isnull_data(test).reshape(-1, 4)
 
+print(train_time[-1, ])
+
 print(train_time.shape)    # (2800, 4)
 print(test_time.shape)     # (700, 4)
 
 y_position = target.loc[:, ['X','Y']]
 
 print(y_position.shape)    # (2800, 2)
+
+# data_save
+np.save('./dacon/comp3/trian_time.npy', arr= train_time)
+np.save('./dacon/comp3/test_time.npy', arr= test_time)
+
 
 # numpy
 x = train_time

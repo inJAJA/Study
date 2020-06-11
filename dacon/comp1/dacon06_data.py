@@ -34,8 +34,8 @@ test = test.interpolate(axis =0)
 train.replace(0, np.nan)
 test.replace(0, np.nan)
 
-train = train.fillna(method = 'bfill')
-test = test.fillna(method = 'bfill')
+train = train.fillna(train.mean())
+test = test.fillna(test.mean())
 
 test.filter(regex='_src$',axis=1).head().T.plot()      # .filter : 원하는 값만 골라내기
 plt.show()                                             # regex = :정규 표현식
