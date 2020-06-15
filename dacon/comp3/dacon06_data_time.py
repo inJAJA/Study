@@ -61,12 +61,21 @@ np.save('./dacon/comp3/trian_time.npy', arr= train_time)
 np.save('./dacon/comp3/test_time.npy', arr= test_time)
 
 
-# numpy
+# data_time
 x = train_time
 x_pred = test_time
 y = y_position.values
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 33, train_size = 0.8)
+
+# data_rest
+x_all = features.values.reshape(-1, 375*5)
+x_all_pred = test.values.reshape(-1, 375*5)
+y_rest = target.loc[:,['M','V']]
+
+x2_train, x2_test, y2_train, y2_test = train_test_split(x_all, y_rest, random_state = 12, 
+                                                        train_size = 0.8)
+
 
 kfold = KFold(n_splits= 3, shuffle = True)
 
@@ -78,16 +87,38 @@ params = {
 }
 
 search = RandomizedSearchCV(model, params, cv = kfold)
+search2 = RandomizedSearchCV(model, params, cv = kfold)
 
 multi = MultiOutputRegressor(search)
+multi2 = MultiOutputRegressor(search2)
 
+# fit
 multi.fit(x_train, y_train)
+multi2.fit(x2_train, y2_train)
 
 # print(search.best_estimator_)
 
-y_pred1 = multi.predict(x_test)
+# evaluate
+y1_pred = multi.predict(x_test)
+y2_pred = multi2.predict(x2_test)
 
-print('R2: ', r2_score(y_test, y_pred1))
+print('R2: ', r2_score(y_test, y1_pred))
+print('R2: ', r2_score(y2_test, y2_pred))
+
+
+# predict
+y_pred1 = multi.predict(x_pred)
+y_pred2 = multi2.predict(x_all_pred)
+
+y_pred = pd.DataFrame({
+  'id' : np.arange(2800, 3500),
+  'X': y_pred1[:,0],
+  'Y': y_pred1[:, 1],
+  'M': y_pred2[:, 0],
+  'V':y_pred2[:, 1]
+})
+y_pred.to_csv('./dacon/comp3/sub_time_xgb.csv', index = False )
+
 
 # 평가지표
 def kaeri_metric(y_true, y_pred):
@@ -129,6 +160,10 @@ def E2(y_true, y_pred):
     
     return np.mean(np.sum(np.square((_t - _p) / (_t + 1e-06)), axis = 1))
 
-print(kaeri_metric(y_test, y_pred1))
-print(E1(y_test, y_pred1))
-print(E2(y_test, y_pred1))
+print(kaeri_metric(y_test, y1_pred))
+print(E1(y_test, y1_pred))
+print(E2(y_test, y1_pred))
+
+print(kaeri_metric(y_test, y2_pred))
+print(E1(y_test, y2_pred))
+print(E2(y_test, y2_pred))

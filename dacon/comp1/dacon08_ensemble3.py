@@ -9,6 +9,9 @@ from keras.callbacks import EarlyStopping
 from sklearn.decomposition import PCA
 from keras.layers.merge import concatenate  
 
+from keras.layers import LeakyReLU
+leaky = LeakyReLU(alpha = 0.2)
+
 #1. data
 train = pd.read_csv('./data/dacon/comp1/train.csv', index_col= 0, header = 0)
 test = pd.read_csv('./data/dacon/comp1/test.csv', index_col= 0 , header = 0)
@@ -180,7 +183,7 @@ print('y_pred: ', y_pred)
 
 a = np.arange(10000,20000)
 y_pred = pd.DataFrame(y_pred,a)
-y_pred.to_csv('./dacon/comp1/y_pred7.csv', 
+y_pred.to_csv('./dacon/comp1/y_pred7_elu.csv', 
               index = True, header=['hhb','hbo2','ca','na'],index_label='id')
 '''
 loss_mae:  [1.6452705392837523, 1.6452704668045044]
@@ -191,4 +194,10 @@ y_pred:  [[ 8.011511   3.9454927  8.913646   2.9070392]
  [ 7.868608   4.0444684  9.084156   3.0219097]
  [ 7.9418683  3.9243941  8.818521   2.8000116]
  [ 8.084814   3.9495373  8.780014   2.9098148]]
+
+ loss_mae:  [1.6670129718780518, 1.667013168334961
+
+ loss_mae:  [1.6643087844848632, 1.6643086671829224] : batch64, leaky
+
+ loss_mae:  [1.6606090335845947, 1.6606090068817139] : batch128, leaky
 '''
