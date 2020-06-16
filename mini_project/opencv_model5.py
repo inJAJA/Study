@@ -17,6 +17,7 @@ kernel = np.ones((3,3),np.uint8)
 closing = cv2.morphologyEx(bin_img, cv2.MORPH_CLOSE, kernel, iterations=4)
 
 n_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(bin_img)
+#    n_labels : 라벨 번호, img_labeled : 각 레이블링 부분의 이미지 배열, lab_stats : 모두 레이블링 된 이미지 배열
 print(n_labels)
 print(labels.shape)
 print(stats.shape)
