@@ -1,10 +1,11 @@
+# 완성작!
 from keras.models import load_model
 import numpy as np
 import cv2
 
 categories = ["carrot","chicken","egg","fish",'flour',"mashroom","meat","noodle", "onion", "potato"]
 
-image = cv2.imread("./data/pred/pred.jpg")
+image = cv2.imread("D:/data/pred/pred.jpg")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 ret, bin_img = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
@@ -35,7 +36,7 @@ for i in range(1, n_labels):
         # cv2.imshow('img', img)
         # cv2.waitKey(0)
 
-        model = load_model('./mini_project/graph/model1.h5') 
+        model = load_model('D:/Study/mini_project/model_train2.h5') 
 
         img_digit = cv2.resize(img, (256, 256), interpolation = cv2.INTER_LINEAR)
                                                                 
@@ -57,9 +58,10 @@ for i in range(1, n_labels):
         cv2.putText(image, str(label), location, font, fontScale, (0, 255, 0), 2)
         
         ingredients.append(label)
-        print(ingredients)
+        
 
 # for문 빠져나옴
 
 cv2.imshow('result', image)  
 cv2.waitKey(0)
+print(ingredients)
