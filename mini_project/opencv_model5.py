@@ -66,3 +66,5 @@ for i in range(1, n_labels):
 cv2.imshow('result', image)  
 cv2.waitKey(0)
 print(ingredients)
+
+np.save('./data/ingredient.npy', arr = ingredients)
