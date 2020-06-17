@@ -67,9 +67,9 @@ es = EarlyStopping(monitor = 'val_loss', patience = 100)
 
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['acc'])
 hist = model.fit_generator(x_train, epochs = 400, 
-                           steps_per_epoch= 100,                       # 한 세대하다 몇번 생성기로부터 데이터를 얻을 것이가                 
-                           validation_data= x_val,                   # validation_data 설정
-                           validation_steps= 10,                    # [validation data수/배치사이즈]
+                           steps_per_epoch= 100,                    # 한번 epoch돌 때, 데이터를 몇번 볼 것인가                   
+                           validation_data= x_val,                  # validation_data 설정
+                           validation_steps= 10,                    # 한번 epoch돌고 난 후, val_data를 몇번 볼 것인가
                            callbacks= [es],
                            verbose = 2
                            )
