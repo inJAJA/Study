@@ -40,8 +40,7 @@ recipe_tol = pd.DataFrame(index = range(0, 1),
                           columns = ['recipe_title', 'recipe_source', 'recipe_step'])
 
 def toCSV(number):
-    # for i in range(number, number+20, 2):
-    for i in [3556,4377,5728,1298,2390,4030,1446] :
+    for i in [48,5810,405,1754,5167,2169,3344,4336,3348,5600] :
         print(i)
         recipe = PageCrawler(str(i))
         recipe_list = pd.DataFrame(recipe)
@@ -52,4 +51,4 @@ def toCSV(number):
 
 toCSV(5959)
 
-recipe_tol.to_csv('./recipe/recipe_fish7.csv', index = False)
+recipe_tol.to_csv('E:/Bit Camp/Study/mini_project/recipe/recipe_meat.csv', index = False)
