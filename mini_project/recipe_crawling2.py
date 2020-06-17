@@ -1,6 +1,8 @@
 import numpy as np
 import urllib
 from bs4 import BeautifulSoup
+import csv
+import pandas as pd
 
 def PageCrawler(recipeUrl):
     url = 'https://haemukja.com/recipes/' + recipeUrl
@@ -18,13 +20,12 @@ def PageCrawler(recipeUrl):
     title = res.find('h1')
     recipe_title = title.find_all('strong')
 
-    res = soup.find_all('ul', {'class': 'lst_ingrd'})
-    print(res)
-    source = res.find_all('span')
+    res = soup.find('ul', {'class': 'lst_ingrd'})
  
     for tmp in res.find_all('span'):
-        recipe_source.append(tmp.get_text().repalce('\n','').replace(' ',''))
-
+        recipe_source.append(tmp.get_text().replace('\n','').replace(' ',''))
+    print(recipe_source)
+ 
     # 요리 순서 찾는 for문
     res = soup.find('ol', {'class':'lst_step'})
     i = 0
@@ -32,7 +33,11 @@ def PageCrawler(recipeUrl):
         i += 1
         recipe_step.append('#' + str(i)+' '+ n.get_text())
 
-    recipe_all = {'recipe_title': recipe_title, 'recipe_source':recipe_source, 'recipe_step':recipe_step}
+    recipe_all = {'recipe_title': recipe_title, 'recipe_source':[recipe_source], 'recipe_step':[recipe_step]}
     return(recipe_all)
+    
+recipe = PageCrawler('5944')
+recipe_list = pd.DataFrame(recipe)
+print(recipe_list.info())
 
-PageCrawler('5944')
+recipe.to_csv('recipe.csv')
