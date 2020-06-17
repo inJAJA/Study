@@ -20,8 +20,8 @@ datagen = ImageDataGenerator(zoom_range = [0.5, 1.0],          # 랜덤하게 �
                              rescale = 1. / 255,
                              brightness_range = [0.2, 1.0],    # 이미지 발기
                              rotation_range = 90,              # 랜덤한 각도로 돌리기
-                             horizontal_flip = True,           # 위, 아래, 오른쪽, 왼쪽 뒤집기
-                             vertical_flip = True,             
+                             horizontal_flip = True,           # 위, 아래
+                             vertical_flip = True,             # 오른쪽, 왼쪽 뒤집기
                              height_shift_range = 0.3,         # 위, 아래 움직임 
                              width_shift_range = 0.3,          # 오른쪽, 왼쪽 움직임
                             )
