@@ -11,9 +11,9 @@ def PageCrawler(recipeUrl):
     sourcecode = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(sourcecode, "html.parser")
 
-    recipe_title = [] # 레시피 제목
+    recipe_title = []  # 레시피 제목
     recipe_source = [] # 레시피 재료
-    recipe_step = [] #레시피 순서
+    recipe_step = []   #레시피 순서
 
     
     res = soup.find('div', {'class':'top'})
@@ -33,22 +33,20 @@ def PageCrawler(recipeUrl):
         i += 1
         recipe_step.append('#' + str(i)+' '+ n.get_text())
 
+    # 레시피 생성
     recipe_all = {'recipe_title': recipe_title, 'recipe_source':[recipe_source], 'recipe_step':[recipe_step]}
     return(recipe_all)
 
+# 빈 데이터 프레임 만들기
 recipe_tol = pd.DataFrame(index = range(0, 1), 
                           columns = ['recipe_title', 'recipe_source', 'recipe_step'])
 
-def toCSV(number):
-    for i in [48,5810,405,1754,5167,2169,3344,4336,3348,5600] :
-        print(i)
-        recipe = PageCrawler(str(i))
-        recipe_list = pd.DataFrame(recipe)
-        global recipe_tol                                  # 전역변수 지역변수에 사용
-        recipe_tol = pd.concat([recipe_tol, recipe_list])
-        
-    return recipe_tol
+# 레시피 생성
+for i in [48,5810,405,1754,5167,2169,3344,4336,3348,5600] :  # 페이지 주소
+    print(i)
+    recipe = PageCrawler(str(i))
+    recipe_list = pd.DataFrame(recipe)
+    recipe_tol = pd.concat([recipe_tol, recipe_list])
 
-toCSV(5959)
 
-recipe_tol.to_csv('E:/Bit Camp/Study/mini_project/recipe/recipe_meat.csv', index = False)
+recipe_tol.to_csv('./mini_project/recipe/recipe_meat.csv', index = False)
