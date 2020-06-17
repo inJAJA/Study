@@ -13,7 +13,7 @@ for source in ingredients:
     elif source == 'chicken':
         source = '닭'
     elif source == 'egg':
-        source = '계란'
+        source = '계란 달걀'
     elif source == 'fish':
         source = '고등어'
     elif source == 'flour':
@@ -21,7 +21,7 @@ for source in ingredients:
     elif source == 'mashroom':
         source = '버섯'
     elif source == 'meat':
-        source = '고기'
+        source = '고기 소고기 돼지고기 '
     elif source == 'onion':
         source = '양파'
     elif source == 'paprika':
@@ -31,6 +31,7 @@ for source in ingredients:
     ingred.append([source])
 
 print(ingred)
+
 
 # recipe_data
 ca = pd.read_csv('./mini_project/recipe/recipe_carrot.csv', encoding= "utf-8", engine ='python')
@@ -60,6 +61,7 @@ ingred_c_sim = cosine_similarity(c_vector_ingred, c_vector_recipe).argsort()[:, 
 print(ingred_c_sim.shape)
 
 sim_index = ingred_c_sim[:3]
+print(sim_index)
 
 recipe_recommend = [i[0]for i in sim_index]
 
