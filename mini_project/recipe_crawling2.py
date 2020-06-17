@@ -25,7 +25,6 @@ def PageCrawler(recipeUrl):
  
     for tmp in res.find_all('span'):
         recipe_source.append(tmp.get_text().replace('\n','').replace(' ',''))
-    print(recipe_source)
  
     # 요리 순서 찾는 for문
     res = soup.find('ol', {'class':'lst_step'})
@@ -39,15 +38,18 @@ def PageCrawler(recipeUrl):
 
 recipe_tol = pd.DataFrame(index = range(0, 1), 
                           columns = ['recipe_title', 'recipe_source', 'recipe_step'])
+
 def toCSV(number):
-    for i in range(number, number+25):
-        recipe = PageCrawler(number)
-        recipe_list = pd.DataFrame(number)
+    # for i in range(number, number+20, 2):
+    for i in [3556,4377,5728,1298,2390,4030,1446] :
+        print(i)
+        recipe = PageCrawler(str(i))
+        recipe_list = pd.DataFrame(recipe)
+        global recipe_tol                                  # 전역변수 지역변수에 사용
         recipe_tol = pd.concat([recipe_tol, recipe_list])
+        
+    return recipe_tol
 
-recipe = PageCrawler('5940')
+toCSV(5959)
 
-recipe_list = pd.DataFrame(recipe)
-print(recipe_list.info())
-
-recipe_list.to_csv('./recipe.csv')
+recipe_tol.to_csv('./recipe_fish7.csv', index = False)
