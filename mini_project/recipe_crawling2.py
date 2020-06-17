@@ -18,7 +18,8 @@ def PageCrawler(recipeUrl):
     
     res = soup.find('div', {'class':'top'})
     title = res.find('h1')
-    recipe_title = title.find_all('strong')
+    recipe_title = title.find('strong')
+    recipe_title = recipe_title.get_text()
 
     res = soup.find('ul', {'class': 'lst_ingrd'})
  
@@ -35,9 +36,18 @@ def PageCrawler(recipeUrl):
 
     recipe_all = {'recipe_title': recipe_title, 'recipe_source':[recipe_source], 'recipe_step':[recipe_step]}
     return(recipe_all)
-    
-recipe = PageCrawler('5944')
+
+recipe_tol = pd.DataFrame(index = range(0, 1), 
+                          columns = ['recipe_title', 'recipe_source', 'recipe_step'])
+def toCSV(number):
+    for i in range(number, number+25):
+        recipe = PageCrawler(number)
+        recipe_list = pd.DataFrame(number)
+        recipe_tol = pd.concat([recipe_tol, recipe_list])
+
+recipe = PageCrawler('5940')
+
 recipe_list = pd.DataFrame(recipe)
 print(recipe_list.info())
 
-recipe.to_csv('recipe.csv')
+recipe_list.to_csv('./recipe.csv')
