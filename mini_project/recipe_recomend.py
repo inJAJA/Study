@@ -15,7 +15,7 @@ for source in ingredients:
     elif source == 'egg':
         source = '계란 달걀'
     elif source == 'fish':
-        source = '고등어'
+        source = '고등어 삼치 꽁치'
     elif source == 'flour':
         source = '밀가루'
     elif source == 'mashroom':
