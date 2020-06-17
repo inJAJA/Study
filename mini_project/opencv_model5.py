@@ -3,7 +3,7 @@ from keras.models import load_model
 import numpy as np
 import cv2
 
-categories = ["carrot","chicken","egg","fish",'flour',"mashroom","meat","noodle", "onion", "potato"]
+categories = ["carrot","chicken","egg","fish",'flour',"mashroom","meat", "onion", "paprika","potato"]
 
 image = cv2.imread("D:/data/pred/pred.jpg")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
