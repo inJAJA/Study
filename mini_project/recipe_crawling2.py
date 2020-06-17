@@ -52,4 +52,4 @@ def toCSV(number):
 
 toCSV(5959)
 
-recipe_tol.to_csv('./recipe_fish7.csv', index = False)
+recipe_tol.to_csv('./recipe/recipe_fish7.csv', index = False)
