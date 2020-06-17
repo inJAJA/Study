@@ -1,11 +1,13 @@
 import numpy as np
+import urllib
+from bs4 import BeautifulSoup
 
 def PageCrawler(recipeUrl):
     url = 'http://www.10000recipe.com/' + recipeUrl
 
     req = urllib.request.Request(url)
-    sourcecode = urlib.request.urlopen(url).read()
-    soup = Beautifulsoup(sourcecode, "html.parser")
+    sourcecode = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(sourcecode, "html.parser")
 
     recipe_title = [] # 레시피 제목
     recipe_source = {} # 레시피 재료
@@ -45,4 +47,3 @@ def PageCrawler(recipeUrl):
 
     recipe_all = [recipe_title, recipe_source, recipe_step]
     return(recipe_all)
-<p></p>

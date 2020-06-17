@@ -42,4 +42,3 @@ class ShapeDetector:
 
 sd = ShapeDetector()
 cnts = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-cnts = cnts[0] if 
