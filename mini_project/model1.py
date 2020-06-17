@@ -12,8 +12,8 @@ import os
 #1. data
 np.random.seed()
 
-train_path = './data/train'
-test_path = './data/test'
+train_path = 'D:/data/train'
+test_path = 'D:/data/test'
 
 # image_generator
 datagen = ImageDataGenerator(zoom_range = [0.5, 1.0],          # 랜덤하게 줌, 아웃
@@ -30,32 +30,35 @@ datagen_val = ImageDataGenerator(rescale = 1. / 255)
 
 x_train = datagen.flow_from_directory( train_path,
                                 target_size = (256, 256),
-                                batch_size = 20,                # batch_size만큼 랜덤하게 변형된 이미지 획득
+                                batch_size = 30,
                                 class_mode = 'categorical')
 
 x_val = datagen_val.flow_from_directory( train_path,
                                 target_size = (256, 256),
+                                batch_size = 30,
                                 class_mode = 'categorical')
 
 x_test = datagen.flow_from_directory( test_path,
                                 target_size = (256, 256),
-                                batch_size = 20,                
+                                batch_size = 4,                
                                 class_mode = 'categorical')
 
 #2. model
 model = Sequential()
-model.add(Conv2D(50, (5, 5), input_shape= ( 256, 256, 3), padding = 'same', activation = 'elu'))
+model.add(Conv2D(50, (5, 5), input_shape= ( 256, 256, 3), padding = 'same', activation = 'relu'))
 model.add(MaxPooling2D(pool_size = 5))
 model.add(Dropout(0.3))
-model.add(Conv2D(100, (5, 5), padding = 'same', activation = 'elu'))
+model.add(Conv2D(100, (5, 5), padding = 'same', activation = 'relu'))
 model.add(MaxPooling2D(pool_size = 5))
-model.add(Dropout(0.3))
-model.add(Conv2D(100, (5, 5), padding = 'same', activation = 'elu'))
+model.add(Dropout(0.5))
+model.add(Conv2D(120, (5, 5), padding = 'same', activation = 'relu'))
 model.add(MaxPooling2D(pool_size = 5))
-model.add(Dropout(0.3))
-model.add(Conv2D(50, (5, 5), padding = 'same', activation = 'elu'))
-model.add(Dropout(0.3))
+model.add(Dropout(0.5))
+model.add(Conv2D(90, (5, 5), padding = 'same', activation = 'relu'))
+model.add(Dropout(0.5))
 model.add(Flatten())
+model.add(Dense(50, activation = 'relu'))
+model.add(Dropout(0.3))
 model.add(Dense(10, activation = 'softmax'))
 
 model.summary()
@@ -63,15 +66,15 @@ model.summary()
 es = EarlyStopping(monitor = 'val_loss', patience = 100)
 
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['acc'])
-hist = model.fit_generator(x_train, epochs = 500, 
-                           steps_per_epoch= 100,                       # 한 세대하다 몇번 생성기로부터 데이터를 얻을 것이가                 
+hist = model.fit_generator(x_train, epochs = 400, 
+                           steps_per_epoch= 50,                       # 한 세대하다 몇번 생성기로부터 데이터를 얻을 것이가                 
                            validation_data= x_val,                   # validation_data 설정
                            validation_steps= 10,                    # [validation data수/배치사이즈]
                            callbacks= [es],
                            verbose = 2)
 
 # model.save
-model.save('./model_train1_2.h5')
+model.save('./model_train1_4.h5')
 
 loss, acc =model.evaluate_generator(x_test, steps = 10, verbose = 2)
 print('loss, acc: ', loss, acc)
