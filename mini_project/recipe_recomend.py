@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from ast import literal_eval
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -32,40 +33,35 @@ for source in ingredients:
 print(ingred)
 
 # recipe_data
-ca = pd.read_csv('./mini_project/recipe/recipe_carrot.csv', header = 1)
-ch = pd.read_csv('./mini_project/recipe/recipe_chicken.csv', header = 1)
-egg = pd.read_csv('./mini_project/recipe/recipe_egg.csv', header = 1)
-fs = pd.read_csv('./mini_project/recipe/recipe_fish.csv', header = 1)
-fl = pd.read_csv('./mini_project/recipe/recipe_flour.csv', header = 1)
-ms = pd.read_csv('./mini_project/recipe/recipe_mashroom.csv', header = 1)
-mt = pd.read_csv('./mini_project/recipe/recipe_meat.csv', header = 1)
-on = pd.read_csv('./mini_project/recipe/recipe_onion.csv', header = 1)
-pa = pd.read_csv('./mini_project/recipe/recipe_paprika.csv', header = 1)
-po = pd.read_csv('./mini_project/recipe/recipe_potato.csv', header = 1)
+ca = pd.read_csv('./mini_project/recipe/recipe_carrot.csv', encoding= "utf-8", engine ='python')
+ch = pd.read_csv('./mini_project/recipe/recipe_chicken.csv',  encoding= "utf-8", engine ='python')
+egg = pd.read_csv('./mini_project/recipe/recipe_egg.csv',  encoding= "utf-8", engine ='python')
+fs = pd.read_csv('./mini_project/recipe/recipe_fish7.csv',  encoding= "utf-8", engine ='python')
+fl = pd.read_csv('./mini_project/recipe/recipe_flour8.csv',  encoding= "utf-8", engine ='python')
+ms = pd.read_csv('./mini_project/recipe/recipe_mashroom.csv',  encoding= "utf-8", engine ='python')
+mt = pd.read_csv('./mini_project/recipe/recipe_meat.csv', encoding= "utf-8", engine ='python')
+on = pd.read_csv('./mini_project/recipe/recipe_onion.csv',  encoding= "utf-8", engine ='python')
+pa = pd.read_csv('./mini_project/recipe/recipe_paprika.csv',  encoding= "utf-8", engine ='python')
+po = pd.read_csv('./mini_project/recipe/recipe_potato.csv',  encoding= "utf-8", engine ='python')
 
-recipe = pd.concat([ca, ch, egg, fs, fl, ms, mt, on, pa, po])
+recipe = pd.concat([ca, ch, egg, fs, fl, ms, mt, on, pa, po]).dropna()
+recipe['recipe_source'] = recipe['recipe_source'].apply(literal_eval)
 
-recipe['recipe_source'] = recipe['recipe_source'].apply(lambda x : ''.join(x)) # 띄어쓰기로 이루어진 str로 변경
+recipe['recipe_source'] = recipe['recipe_source'].apply(lambda x: " ".join(x))
 
-recipe.ingred.head(2)
-
-count_vector = CountVectorizer(ngram_range=(1, 3)) # 객체 생성
-c_vector_ingred = count_vector.fit(recipe['recipe_source']) # 변환
-print(c_vector_ingred.shape)
+# 단어 토큰화
+vector = CountVectorizer(ngram_range=(1, 1))                # 단어 묶음을 1개부터 1개까지 설정
+vector.fit(ingred)                                  
+c_vector_recipe = vector.transform(recipe['recipe_source']) # 변환
+c_vector_ingred = vector.transform(ingred)
 
 # 코사인 유사도를 구한 벡터를 미리 저장
-ingred_c_sim = cosine_similarity(c_vector_ingred, c_vector_ingred).argsort()[:, ::-1]
+ingred_c_sim = cosine_similarity(c_vector_ingred, c_vector_recipe).argsort()[:, ::-1] # 오름차순 정렬
 print(ingred_c_sim.shape)
 
-def get_recommend_recipe_list(df, recipe_title, top=3):    # data, data_title
-    # 특정 영화와 비슷한 영화를 추천해야 하기 때문에 '특정 레시피'정보를 뽑아낸다.
-    target_recipe_index = df[df['recipe_title']] == recipe_title.index.ValuesView
+sim_index = ingred_c_sim[:3]
 
-    # 코사인 유사도 중 비슷한 코사인 유사도를 가진 정보를 뽑아낸다.
-    sim_index = ingred_c_sim[target_recipe_index, :top].reshape(-1)
-    
-    # data frame으로 만들고 return
-    result = df.iloc[sim_index][:10]
-    return result
+recipe_recommend = [i[0]for i in sim_index]
 
-get_recommend_recipe_list(ingredients, recipe_title= '')
+print(recipe.iloc[recipe_recommend])
+
