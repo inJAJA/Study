@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # image로 인식한 재료
-ingredients = np.load('./data/ingredient.npy')
+ingredients = np.load('./mini_project/graph/ingredient.npy')
 ingred = []
 for source in ingredients:
     if source == 'carrot':
@@ -28,7 +28,7 @@ for source in ingredients:
         source = '파프리카'
     else:
         source = '감자'
-    ingred.append([source])
+    ingred.append(source)
 
 print(ingred)
 
