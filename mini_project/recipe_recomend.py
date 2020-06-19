@@ -3,7 +3,7 @@ import pandas as pd
 from ast import literal_eval
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
+'''
 # image로 인식한 재료
 ingredients = np.load('./mini_project/graph/ingredient.npy')
 ingred = []
@@ -57,11 +57,10 @@ c_vector_recipe = vector.transform(recipe['recipe_source']) # 변환
 c_vector_ingred = vector.transform(ingred)
 
 # 코사인 유사도를 구한 벡터를 미리 저장
-ingred_c_sim = cosine_similarity(c_vector_ingred, c_vector_recipe).argsort()[:, ::-1] # 오름차순 정렬
+ingred_c_sim = cosine_similarity(c_vector_ingred, c_vector_recipe).argsort()[:, ::-1] # 내림차순 정렬
 print(ingred_c_sim.shape)
 
 sim_index = ingred_c_sim[:3]
-print(sim_index)
 
 recipe_recommend = [i[0]for i in sim_index]
 
