@@ -1,9 +1,0 @@
-categori = 9
-# image generator
-batch_size = train: 20, test:2
-val_data = 원본
-steps_per_epochs = train100
-validation_steps = 100
-steps = 10
-epochs = 500(es : 259)
-loss, acc:  0.03742332011461258 0.949999988079071
