@@ -91,3 +91,10 @@ for i in range(len(multi_XGB.estimators_)):
         y_pred = multi_search.predict(select_x_test)
         score =r2_score(y_test, y_pred)
         print("Thresh=%.3f, n = %d, R2 : %.2f%%" %(thres, select_x_train.shape[1], score*100.0))
+ 
+        select_x_pred = selection.transform(x_pred)
+        y_predict = multi_search.predict(select_x_pred)
+        # submission
+        a = np.arange(10000,20000)
+        submission = pd.DataFrame(y_predict, a)
+        submission.to_csv('D:/Study/dacon/comp1/sub_XG.csv',index = True, header=['hhb','hbo2','ca','na'],index_label='id')
