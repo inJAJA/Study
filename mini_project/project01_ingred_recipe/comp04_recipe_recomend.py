@@ -3,7 +3,7 @@ import pandas as pd
 from ast import literal_eval
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-'''
+
 # image로 인식한 재료
 ingredients = np.load('./mini_project/graph/ingredient.npy')
 ingred = []
@@ -30,9 +30,6 @@ for source in ingredients:
         source = '감자'
     ingred.append(source)
 
-print(ingred)
-'''
-ingred = ['감자','파프리카','양파','고기 소고기 돼지고기']
 # recipe_data
 ca = pd.read_csv('./mini_project/recipe/recipe_carrot.csv', encoding= "utf-8", engine ='python')
 ch = pd.read_csv('./mini_project/recipe/recipe_chicken.csv',  encoding= "utf-8", engine ='python')
