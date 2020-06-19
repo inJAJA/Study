@@ -55,32 +55,39 @@ multi_XGB.fit(x_train, y_train)
 
 print(len(multi_XGB.estimators_))   # 4
 
-print(multi_XGB.estimators_[0].feature_importances_)
-print(multi_XGB.estimators_[1].feature_importances_)
-print(multi_XGB.estimators_[2].feature_importances_)
-print(multi_XGB.estimators_[3].feature_importances_)
+# print(multi_XGB.estimators_[0].feature_importances_)
+# print(multi_XGB.estimators_[1].feature_importances_)
+# print(multi_XGB.estimators_[2].feature_importances_)
+# print(multi_XGB.estimators_[3].feature_importances_)
 
 xgb = XGBRegressor()
 model = MultiOutputRegressor(xgb)
 model.fit(x_train, y_train)
 
-threshold = np.sort(multi_XGB.estimators_[0].feature_importances_)
 
-for thres in threshold:
-    selection = SelectFromModel(xgb, threshold = thres, prefit = True)
-    select_x_train = selection.transform(x_train)
 
-    parameter = {
-        'n_estimator': [100, 200, 400],
-        'learning_rate' : [0.01, 0.03, 0.05, 0.07, 0.1],
-        'colsample_bytree': [0.6, 0.7, 0.8, 0.9],
-        'colsample_bylevel':[0.6, 0.7, 0.8, 0.9],
-        'max_depth': [4, 5, 6]
-    }
+for i in range(len(multi_XGB.estimators_)):
+    threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)
+
+    for thres in threshold:
+        selection = SelectFromModel(xgb, threshold = thres, prefit = True)
+        select_x_train = selection.transform(x_train)
+
+        parameter = {
+            'n_estimator': [100, 200, 400],
+            'learning_rate' : [0.01, 0.03, 0.05, 0.07, 0.1],
+            'colsample_bytree': [0.6, 0.7, 0.8, 0.9],
+            'colsample_bylevel':[0.6, 0.7, 0.8, 0.9],
+            'max_depth': [4, 5, 6]
+        }
     
-    search = GridSearchCV(xgb, parameter, cv =5, n_jobs = -1)
+        search = GridSearchCV(xgb, parameter, cv =5, n_jobs = -1)
 
-    multi_search = MultiOutputRegressor(search)
-    multi_search.fit(select_x_train, y_train)
+        multi_search = MultiOutputRegressor(search)
+        multi_search.fit(select_x_train, y_train)
+        
+        select_x_test = selection.transform(x_test)
 
-    score = multi_search()
+        y_pred = multi_search.predict(select_x_test)
+        score =r2_score(y_test, y_pred)
+        print("Thresh=%.3f, n = %d, R2 : %.2f%%" %(thres, select_x_train.shape[1], score*100.0))
