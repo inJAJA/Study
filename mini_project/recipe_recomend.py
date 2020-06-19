@@ -3,7 +3,7 @@ import pandas as pd
 from ast import literal_eval
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-'''
+
 # image로 인식한 재료
 ingredients = np.load('./mini_project/graph/ingredient.npy')
 ingred = []
