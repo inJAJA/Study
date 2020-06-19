@@ -3,7 +3,7 @@ import numpy as np
 from xgboost import XGBClassifier, XGBRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_iris
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, accuracy_score
 
 iris = load_iris()
 x = iris.data
@@ -36,8 +36,8 @@ for thresh in thresholds:                             # 전체 컬럼 수만큼 
     select_x_test = selection.transform(x_test)
     y_pred = selection_model.predict(select_x_test)
 
-    score = r2_score(y_test, y_pred) 
-    # print('R2 :', score)
+    score = accuracy_score(y_test, y_pred) 
+    # print('acc :', score)
 
     print("Thresh=%.3f, n = %d, R2 : %.2f%%" %(thresh, select_x_train.shape[1],
                                                 score*100.0))

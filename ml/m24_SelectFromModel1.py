@@ -1,9 +1,10 @@
 from sklearn.feature_selection import SelectFromModel
 import numpy as np
-from xgboost import XGBClassifier, XGBRegressor
+from xgboost import XGBClassifier, XGBRegressor, plot_importance
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_boston
 from sklearn.metrics import r2_score
+import matplotlib.pyplot as plt
 
 # dataset = load_boston()
 # x = dataset.data
