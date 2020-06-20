@@ -89,10 +89,11 @@ for i in range(len(multi_XGB.estimators_)):
         mae = mean_absolute_error(y_test, y_pred)
         score =r2_score(y_test, y_pred)
         print("Thresh=%.3f, n = %d, R2 : %.2f%%, MAE : %.3f"%(thres, select_x_train.shape[1], score*100.0, mae))
+        print(search.best_params_)
  
         select_x_pred = selection.transform(x_pred)
         y_predict = multi_search.predict(select_x_pred)
         # submission
         a = np.arange(10000,20000)
         submission = pd.DataFrame(y_predict, a)
-        submission.to_csv('./dacon/comp1/sub_XG%i_%.3f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
+        submission.to_csv('./dacon/comp1/sub_XG%i_%.5f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
