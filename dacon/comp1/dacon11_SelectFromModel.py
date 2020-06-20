@@ -10,7 +10,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 from keras.callbacks import EarlyStopping
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_absolute_error
 from sklearn.feature_selection import SelectFromModel
 
 
@@ -64,35 +64,35 @@ print(len(multi_XGB.estimators_))   # 4
 
 for i in range(len(multi_XGB.estimators_)):
     threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)
-    print(threshold)
 
     for thres in threshold:
         selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
         
         parameter = {
             'n_estimators': [100, 200, 400],
-            'learning_rate' : [0.01, 0.03, 0.05, 0.07, 0.1],
+            'learning_rate' : [0.03, 0.05, 0.07, 0.1],
             'colsample_bytree': [0.6, 0.7, 0.8, 0.9],
             'colsample_bylevel':[0.6, 0.7, 0.8, 0.9],
             'max_depth': [4, 5, 6]
         }
     
-        search = GridSearchCV( XGBRegressor(), parameter, cv =5, n_jobs = -1)
+        search = RandomizedSearchCV( XGBRegressor(), parameter, cv =5)
 
         select_x_train = selection.transform(x_train)
 
-        multi_search = MultiOutputRegressor(search)
-        multi_search.fit(select_x_train, y_train)
+        multi_search = MultiOutputRegressor(search,n_jobs = -1)
+        multi_search.fit(select_x_train, y_train )
         
         select_x_test = selection.transform(x_test)
 
         y_pred = multi_search.predict(select_x_test)
+        mae = mean_absolute_error(y_test, y_pred)
         score =r2_score(y_test, y_pred)
-        print("Thresh=%.3f, n = %d, R2 : %.2f%%" %(thres, select_x_train.shape[1], score*100.0))
+        print("Thresh=%.3f, n = %d, R2 : %.2f%%, MAE : %.3f"%(thres, select_x_train.shape[1], score*100.0, mae))
  
         select_x_pred = selection.transform(x_pred)
         y_predict = multi_search.predict(select_x_pred)
         # submission
         a = np.arange(10000,20000)
         submission = pd.DataFrame(y_predict, a)
-        submission.to_csv('./dacon/comp1/sub_XG.csv',index = True, header=['hhb','hbo2','ca','na'],index_label='id')
+        submission.to_csv('./dacon/comp1/sub_XG%i_%.3f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
