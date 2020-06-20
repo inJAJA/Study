@@ -50,38 +50,36 @@ print(y_test.shape)
 
 
 #2. feature_importance
-multi_XGB = MultiOutputRegressor(XGBRegressor())
+xgb = XGBRegressor()
+multi_XGB = MultiOutputRegressor(xgb)
 multi_XGB.fit(x_train, y_train)
 
 print(len(multi_XGB.estimators_))   # 4
+
 
 # print(multi_XGB.estimators_[0].feature_importances_)
 # print(multi_XGB.estimators_[1].feature_importances_)
 # print(multi_XGB.estimators_[2].feature_importances_)
 # print(multi_XGB.estimators_[3].feature_importances_)
 
-xgb = XGBRegressor()
-model = MultiOutputRegressor(xgb)
-model.fit(x_train, y_train)
-
-
-
 for i in range(len(multi_XGB.estimators_)):
     threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)
+    print(threshold)
 
     for thres in threshold:
-        selection = SelectFromModel(xgb, threshold = thres, prefit = True)
-        select_x_train = selection.transform(x_train)
-
+        selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
+        
         parameter = {
-            'n_estimator': [100, 200, 400],
+            'n_estimators': [100, 200, 400],
             'learning_rate' : [0.01, 0.03, 0.05, 0.07, 0.1],
             'colsample_bytree': [0.6, 0.7, 0.8, 0.9],
             'colsample_bylevel':[0.6, 0.7, 0.8, 0.9],
             'max_depth': [4, 5, 6]
         }
     
-        search = GridSearchCV(xgb, parameter, cv =5, n_jobs = -1)
+        search = GridSearchCV( XGBRegressor(), parameter, cv =5, n_jobs = -1)
+
+        select_x_train = selection.transform(x_train)
 
         multi_search = MultiOutputRegressor(search)
         multi_search.fit(select_x_train, y_train)
@@ -97,4 +95,4 @@ for i in range(len(multi_XGB.estimators_)):
         # submission
         a = np.arange(10000,20000)
         submission = pd.DataFrame(y_predict, a)
-        submission.to_csv('D:/Study/dacon/comp1/sub_XG.csv',index = True, header=['hhb','hbo2','ca','na'],index_label='id')
+        submission.to_csv('./dacon/comp1/sub_XG.csv',index = True, header=['hhb','hbo2','ca','na'],index_label='id')
