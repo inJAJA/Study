@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSe
 from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, Input
 from xgboost import XGBRegressor, plot_importance
+from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 from keras.callbacks import EarlyStopping
@@ -43,10 +44,18 @@ x = x.values
 y = y.values
 x_pred = test.values
 
+scaler = StandardScaler()
+scaler.fit(x)
+x = scaler.transform(x)
+x_pred = scaler.transform(x_pred)
+
+pca = PCA(n_components= 10)
+pca.fit(x)
+x = pca.transform(x)
+x_pred = pca.transform(x_pred)
+
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size =0.8,
                                                     shuffle = True, random_state = 66)
-
-
 
 #2. feature_importance
 xgb = XGBRegressor()
@@ -65,12 +74,12 @@ print(len(multi_XGB.estimators_))   # 4
 
 def create_hyperparameter():
     batches = [16, 32, 64, 128]
-    epochs = [50, 100, 150, 200]
+    epochs = [100, 150, 200]
     dropout = np.linspace(0.1, 0.5, 5).tolist()
     activation= ['relu', 'elu', leaky]
     optimizers = ['rmsprop', 'adam', 'adadelta']
-    return {'batch_size': batches, 'epochs':epochs, 'act': activation, 'drop': dropout,
-            'optimizer': optimizers}
+    return {'deep__batch_size': batches, 'deep__epochs':epochs, 'deep__act': activation, 'deep__drop': dropout,
+            'deep__optimizer': optimizers}
                   
 
 for i in range(len(multi_XGB.estimators_)):
@@ -79,41 +88,44 @@ for i in range(len(multi_XGB.estimators_)):
     for thres in threshold:
         selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
     
-        for n in np.sort(range(1, 72))[::-1]:
+        select_x_train = selection.transform(x_train)
+        select_x_test = selection.transform(x_test)
+        select_x_pred = selection.transform(x_pred)
     
-            def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
-                inputs = Input(shape= (n, ))
-                x = Dense(51, activation =act)(inputs)
-                x = Dropout(drop)(x)
-                x = Dense(256, activation = act)(x)
-                x = Dropout(drop)(x)
-                x = Dense(128, activation = act)(x)
-                x = Dropout(drop)(x)
-                outputs = Dense(4, activation = act)(x)
-                model = Model(inputs = inputs, outputs = outputs)
-                model.compile(optimizer = optimizer, metrics = ['mae'],  loss = 'mae')
-                return model
+        def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
+            inputs = Input(shape= (select_x_train.shape[1], ))
+            x = Dense(51, activation =act)(inputs)
+            x = Dropout(drop)(x)
+            x = Dense(100, activation = act)(x)
+            x = Dropout(drop)(x)
+            x = Dense(150, activation = act)(x)
+            x = Dropout(drop)(x)
+            x = Dense(250, activation = act)(x)
+            x = Dropout(drop)(x)
+            x = Dense(128, activation = act)(x)
+            x = Dropout(drop)(x)
+            outputs = Dense(4, activation = act)(x)
+            model = Model(inputs = inputs, outputs = outputs)
+            model.compile(optimizer = optimizer, metrics = ['mae'],  loss = 'mae')
+            return model
 
+        # wrapper    
+        model = KerasRegressor(build_fn = build_model, verbose =2)
 
-            # wrapper    
-            model = KerasRegressor(build_fn = build_model, verbose =2)
+        parameter = create_hyperparameter()
 
-            parameter = create_hyperparameter()
+        pipe = Pipeline([('scaler', RobustScaler()), ('deep', model)])
 
-            search = RandomizedSearchCV(model, parameter, cv = 3)
+        search = RandomizedSearchCV(pipe, parameter, cv = 3)
+        search.fit(select_x_train, y_train )
         
-            select_x_train = selection.transform(x_train)
-            search.fit(select_x_train, y_train )
+        y_pred = search.predict(select_x_test)
+        mae = mean_absolute_error(y_test, y_pred)
+        score =r2_score(y_test, y_pred)
+        print("Thresh=%.3f, n = %d, R2 : %.2f%%, MAE : %.3f"%(thres, select_x_train.shape[1], score*100.0, mae))
         
-            select_x_test = selection.transform(x_test)
-            y_pred = search.predict(select_x_test)
-            mae = mean_absolute_error(y_test, y_pred)
-            score =r2_score(y_test, y_pred)
-            print("Thresh=%.3f, n = %d, R2 : %.2f%%, MAE : %.3f"%(thres, select_x_train.shape[1], score*100.0, mae))
- 
-            select_x_pred = selection.transform(x_pred)
-            y_predict = search.predict(select_x_pred)
-            # submission
-            a = np.arange(10000,20000)
-            submission = pd.DataFrame(y_predict, a)
-            submission.to_csv('./dacon/comp1/sub_XG%i_%.5f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
+        y_predict = search.predict(select_x_pred)
+        # submission
+        a = np.arange(10000,20000)
+        submission = pd.DataFrame(y_predict, a)
+        submission.to_csv('./dacon/comp1/sub_XG%i_%.5f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
