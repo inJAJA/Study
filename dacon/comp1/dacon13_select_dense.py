@@ -98,7 +98,7 @@ for i in range(len(multi_XGB.estimators_)):
     for thres in threshold:
         selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
     
-        search = RandomizedSearchCV(model, parameter, cv = 3, n_jobs= -1)
+        search = RandomizedSearchCV(model, parameter, cv = 3)
 
         select_x_train = selection.transform(x_train)
         search.fit(select_x_train, y_train )

@@ -89,7 +89,6 @@ for i in range(len(multi_XGB.estimators_)):
         mae = mean_absolute_error(y_test, y_pred)
         score =r2_score(y_test, y_pred)
         print("Thresh=%.3f, n = %d, R2 : %.2f%%, MAE : %.3f"%(thres, select_x_train.shape[1], score*100.0, mae))
-        print(search.best_params_)
  
         select_x_pred = selection.transform(x_pred)
         y_predict = multi_search.predict(select_x_pred)
