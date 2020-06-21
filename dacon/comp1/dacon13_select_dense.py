@@ -73,7 +73,7 @@ print(len(multi_XGB.estimators_))   # 4
 #2. model
 
 def create_hyperparameter():
-    batches = [16, 32, 64, 128]
+    batches = [64, 128, 256]
     epochs = [100, 150, 200]
     dropout = np.linspace(0.1, 0.5, 5).tolist()
     activation= ['relu', 'elu', leaky]
