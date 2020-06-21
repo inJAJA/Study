@@ -62,20 +62,6 @@ print(len(multi_XGB.estimators_))   # 4
 # print(multi_XGB.estimators_[3].feature_importances_)
 
 #2. model
-def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
-    inputs = Input(shape= (71, ))
-    x = Dense(51, activation =act)(inputs)
-    x = Dropout(drop)(x)
-    x = Dense(256, activation = act)(x)
-    x = Dropout(drop)(x)
-    x = Dense(128, activation = act)(x)
-    x = Dropout(drop)(x)
-    outputs = Dense(4, activation = act)(x)
-    model = Model(inputs = inputs, outputs = outputs)
-    model.compile(optimizer = optimizer, metrics = ['mae'],
-                  loss = 'mae')
-    return model
-
 
 def create_hyperparameter():
     batches = [16, 32, 64, 128]
@@ -85,12 +71,7 @@ def create_hyperparameter():
     optimizers = ['rmsprop', 'adam', 'adadelta']
     return {'batch_size': batches, 'epochs':epochs, 'act': activation, 'drop': dropout,
             'optimizer': optimizers}
-
-# wrapper    
-model = KerasRegressor(build_fn = build_model, verbose =2)
-
-parameter = create_hyperparameter()
-                   
+                  
 
 for i in range(len(multi_XGB.estimators_)):
     threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)
@@ -98,20 +79,41 @@ for i in range(len(multi_XGB.estimators_)):
     for thres in threshold:
         selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
     
-        search = RandomizedSearchCV(model, parameter, cv = 3)
+        for n in np.sort(range(1, 72))[::-1]:
+    
+            def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
+                inputs = Input(shape= (n, ))
+                x = Dense(51, activation =act)(inputs)
+                x = Dropout(drop)(x)
+                x = Dense(256, activation = act)(x)
+                x = Dropout(drop)(x)
+                x = Dense(128, activation = act)(x)
+                x = Dropout(drop)(x)
+                outputs = Dense(4, activation = act)(x)
+                model = Model(inputs = inputs, outputs = outputs)
+                model.compile(optimizer = optimizer, metrics = ['mae'],  loss = 'mae')
+                return model
 
-        select_x_train = selection.transform(x_train)
-        search.fit(select_x_train, y_train )
+
+            # wrapper    
+            model = KerasRegressor(build_fn = build_model, verbose =2)
+
+            parameter = create_hyperparameter()
+
+            search = RandomizedSearchCV(model, parameter, cv = 3)
         
-        select_x_test = selection.transform(x_test)
-        y_pred = search.predict(select_x_test)
-        mae = mean_absolute_error(y_test, y_pred)
-        score =r2_score(y_test, y_pred)
-        print("Thresh=%.3f, n = %d, R2 : %.2f%%, MAE : %.3f"%(thres, select_x_train.shape[1], score*100.0, mae))
+            select_x_train = selection.transform(x_train)
+            search.fit(select_x_train, y_train )
+        
+            select_x_test = selection.transform(x_test)
+            y_pred = search.predict(select_x_test)
+            mae = mean_absolute_error(y_test, y_pred)
+            score =r2_score(y_test, y_pred)
+            print("Thresh=%.3f, n = %d, R2 : %.2f%%, MAE : %.3f"%(thres, select_x_train.shape[1], score*100.0, mae))
  
-        select_x_pred = selection.transform(x_pred)
-        y_predict = search.predict(select_x_pred)
-        # submission
-        a = np.arange(10000,20000)
-        submission = pd.DataFrame(y_predict, a)
-        submission.to_csv('./dacon/comp1/sub_XG%i_%.5f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
+            select_x_pred = selection.transform(x_pred)
+            y_predict = search.predict(select_x_pred)
+            # submission
+            a = np.arange(10000,20000)
+            submission = pd.DataFrame(y_predict, a)
+            submission.to_csv('./dacon/comp1/sub_XG%i_%.5f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
