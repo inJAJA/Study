@@ -40,7 +40,7 @@ def build_model(drop=0.5, optimizer = 'adam'):
 def create_hyperparameters():
     batches = [10, 20, 30, 40, 50]
     optimizers = ['rmsprop', 'adam', 'adadelta']
-    dropout = np.linspace(0.1, 0.5, 5)                           # start = 0.1, end = 0.5, 5개 생성
+    dropout = np.linspace(0.1, 0.5, 5).tolist()                           # start = 0.1, end = 0.5, 5개 생성
     return{'batch_size' : batches, 'optimizer': optimizers, 
            'drop': dropout}                                      # dictionary형태
 

@@ -44,7 +44,7 @@ def build_model(drop = 0.5, optimizer = 'adam'):        # 초기값이 없으면
 def create_hyperparameters(): # epochs, node, acivation 추가 가능
     batches = [10, 20, 30, 40, 50]
     optimizers = ['rmsprop', 'adam', 'adadelta']
-    dropout = np.linspace(0.1, 0.5, 5)       
+    dropout = np.linspace(0.1, 0.5, 5).tolist()       
     epochs = [10, 20, 30, 40]               
     node = [32, 64, 128, 512]    
     return { 'batch_size' : batches, 'optimizer': optimizers , 'epochs' :epochs,
