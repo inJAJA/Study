@@ -24,21 +24,26 @@ print('test.shape: ', test.shape)                # (10000, 71)  = x_predict
 print('submission.shape: ', submission.shape)    # (10000, 4)   = y_predict
 
 
-trian = train.interpolate(axis = 0)
-test= test.interpolate(axis = 0)
+train = train.interpolate()                       
+test = test.interpolate()
 
-train = train.fillna(train.mean())
+x_data = train.iloc[:, :71]                           
+y_data = train.iloc[:, -4:]
+
+
+x_data = x_data.fillna(x_data.mean())
 test = test.fillna(test.mean())
 
 
-x = train.iloc[:, :71]                           
-y = train.iloc[:, -4:]
-print(x.shape)                                   # (10000, 71)
-print(y.shape)                                   # (10000, 4)
-
-x = x.values
-y = y.values
+x = x_data.values
+y = y_data.values
 x_pred = test.values
+
+train_gap = np.load('./dacon/comp1/train_gap.npy')
+test_gap = np.load('./dacon/comp1/test_gap.npy')
+
+x = np.hstack((x, train_gap))
+x_pred = np.hstack((x_pred, test_gap))
 
 scaler = StandardScaler()
 scaler.fit(x)
