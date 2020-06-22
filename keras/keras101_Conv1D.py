@@ -69,7 +69,7 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.summary()
-'''
+
 # EarlyStopping
 from keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor = 'loss', patience=100, mode = 'min')
@@ -92,4 +92,13 @@ print('mse :',mse )
 
 y_predict = model.predict(x_predict)
 print(y_predict)
+'''
+loss : 1.938651904412028e-05
+mse : 1.9386519852560014e-05
+[[ 95.00226 ]
+ [ 96.002235]
+ [ 97.0022  ]
+ [ 98.00216 ]
+ [ 99.00211 ]
+ [100.002075]]
 '''
