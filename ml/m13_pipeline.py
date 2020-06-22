@@ -26,3 +26,4 @@ pipe = make_pipeline(MinMaxScaler(), SVC())                       # '이름'써�
 pipe.fit(x_train, y_train)
 
 print('acc: ', pipe.score(x_test, y_test))
+# acc:  1.0

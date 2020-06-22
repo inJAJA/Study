@@ -34,7 +34,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # pipe = Pipeline([("scaler", MinMaxScaler()), ('svm', SVC())])    
 pipe = make_pipeline(MinMaxScaler(), SVC())                  
 
-model = RandomizedSearchCV(pipe, parameters , cv = 5)
+model = RandomizedSearchCV(pipe, parameters , cv = 5, n_jobs= -1)
 
 #3. fit
 model.fit(x_train, y_train)
@@ -50,3 +50,6 @@ print('acc : ', acc)
 import sklearn as sk
 print('sklearn: ', sk.__version__)                              # sklearn version확인
 ## make_pipeline은 버전이 0.22.1이어야 함
+
+# acc :  0.9333333333333333
+# sklearn:  0.22.1

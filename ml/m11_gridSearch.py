@@ -39,4 +39,10 @@ model.fit(x_train, y_train)
 print('최적의 매개변수 : ', model.best_estimator_)
 y_pred = model.predict(x_test)
 print("최종 정답률 = ", accuracy_score(y_test, y_pred) )
-
+'''
+최적의 매개변수 :  SVC(C=1, break_ties=False, cache_size=200, class_weight=None, coef0=0.0,
+    decision_function_shape='ovr', degree=3, gamma='scale', kernel='linear',
+    max_iter=-1, probability=False, random_state=None, shrinking=True,
+    tol=0.001, verbose=False)
+최종 정답률 =  0.9666666666666667
+'''
