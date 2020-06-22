@@ -28,11 +28,11 @@ for thres in threshold:
 
     selection_model = XGBClassifier(n_estimators = 100, learning_rate = 0.05, n_jobs = -1) 
 
-    selection_model.fit(x_train, y_train, verbose= True, eval_metric= ['logloss', 'error'],
+    selection_model.fit(select_x_train, y_train, verbose= True, eval_metric= ['logloss', 'error'],
                                         eval_set= [(x_train, y_train), (x_test, y_test)],
                                         early_stopping_rounds= 20)
 
-    y_pred = selection_model.predict(x_test)
+    y_pred = selection_model.predict(select_x_test)
     acc = accuracy_score(y_test, y_pred)
     print('acc : ', acc)
      

@@ -13,6 +13,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8,
                                                     shuffle = True, random_state = 66)
 
 model = XGBClassifier(objective='multi:softmax', n_estimators = 100, learning_rate = 0.05, n_jobs = -1)
+                    # binary:logistic: 이항 분류, logistic regressor모형, 반환값이 클래스가 아니라 예측 확률.
+                    # multi:softmax: 다항 분류, Softmax사용 반횐되는 값이 예측확률이 아니라 클래스임. 또한 num_class도 지정해야함.
+                    # multi:softprob: 각 클래스 범주에 속하는 예측확률을 반환함.
+
 
 model.fit(x_train, y_train, verbose = True, eval_metric= ['mlogloss', 'merror'],
                             eval_set= [(x_train, y_train),(x_test, y_test)],

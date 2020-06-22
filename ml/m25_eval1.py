@@ -18,6 +18,7 @@ model = XGBRegressor(n_estimators=400, learning_rate=0.1)
 model.fit(x_train, y_train, verbose=True, eval_metric='rmse',
                 eval_set=[(x_train, y_train), (x_test, y_test)])
 # rmse, mae, logloss, error, auc
+# merror, mlogloss : multiclass
 
 result = model.evals_result()
 print("eval's results :", result)

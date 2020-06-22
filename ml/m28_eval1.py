@@ -49,8 +49,9 @@ print('R2 : ', r2)
 
 epochs = len(result['validation_0']['logloss'])
 x_axis = range(0, epochs)
-
-fig, ax = plt.subplots()
+ 
+                            # subplot : 하나의 값(axes)만 받을 수 있다.
+fig, ax = plt.subplots()    # fig = figure : 전체 subplot / ax = axe : 전체 중 낱개 
 ax.plot(x_axis, result['validation_0']['logloss'], label = 'Train')
 ax.plot(x_axis, result['validation_1']['logloss'], label = 'Test')
 ax.legend()
