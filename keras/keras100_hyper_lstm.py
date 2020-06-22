@@ -38,9 +38,9 @@ def build_model(drop=0.5, optimizer = 'adam'):
 
 # parameter
 def create_hyperparameters(): # epochs, node, acivation 추가 가능
-    batches = [10, 20, 30, 40, 50]
+    batches = [64, 128, 256]
     optimizers = ['rmsprop', 'adam', 'adadelta']
-    dropout = np.linspace(0.1, 0.5, 5)                           
+    dropout = np.linspace(0.1, 0.5, 5).tolist()                           
     return {'batch_size' : batches, 'optimizer': optimizers, 
            'drop': dropout}                                       
 
@@ -64,4 +64,5 @@ print(search.best_params_)
 score = search.score(x_test, y_test)
 print('acc: ', score)
 
+# 터짐
 

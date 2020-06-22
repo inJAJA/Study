@@ -38,7 +38,7 @@ def build_model(drop=0.5, optimizer = 'adam'):
 
 # parameter
 def create_hyperparameters():
-    batches = [10, 20, 30, 40, 50]
+    batches = [64, 128, 256]
     optimizers = ['rmsprop', 'adam', 'adadelta']
     dropout = np.linspace(0.1, 0.5, 5).tolist()                           # start = 0.1, end = 0.5, 5개 생성
     return{'batch_size' : batches, 'optimizer': optimizers, 
@@ -63,3 +63,8 @@ print(search.best_params_)
 # .best_estimator_ : 최고 점수를 낸 파라미터를 가진 모형
 # .best_params_ : 최고점수를 낸 파라미터
 # .best_score_ : 최고 점수
+
+score = model.score(x_test, y_test)
+print('Score : ', score)
+
+# 터짐
