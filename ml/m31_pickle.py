@@ -29,7 +29,7 @@ print('acc : ', acc)
 #############################################################################
 
 ''' save''' 
-import pickle # python제공                                   # write b
+import pickle # python제공                                   # write binary 
 pickle.dump(model, open("./model/xgb_save/cancer.pickle.dat", "wb")) # model을 cancer.pickle.dat에 넣겠다.
 
 print("저장됬다.")
@@ -37,7 +37,7 @@ print("저장됬다.")
 # 저장됬다.
 
 
-''' load '''                                                   # read
+''' load '''                                                   # read binary
 model2 = pickle.load(open("./model/xgb_save/cancer.pickle.dat", "rb"))
 print("불러왔다.")
 
