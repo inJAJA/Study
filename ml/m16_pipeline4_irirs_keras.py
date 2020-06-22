@@ -28,6 +28,9 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8,
 
 # gridsearch에 넣기위한 모델(모델에 대한 명시 : 함수로 만듦)
 def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
+    if optimizer == 'leaky':
+        optimizer = leaky
+        
     inputs = Input(shape= (4, ), name = 'input')
     x = Dense(51, activation = act, name = 'hidden1')(inputs)
     x = Dropout(drop)(x)
@@ -46,7 +49,7 @@ def create_hyperparameters():                                        # pipeline
     batches = [64, 128, 512]
     optimizers = ['rmsprop', 'adam', 'adadelta']
     dropout = np.linspace(0.1, 0.5, 5).tolist()           
-    activation = ['relu', 'elu', leaky]               
+    activation = ['relu', 'elu', 'leaky']               
     return {'deep__batch_size' : batches, 'deep__optimizer': optimizers, 'deep__act':activation,
            'deep__drop': dropout}     
 
