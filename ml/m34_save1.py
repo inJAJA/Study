@@ -22,7 +22,7 @@ from xgboost import XGBRegressor, plot_importance
 from sklearn.feature_selection import SelectFromModel
 from sklearn.datasets import load_boston
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_squared_error
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -61,7 +61,10 @@ for thres in threshold:
     result = selection_model.evals_result()
     # print("eval's result : ", result)
 
-    model.save_model("./model/xgb_save/boston_thresh=%.3f-r2=%.2f.model"%(thres, r2))
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+
+    # model.save_model("./model/xgb_save/boston_thresh=%.3f-r2=%.2f.model"%(thres, r2))
+    model.save_model("./model/xgb_save/boston_rmse=%.3f-r2=%.2f.model"%(rmse, r2))
 
 # Thresh=0.003, n = 13, R2 : 93.54%
 # Thresh=0.005, n = 12, R2 : 93.71%
