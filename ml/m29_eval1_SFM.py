@@ -49,17 +49,28 @@ for thres in threshold:
 
     selection_model = XGBRegressor(n_estimators = 100, learning_rate = 0.05, n_jobs = -1) 
 
-    selection_model.fit(select_x_train, y_train, verbose= True, eval_metric= ['logloss', 'rmse'],
+    selection_model.fit(select_x_train, y_train, verbose= False, eval_metric= ['logloss', 'rmse'],
                                         eval_set= [(select_x_train, y_train), (select_x_test, y_test)],
                                         early_stopping_rounds= 20)
 
     y_pred = selection_model.predict(select_x_test)
     r2 = r2_score(y_test, y_pred)
-    print('R2 : ', r2)
-     
+
     print("Thresh=%.3f, n = %d, R2 : %.2f%%" %(thres, select_x_train.shape[1], r2*100.0))
 
     # result = selection_model.evals_result()
     # print("eval's result : ", result)
 
-# R2 :  0.9354279986548603
+# Thresh=0.003, n = 13, R2 : 93.54%
+# Thresh=0.005, n = 12, R2 : 93.71%
+# Thresh=0.006, n = 11, R2 : 93.69%
+# Thresh=0.009, n = 10, R2 : 93.78%
+# Thresh=0.012, n = 9, R2 : 94.11%
+# Thresh=0.014, n = 8, R2 : 94.31%
+# Thresh=0.015, n = 7, R2 : 93.76%
+# Thresh=0.017, n = 6, R2 : 92.80%
+# Thresh=0.017, n = 5, R2 : 93.63%
+# Thresh=0.039, n = 4, R2 : 92.26%
+# Thresh=0.045, n = 3, R2 : 89.30%
+# Thresh=0.248, n = 2, R2 : 81.05%
+# Thresh=0.569, n = 1, R2 : 69.21%

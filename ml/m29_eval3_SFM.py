@@ -30,7 +30,7 @@ for thres in threshold:
 
     selection_model = XGBClassifier(objective='multi:softmax', n_estimators = 100, learning_rate = 0.05, n_jobs = -1) 
 
-    selection_model.fit(select_x_train, y_train, verbose= True, eval_metric= ['mlogloss', 'merror'],
+    selection_model.fit(select_x_train, y_train, verbose= False, eval_metric= ['mlogloss', 'merror'],
                                         eval_set= [(select_x_train, y_train), (select_x_test, y_test)],
                                         early_stopping_rounds= 20)
 
@@ -45,4 +45,8 @@ for thres in threshold:
 end = time.time() - start
 print(" 걸린 시간 :", end)
 
-# Thresh=0.644, n = 1, ACC : 100.00%
+# Thresh=0.022, n = 4, ACC : 100.00%
+# Thresh=0.041, n = 3, ACC : 100.00%
+# Thresh=0.463, n = 2, ACC : 100.00%
+# Thresh=0.473, n = 1, ACC : 93.33%
+#  걸린 시간 : 0.34758806228637695
