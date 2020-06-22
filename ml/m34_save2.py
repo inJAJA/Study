@@ -40,5 +40,5 @@ for thres in threshold:
     # result = selection_model.evals_result()
     # print("eval's result : ", result)
 
-    model.save_model("./model/xgb_save/thresh=%.3f-acc=%.2f"%(thres, acc))
+    model.save_model("./model/xgb_save/thresh=%.3f-acc=%.2f.model"%(thres, acc))
 
