@@ -13,7 +13,7 @@ y = iris.target
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8,
                                                     shuffle = True, random_state = 66)
 
-model = XGBClassifier()
+model = XGBClassifier(n_jobs = -1)
 model.fit(x_train, y_train)
 score = model.score(x_test, y_test)
 print("R2 : ", score)
@@ -30,7 +30,7 @@ for thresh in thresholds:                             # 전체 컬럼 수만큼 
     select_x_train = selection.transform(x_train)     # for문을 돌릴 때 마다 컬럼이 하나씩 빠진다.(중요도가 낮은 것 부터)
     print(select_x_train.shape)                      
 
-    selection_model = XGBClassifier()
+    selection_model = XGBClassifier(n_jobs = -1)
     selection_model.fit(select_x_train, y_train)
 
     select_x_test = selection.transform(x_test)

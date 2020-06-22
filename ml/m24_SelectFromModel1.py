@@ -15,7 +15,7 @@ x, y = load_boston(return_X_y=True)                    # x, y가 그냥 들어�
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8,
                                                     shuffle = True, random_state = 66)
 
-model = XGBRegressor()
+model = XGBRegressor(n_jobs = -1)
 model.fit(x_train, y_train)
 score = model.score(x_test, y_test)
 print("R2 : ", score)
@@ -45,7 +45,7 @@ for thresh in thresholds:                             # 전체 컬럼 수만큼 
     # (404, 2)
     # (404, 1)
 
-    selection_model = XGBRegressor()
+    selection_model = XGBRegressor(n_jobs = -1)
     selection_model.fit(select_x_train, y_train)
 
     select_x_test = selection.transform(x_test)
