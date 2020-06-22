@@ -61,4 +61,18 @@ for thres in threshold:
     result = selection_model.evals_result()
     # print("eval's result : ", result)
 
-    model.save_model("./model/xgb_save/thresh=%.3f-r2=%.2f.model"%(thres, r2))
+    model.save_model("./model/xgb_save/boston_thresh=%.3f-r2=%.2f.model"%(thres, r2))
+
+# Thresh=0.003, n = 13, R2 : 93.54%
+# Thresh=0.005, n = 12, R2 : 93.71%
+# Thresh=0.006, n = 11, R2 : 93.69%
+# Thresh=0.009, n = 10, R2 : 93.78%
+# Thresh=0.012, n = 9, R2 : 94.11%
+# Thresh=0.014, n = 8, R2 : 94.31%
+# Thresh=0.015, n = 7, R2 : 93.76%
+# Thresh=0.017, n = 6, R2 : 92.80%
+# Thresh=0.017, n = 5, R2 : 93.63%
+# Thresh=0.039, n = 4, R2 : 92.26%
+# Thresh=0.045, n = 3, R2 : 89.30%
+# Thresh=0.248, n = 2, R2 : 81.05%
+# Thresh=0.569, n = 1, R2 : 69.21%
