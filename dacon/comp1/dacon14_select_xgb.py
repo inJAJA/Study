@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score, mean_absolute_error
 from sklearn.feature_selection import SelectFromModel
 from keras.wrappers.scikit_learn import KerasRegressor
+from scipy.interpolate import interp1d
 from keras.layers import LeakyReLU
 
 leaky = LeakyReLU(alpha = 0.2)
@@ -27,33 +28,49 @@ print('train.shape: ', train.shape)              # (10000, 75)  = x_train, test
 print('test.shape: ', test.shape)                # (10000, 71)  = x_predict
 print('submission.shape: ', submission.shape)    # (10000, 4)   = y_predict
 
+# load_gap
+train_gap = np.load('./dacon/comp1/train_gap.npy')
+test_gap = np.load('./dacon/comp1/test_gap.npy')
+print(train_gap.shape)                                   # (10000, 35)
+print(test_gap.shape)                                    # (10000, 35)
 
-trian = train.interpolate(axis = 0)
-test= test.interpolate(axis = 0)
-
-train = train.fillna(train.mean())
-test = test.fillna(test.mean())
-
-
-x = train.iloc[:, :71]                           
+# rho
+train_rho = train.iloc[:, 0]   
+test_rho = test.iloc[:, 0]                        
 y = train.iloc[:, -4:]
-print(x.shape)                                   # (10000, 71)
+print(train_rho.shape)                           # (10000, )
+print(test_rho.shape)                            # (10000, )
 print(y.shape)                                   # (10000, 4)
 
-x = x.values
+x_rho = train_rho.values.reshape(-1, 1)
+x_pred_rho = test_rho.values.reshape(-1, 1)
 y = y.values
-x_pred = test.values
 
+# ratio
+x_ratio = np.load('./dacon/comp1/train_ratio.npy')
+x_pred_ratio = np.load('./dacon/comp1/test_ratio.npy')
+
+# np.hstack
+x = np.hstack((x_rho, x_ratio, train_gap))
+x_pred = np.hstack((x_pred_rho, x_pred_ratio, test_gap))
+
+# scaler
 scaler = StandardScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 x_pred = scaler.transform(x_pred)
 
+# pca
 pca = PCA(n_components= 10)
 pca.fit(x)
 x = pca.transform(x)
 x_pred = pca.transform(x_pred)
 
+print(x.shape)                                   # (10000, 10)
+print(x_pred.shape)                              # (10000, 10)  
+
+
+# train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size =0.8,
                                                     shuffle = True, random_state = 66)
 
@@ -70,62 +87,37 @@ print(len(multi_XGB.estimators_))   # 4
 # print(multi_XGB.estimators_[2].feature_importances_)
 # print(multi_XGB.estimators_[3].feature_importances_)
 
-#2. model
-
-def create_hyperparameter():
-    batches = [64, 128, 256]
-    epochs = [200]
-    dropout = np.linspace(0.3, 0.5, 3).tolist()
-    activation= ['relu', 'elu', 'leaky']
-    optimizers = ['rmsprop', 'adam', 'adadelta']
-    return {'deep__batch_size': batches, 'deep__epochs':epochs, 'deep__act': activation, 'deep__drop': dropout,
-            'deep__optimizer': optimizers}
-                  
-
 for i in range(len(multi_XGB.estimators_)):
     threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)
 
     for thres in threshold:
         selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
-    
-        select_x_train = selection.transform(x_train)
-        select_x_test = selection.transform(x_test)
-        select_x_pred = selection.transform(x_pred)
-    
-        def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
-            if act == 'leaky':
-                act = leaky
-            inputs = Input(shape= (select_x_train.shape[1], ))
-            x = Dense(51, activation =act)(inputs)
-            x = Dropout(drop)(x)
-            x = Dense(150, activation = act)(x)
-            x = Dropout(drop)(x)
-            x = Dense(300, activation = act)(x)
-            x = Dropout(drop)(x)
-            x = Dense(128, activation = act)(x)
-            x = Dropout(drop)(x)
-            outputs = Dense(4, activation = act)(x)
-            model = Model(inputs = inputs, outputs = outputs)
-            model.compile(optimizer = optimizer, metrics = ['mae'],  loss = 'mae')
-            return model
-
-        # wrapper    
-        model = KerasRegressor(build_fn = build_model, verbose =2)
-
-        parameter = create_hyperparameter()
-
-        pipe = Pipeline([('scaler', RobustScaler()), ('deep', model)])
-
-        search = RandomizedSearchCV(pipe, parameter, cv = 3)
-        search.fit(select_x_train, y_train )
         
-        y_pred = search.predict(select_x_test)
+        parameter = {
+            'n_estimators': [100, 200, 400],
+            'learning_rate' : [0.03, 0.05, 0.07, 0.1],
+            'colsample_bytree': [0.6, 0.7, 0.8, 0.9],
+            'colsample_bylevel':[0.6, 0.7, 0.8, 0.9],
+            'max_depth': [4, 5, 6]
+        }
+    
+        search = RandomizedSearchCV( XGBRegressor(), parameter, cv =5)
+
+        select_x_train = selection.transform(x_train)
+
+        multi_search = MultiOutputRegressor(search,n_jobs = -1)
+        multi_search.fit(select_x_train, y_train )
+        
+        select_x_test = selection.transform(x_test)
+
+        y_pred = multi_search.predict(select_x_test)
         mae = mean_absolute_error(y_test, y_pred)
         score =r2_score(y_test, y_pred)
         print("Thresh=%.3f, n = %d, R2 : %.2f%%, MAE : %.3f"%(thres, select_x_train.shape[1], score*100.0, mae))
-        
-        y_predict = search.predict(select_x_pred)
+ 
+        select_x_pred = selection.transform(x_pred)
+        y_predict = multi_search.predict(select_x_pred)
         # submission
         a = np.arange(10000,20000)
         submission = pd.DataFrame(y_predict, a)
-        submission.to_csv('./dacon/comp1/sub_XG%d_%.5f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
+        submission.to_csv('./dacon/comp1/select_XG%d_%.5f.csv'%(i, mae),index = True, header=['hhb','hbo2','ca','na'],index_label='id')
