@@ -76,7 +76,7 @@ def create_hyperparameter():
     batches = [64, 128, 256]
     epochs = [100, 150, 200]
     dropout = np.linspace(0.1, 0.5, 5).tolist()
-    activation= ['relu', 'elu', leaky]
+    activation= ['relu', 'elu', 'leaky']
     optimizers = ['rmsprop', 'adam', 'adadelta']
     return {'deep__batch_size': batches, 'deep__epochs':epochs, 'deep__act': activation, 'deep__drop': dropout,
             'deep__optimizer': optimizers}
@@ -93,6 +93,8 @@ for i in range(len(multi_XGB.estimators_)):
         select_x_pred = selection.transform(x_pred)
     
         def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
+            if optimizer == 'leaky':
+                optimizer = leaky
             inputs = Input(shape= (select_x_train.shape[1], ))
             x = Dense(51, activation =act)(inputs)
             x = Dropout(drop)(x)
