@@ -16,6 +16,7 @@ from sklearn.feature_selection import SelectFromModel
 from keras.wrappers.scikit_learn import KerasRegressor
 from scipy.interpolate import interp1d
 from keras.layers import LeakyReLU
+import pickle 
 
 leaky = LeakyReLU(alpha = 0.2)
 
@@ -92,13 +93,9 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size =0.8,
 
 #2. feature_importance
 # xgb = XGBRegressor(gpu_id = 0, tree_method = 'gpu_hist')
-xgb = XGBRegressor(n_jobs = -1)
 
-multi_XGB = MultiOutputRegressor(xgb)
+multi_XGB = pickle.load(open("./dacon/comp1/save/dacon14_select_xgb_feature.dat", "rb"))
 multi_XGB.fit(x_train, y_train)
-
-import pickle 
-pickle.dump(multi_XGB, open("./dacon/comp1/save/dacon14_select_xgb_feature.dat", "wb"))
 
 print(len(multi_XGB.estimators_))   # 4
 
@@ -109,8 +106,9 @@ print(len(multi_XGB.estimators_))   # 4
 # print(multi_XGB.estimators_[3].feature_importances_)
 
 for i in range(len(multi_XGB.estimators_)):
-    importance = np.delete(multi_XGB.estimators_[i].feature_importances_ , 0)
-    threshold = np.sort(importance)
+    threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)[18:]
+    print(threshold)
+    
 
     for thres in threshold:
         selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
