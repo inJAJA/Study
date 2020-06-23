@@ -58,17 +58,23 @@ b2 = outliers(a2)
 print(b2)
 # [(array([1], dtype=int64),), (array([0], dtype=int64),)]
 
+
 # -------------------------------------------------------------------
 # pandas
 def outliers(data_out):
-        quartile_1 = data_out.quantile(.25)
-        quartile_3 = data_out.quantile(.75)
+    outliers = []
+    for i in range(len(data_out.columns)):
+        data = data_out.iloc[:, i]
+        quartile_1 = data.quantile(.25)
+        quartile_3 = data.quantile(.75)
         print("1사 분위 : ",quartile_1)                                       
         print("3사 분위 : ",quartile_3)                                        
         iqr = quartile_3 - quartile_1
         lower_bound = quartile_1 - (iqr * 1.5)
         upper_bound = quartile_3 + (iqr * 1.5)
-        return np.where((data_out > upper_bound) | (data_out < lower_bound))
+        out = np.where((data > upper_bound) | (data < lower_bound))
+        outliers.append(out)
+    return outliers
          
 a3 = pd.DataFrame({'a' : [1, 3, 5, 200, 100, 8],
                     'b' : [300, 100, 6, 8, 2, 3]})
@@ -84,9 +90,9 @@ print(a3)
 b3 = outliers(a3)
 print(b3)
 # 1사 분위 :  a    3.50
-# b    3.75
+#             b    3.75
 # Name: 0.25, dtype: float64
 # 3사 분위 :  a    77.0
-# b    77.0
+#             b    77.0
 # Name: 0.75, dtype: float64
 # (array([0, 3], dtype=int64), array([1, 0], dtype=int64))
