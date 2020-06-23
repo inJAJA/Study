@@ -73,11 +73,11 @@ x_pred = np.hstack((x_pred_rho, x_pred_ratio, test_fft))
 print(x.shape)                                   # (10000, 10)
 print(x_pred.shape)                              # (10000, 10)  
 
-# # scaler
-# scaler = StandardScaler()
-# scaler.fit(x)
-# x = scaler.transform(x)
-# x_pred = scaler.transform(x_pred)
+# scaler
+scaler = RobustScaler()
+scaler.fit(x)
+x = scaler.transform(x)
+x_pred = scaler.transform(x_pred)
 
 # # pca
 # pca = PCA(n_components= 36)
@@ -97,6 +97,9 @@ xgb = XGBRegressor(n_jobs = -1)
 multi_XGB = MultiOutputRegressor(xgb)
 multi_XGB.fit(x_train, y_train)
 
+import pickle 
+pickle.dump(multi_XGB, open("./dacon/comp1/save/dacon14_select_xgb_feature.dat", "wb"))
+
 print(len(multi_XGB.estimators_))   # 4
 
 
@@ -106,7 +109,8 @@ print(len(multi_XGB.estimators_))   # 4
 # print(multi_XGB.estimators_[3].feature_importances_)
 
 for i in range(len(multi_XGB.estimators_)):
-    threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)
+    importance = np.delete(multi_XGB.estimators_[i].feature_importances_ , 0)
+    threshold = np.sort(importance)
 
     for thres in threshold:
         selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
