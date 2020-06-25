@@ -167,6 +167,8 @@ for i in range(len(multi_XGB.estimators_)):
         search.fit(select_x_train, y_train[:, i], verbose = False, eval_metric = ['rmse', 'mae'],
                                                    eval_set = [(select_x_test, y_test[:, i])])
         
+        print(search.best_params_)        
+
         y_pred = search.predict(select_x_test)
         mae = mean_absolute_error(y_test[:, i], y_pred)
         score =r2_score(y_test[:, i], y_pred)
