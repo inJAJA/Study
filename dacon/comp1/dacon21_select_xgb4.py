@@ -54,15 +54,15 @@ test_ratio_0 = np.load('./dacon/comp1/data/test_ratio_0.npy')
 train_scr_fft = np.load('./dacon/comp1/data/train_scr_fft.npy')
 test_scr_fft = np.load('./dacon/comp1/data/test_scr_fft.npy')
 
-train_dst_fft = np.load('./dacon/comp1/data/train_dst_fft.npy')
-test_dst_fft = np.load('./dacon/comp1/data/test_dst_fft.npy')
+train_dst_fft = np.load('./dacon/comp1/data/train_dst_fft_0.npy')
+test_dst_fft = np.load('./dacon/comp1/data/test_dst_fft_0.npy')
 
 # imag
 train_scr_fft_imag = np.load('./dacon/comp1/data/train_scr_fft_imag.npy')
 test_scr_fft_imag = np.load('./dacon/comp1/data/test_scr_fft_imag.npy')
 
-train_dst_fft_imag = np.load('./dacon/comp1/data/train_dst_fft_imag.npy')
-test_dst_fft_imag = np.load('./dacon/comp1/data/test_dst_fft_imag.npy')
+train_dst_fft_imag = np.load('./dacon/comp1/data/train_dst_fft_0_imag.npy')
+test_dst_fft_imag = np.load('./dacon/comp1/data/test_dst_fft_0_imag.npy')
 
 
 # RobustScaler
@@ -98,9 +98,9 @@ train_ratio = stand.transform(train_ratio_0)
 test_ratio = stand.transform(test_ratio_0)
 
 # np.hstack
-x = np.hstack((train_rho2, train_ratio,  train_ratio_0, (train_scr_fft - train_dst_fft), 
+x = np.hstack((train_rho2, train_ratio_0, (train_scr_fft - train_dst_fft), 
                train_scr_fft, train_dst_fft, train_scr_fft_imag, train_dst_fft_imag ))
-x_pred = np.hstack((test_rho2, test_ratio, test_ratio_0,  (test_scr_fft - test_dst_fft), 
+x_pred = np.hstack((test_rho2,  test_ratio_0,  (test_scr_fft - test_dst_fft), 
                     test_scr_fft, test_dst_fft, test_scr_fft_imag, test_dst_fft_imag))
 
 print(x.shape)                                   # (10000, 10)
@@ -135,13 +135,13 @@ print(len(multi_XGB.estimators_))   # 4
 # print(multi_XGB.estimators_[3].feature_importances_)
 
 
-best_mae = 1.3
-best_score = 0.45
 
-y_predict = []
 for i in range(len(multi_XGB.estimators_)):
-    threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)[60:]
+    threshold = np.sort(multi_XGB.estimators_[i].feature_importances_)
 
+    best_mae = 2.0
+    best_score = 0.30
+    print(best_mae)
     for thres in threshold:
         selection = SelectFromModel(multi_XGB.estimators_[i], threshold = thres, prefit = True)
         
@@ -150,14 +150,14 @@ for i in range(len(multi_XGB.estimators_)):
         select_x_pred = selection.transform(x_pred)
         
         parameter = {
-            'n_estimators': [450, 550],
-            'learning_rate' : [0.065, 0.05],
-            'colsample_bytree': [ 0.65, 0.7],
+            'n_estimators': [550],
+            'learning_rate' : [0.065,0.07, 0.05],
+            'colsample_bytree': [ 0.6, 0.65, 0.7],
             'colsample_bylevel':[ 0.75, 0.85, 0.65],
-            'reg_alpha' : [1],
-            'max_depth': [7, 8],
-            'scale_pos_weight': [1],
-            'reg_lambda' : [1.1]
+            'reg_alpha' : [0, 1],
+            'max_depth': [7, 8, 6],
+            'scale_pos_weight': [1, 2],
+            'reg_lambda' : [0, 1.1]
         }
     
         # search = RandomizedSearchCV( XGBRegressor(gpu_id = 0, tree_method = 'gpu_hist'), parameter, cv =5)
@@ -179,6 +179,7 @@ for i in range(len(multi_XGB.estimators_)):
         if mae < best_mae or score > best_score:
             best_mae = mae
             best_score = score
+            print(best_mae)
         # submission
             if i == 0: 
                 a = np.arange(10000,20000)
@@ -197,7 +198,6 @@ for i in range(len(multi_XGB.estimators_)):
                 submission = pd.DataFrame(y_predict, a)
                 submission.to_csv('./dacon/comp1/sub/dacon21_col4_%.5f_%.2f.csv'%( best_mae, score*100.0 ),index = True, header=['na'],index_label='id')
            
-            
 '''            
 # submission
 a = np.arange(10000,20000)
