@@ -77,6 +77,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, rand
 
 #2. model
 def build_model(drop=0.5, optimizer = 'adam', act = 'relu'):
+    if act == 'leaky':
+          act = leaky
     inputs = Input(shape= (71, ))
     x = Dense(51, activation =act)(inputs)
     x = Dropout(drop)(x)
@@ -95,7 +97,7 @@ def create_hyperparameter():
     batches = [16, 32, 64, 128]
     epochs = [50, 100, 150, 200]
     dropout = np.linspace(0.1, 0.5, 5).tolist()
-    activation= ['relu', 'elu', leaky]
+    activation= ['relu', 'elu', 'leaky']
     optimizers = ['rmsprop', 'adam', 'adadelta']
     return {'batch_size': batches, 'epochs':epochs, 'act': activation, 'drop': dropout,
             'optimizer': optimizers}

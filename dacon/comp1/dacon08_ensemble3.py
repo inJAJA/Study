@@ -32,8 +32,9 @@ test.filter(regex='_dst$',axis=1).head().T.plot()
 plt.show()
 
 
-train = train.interpolate(axis = 0)                  
-test = test.interpolate(axis =0)
+train = train.interpolate(axis = 1)                  
+test = test.interpolate(axis = 1)
+
 
 train.replace(0, np.nan)                          # 0의 값들을 채워주기 위해서 NaN값으로 변환
 test.replace(0, np.nan)

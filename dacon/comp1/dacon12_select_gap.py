@@ -40,8 +40,8 @@ x = x_data.values.reshape(-1, 1)
 y = y_data.values
 x_pred = test.values.reshape(-1, 1)
 
-train_gap = np.load('./dacon/comp1/train_gap.npy')
-test_gap = np.load('./dacon/comp1/test_gap.npy')
+train_gap = np.load('./dacon/comp1/data/train_gap.npy')
+test_gap = np.load('./dacon/comp1/data/test_gap.npy')
 
 x = np.hstack((x, train_gap))
 x_pred = np.hstack((x_pred, test_gap))

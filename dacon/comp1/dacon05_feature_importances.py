@@ -43,10 +43,10 @@ model = XGBRegressor()
 ## feature_importances
 def plot_feature_importances(model):
     plt.figure(figsize= (10, 40))
-    n_features = x_data.shape[1]                                # n_features = column개수 
+    n_features = x_data.shape[1]                                     # n_features = column개수 
     plt.barh(np.arange(n_features), model.feature_importances_,      # barh : 가로방향 bar chart
               align = 'center')                                      # align : 정렬 / 'edge' : x축 label이 막대 왼쪽 가장자리에 위치
-    plt.yticks(np.arange(n_features), x_data.columns)          # tick = 축상의 위치표시 지점
+    plt.yticks(np.arange(n_features), x_data.columns)                # tick = 축상의 위치표시 지점
     plt.xlabel('Feature Importances')
     plt.ylabel('Features')
     plt.ylim(-1, n_features)             # y축의 최솟값, 최댓값을 지정/ x는 xlim

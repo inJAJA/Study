@@ -28,11 +28,11 @@ train_dst = train.filter(regex='_dst$',axis=1)
 test_dst = test.filter(regex='_dst$',axis=1)
 
 # rho열 제거 후 interpolate
-train_scr = train_scr.interpolate(axis = 1)
-test_scr= test_scr.interpolate(axis = 1)
+train_scr = train_scr.interpolate(axis = 1, limit_direction='both')
+test_scr= test_scr.interpolate(axis = 1, limit_direction='both')
 
-train_dst = train_dst.interpolate(axis = 1)
-test_dst= test_dst.interpolate(axis = 1)
+train_dst = train_dst.interpolate(axis = 1, limit_direction='both')
+test_dst= test_dst.interpolate(axis = 1, limit_direction='both')
 
 # fillna = bfill
 train_scr = train_scr.fillna(method = 'bfill', axis = 1)
@@ -41,12 +41,14 @@ test_scr = test_scr.fillna(method = 'bfill', axis = 1)
 train_dst = train_dst.fillna(method = 'bfill', axis = 1)
 test_dst = test_dst.fillna(method = 'bfill', axis = 1)
 
-# fillna = mean
-train_scr = train_scr.fillna(train_scr.mean(axis = 1))
-test_scr = test_scr.fillna(test_scr.mean(axis = 1))
+# dst : fillna = 0
+# train_dst = train_dst.fillna(0)
+# test_dst = test_dst.fillna(0)
 
-train_dst = train_dst.fillna(train_dst.mean(axis = 1))
-test_dst = test_dst.fillna(test_dst.mean(axis = 1))
+# print(train_scr.isnull().sum())
+# print(test_scr.isnull().sum())
+# print(train_dst.isnull().sum())
+# print(test_dst.isnull().sum())
 
 # numpy
 train_scr = train_scr.values
@@ -59,5 +61,5 @@ test_dst = test_dst.values
 np.save('./dacon/comp1/data/train_scr.npy', arr= train_scr)
 np.save('./dacon/comp1/data/test_scr.npy', arr= test_scr)
 
-np.save('./dacon/comp1/data/train_dst.npy', arr= train_dst)
-np.save('./dacon/comp1/data/test_dst.npy', arr= test_dst)
+np.save('./dacon/comp1/data/train_dst_0.npy', arr= train_dst)
+np.save('./dacon/comp1/data/test_dst_0.npy', arr= test_dst)

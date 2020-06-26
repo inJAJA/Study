@@ -16,8 +16,8 @@ test_dst = np.load('./dacon/comp1/data/test_dst.npy')
 
 
 # ratio
-train_ratio = np.float32(train_dst/ train_scr)
-test_ratio = np.float32(test_dst/ test_scr)
+train_ratio = np.float32(train_scr/ train_dst)
+test_ratio = np.float32(test_scr/ test_dst)
 
 # 
 # train_ratio = train_ratio[np.isnan(train_ratio)] = 0
