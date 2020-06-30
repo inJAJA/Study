@@ -109,6 +109,8 @@ checkpoint = ModelCheckpoint(filepath= modelpath, monitor='val_loss',
 
 model = RandomizedSearchCV(keras, params, cv = 3, n_iter= 10) 
                                                 # n_iter : 해당 갯수만큼의 경우만 돌리겠다 * cv / default = 10
+                                                # ex) params = 10*10*10, cv =3, n_iter = 10
+                                                #     => 3(cv) * 10(n_iter)  = 30 번 돌아감
 model.fit(x_train, y_train, epochs = 300,
                             callbacks = [es, checkpoint],
                             validation_data = (x_val, y_val))
