@@ -111,9 +111,10 @@ model = RandomizedSearchCV(keras, params, cv = 3, n_iter= 10)
                                                 # n_iter : 해당 갯수만큼의 경우만 돌리겠다 * cv / default = 10
                                                 # ex) params = 10*10*10, cv =3, n_iter = 10
                                                 #     => 3(cv) * 10(n_iter)  = 30 번 돌아감
+
 model.fit(x_train, y_train, epochs = 300,
-                            callbacks = [es, checkpoint],
-                            validation_data = (x_val, y_val))
+                            callbacks = [es, checkpoint],      # callback 설정 : EarlyStopping, ModelCheckpoint
+                            validation_data = (x_val, y_val))  # randomsearch에서 validation설정
 
 print(model.best_params_)
 
