@@ -5,7 +5,8 @@ from keras.layers import Input, Dropout, Conv2D, Flatten, MaxPooling2D, Dense, L
 from keras.optimizers import Adam, RMSprop, SGD, Adadelta, Adagrad, Nadam
 import numpy as np
 from keras.layers import LeakyReLU
-leaky = LeakyReLU(alpha = 0.2)
+leaky = LeakyReLU(alpha= 0.2)
+
 
 #1. data
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
@@ -26,7 +27,6 @@ print(y_train.shape)                                    # (60000, 10)
 
 # gridsearch에 넣기위한 모델(모델에 대한 명시 : 함수로 만듦)
 def build_model(drop=0.5, optimizer = Adam, lr = 0.01, act = 'relu'):
-
     inputs = Input(shape= (28*28, ), name = 'input')
     x = Dense(51, activation = act, name = 'hidden1')(inputs)
     x = Dropout(drop)(x)
@@ -49,7 +49,7 @@ def create_hyperparameters(): # epochs, node, acivation 추가 가능
     optimizers = [Adam, RMSprop, SGD, Adadelta, Adagrad, Nadam]
     learning_rate = [0.05, 0.1, 0.5]
     dropout = np.linspace(0.3, 0.5, 3).tolist()      
-    activation = ['tanh','relu','leaky','elu','selu']                     
+    activation = ['tanh','relu','elu','selu']                     
     return {'batch_size' : batches, 'optimizer': optimizers, 'lr':learning_rate,
            'drop': dropout, 'act': activation}                                       
 
@@ -62,7 +62,7 @@ hyperparameters = create_hyperparameters()
 # gridsearch
 from sklearn.model_selection import GridSearchCV,  RandomizedSearchCV
 # search = RandomizedSearchCV(model, hyperparameters, cv = 3, n_jobs = 5)          
-search = RandomizedSearchCV(model, hyperparameters, cv = 3, n_iter = 5)                        
+search = RandomizedSearchCV(model, hyperparameters, cv = 3, n_iter = 1)                        
 
 # fit
 search.fit(x_train, y_train)
