@@ -13,7 +13,7 @@ print('step\tx\tf(x)')
 print('{:02d}\t{:6.5f}\t{:6.5f}'.format(0, x0, f(x0)))
 
 for i in range(MaxIter):                   # MaxIter만큼 돌리겠다.
-    x1 = x0 - learning_rate * gradient(x0) # Gradient를 learning_rate만큼 잘라서 하강
+    x1 = x0 - learning_rate * gradient(x0) # Gradient를 learning_rate만큼 잘라서 하강/ -기울기를 0에 가깝게 올려준다.
     print(learning_rate * gradient(x0))
     x0 = x1
     
