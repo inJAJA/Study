@@ -4,9 +4,10 @@ from keras.models import Sequential, Model
 from keras.layers import Input, Dropout, Conv2D, Flatten, MaxPooling2D, Dense, LSTM
 from keras.optimizers import Adam, RMSprop, SGD, Adadelta, Adagrad, Nadam
 import numpy as np
-from keras.layers import LeakyReLU
-leaky = LeakyReLU(alpha= 0.2)
-
+# from keras.layers import LeakyReLU
+# leaky = LeakyReLU(alpha= 0.2)
+import tensorflow as tf
+leaky = tf.nn.leaky_relu   # load_model에서 사용 불가
 
 #1. data
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
@@ -49,7 +50,7 @@ def create_hyperparameters(): # epochs, node, acivation 추가 가능
     optimizers = [Adam, RMSprop, SGD, Adadelta, Adagrad, Nadam]
     learning_rate = [0.05, 0.1, 0.5]
     dropout = np.linspace(0.3, 0.5, 3).tolist()      
-    activation = ['tanh','relu','elu','selu']                     
+    activation = [leaky]                     
     return {'batch_size' : batches, 'optimizer': optimizers, 'lr':learning_rate,
            'drop': dropout, 'act': activation}                                       
 
