@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from keras.activations import elu
+
 '''
 def elu(x, a=1):
     y_list = []
