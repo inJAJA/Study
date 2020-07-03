@@ -39,3 +39,5 @@ top_model = Dense(10, activation = 'softmax')(top_model)
 model = Model(inputs = vgg16.input, outputs = top_model)
 '''
 
+# [참고] https://keras.io/api/applications/
+

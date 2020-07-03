@@ -92,7 +92,7 @@ print('beta(x)       = ', special.beta(x, 2))
 # Note : 오차 함수(가우스 적분), 그 보수(complement)와 역수(inverse)
 x = np.array([0, 0.3, 0.7, 1.0])
 print('erf(x)    = ', special.erf(x))
-print('erfc(x)   = ', sepcial.erfc(x))
+print('erfc(x)   = ', special.erfc(x))
 print('erfinv(x) = ', special.erfinv(x))
 
 x = np.arange(5)
@@ -188,7 +188,7 @@ print(np.less_equal(x, 5))
 print(np.greater(x, 5))
 print(np.greater_equal(x, 5))
 
-print(np.count_nonzero(np.less(x, 6))
+print(np.count_nonzero(np.less(x, 6)))
 print(np.sum(np.less(x, 6)))
 print(np.sum(np.less(x, 6), axis = 1))   # 각 행에 6보다 작은 값의 개수
 print(np.sum(np.less(x, 6), axis = 0))   # 각 열에 6보다 작은 값의 갯수

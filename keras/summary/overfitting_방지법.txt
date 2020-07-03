@@ -26,7 +26,10 @@ from keras.regularizers import l1, l2, l1_l2
 model.add(Conv2D(32, kernel_size = 3, padding = 'same', activation = 'relu', kernel_regularizer=l2(0.001)))
                                                                              
 --------------------------------------------------------------------------------
-#2. BatchNormalization
+#2. Dropout
+
+
+#3. BatchNormalization
 : 과적합 방지
 : Activation 이전에 사용해야 한다.
 : 원래 목적 BatchNormalization로 정규화한 값들을 활성화함수로 보내준다.
