@@ -2,7 +2,8 @@
 # 훈련데이터 늘린다.
 # feature를 늘린다
 # 정규화 시킨다. 1. kernel_regularizer
-#               2. 
+#               2.BatchNormalization
+# Dropout
 
 '''
 # BatchNormalization
