@@ -8,7 +8,7 @@
 : 과적합 줄임
                                            ( 규제 값 )
 L1 규제 : 가중치의 절대값 합 = regularizer.l1(l = 0.01)
-L2 규제 : 가중ㅊ;의 제곱 합   = regularizer.l2(l = 0.01)
+L2 규제 : 가중치의 제곱 합   = regularizer.l2(l = 0.01)
 
        (규제 내용) 
 loss =     L1     * reduce_sum(abs(x))     -> L1 * x의 절대값의 합
