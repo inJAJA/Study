@@ -16,6 +16,7 @@ def index_to_word(dataset, data):
 '''
 from keras.datasets import reuters, imdb
 (x_train, y_train), (x_test, y_test) = imdb.load_data(num_words = 2000) # train:test = 50:50
+print(x_train[0])
 
 index_to_word(imdb, x_train[0])
 '''
