@@ -41,7 +41,15 @@ model = Sequential()
 model.add(Embedding(25, 10))                               
 model.add(Conv1D(3, 3))          #                     3D                                    2D 
 model.add(GlobalMaxPooling1D())  # Input:(batch_size, steps, features) -> output:(batch_size, features)
-# model.add(LSTM(3))             # GlobalMaxPooling1D 대신 LSTM을 섞어서 사용 가능
+                                 # 전역 폴링 : 가장 큰 벡터를 골라서 반환합니다.
+
+model.add(LSTM(3))             # GlobalMaxPooling1D 대신 LSTM을 섞어서 사용 가능
+
+# model.add(Embedding(25, 10, input_length= 5))
+# model.add(Conv1D(3, 3))
+# model.add(MaxPooling1D(3))
+# model.add(Flatten())
+
 model.add(Dense(1, activation = 'sigmoid'))
 
 model.summary()
