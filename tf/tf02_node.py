@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 node1 = tf.constant(3.0, tf.float32)
-node2 = tf.constant(4.0)                 # defalur = float32
+node2 = tf.constant(4.0)                 # defalut = float32
 node3 = tf.add(node1, node2)             # 두 tensor의 type이 같아야 한다
 
                                          # input한 machine의 상태만 나옴

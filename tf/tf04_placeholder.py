@@ -14,5 +14,5 @@ adder_node = a + b
 print(sess.run(adder_node, feed_dict = {a:3, b:4.5}))   # dict안에 들어간 수를 빼와서 사용
 print(sess.run(adder_node, feed_dict = {a:[1, 3], b:[2, 4]})) # [3. 7.]
 
-add_and_triple = adder_node * 3
-print(sess.run(add_and_triple, feed_dict={a:3, b:4.5}))       # 22.5
+add_and_triple = adder_node * 3                         # (a + b) *3
+print(sess.run(add_and_triple, feed_dict={a:3, b:4.5})) # 22.5
