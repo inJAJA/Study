@@ -2,6 +2,7 @@ from keras.applications import VGG16, VGG19, Xception, ResNet101, ResNet101V2, R
 from keras.applications import ResNet152V2, ResNet50, ResNet50V2, InceptionV3, InceptionResNetV2
 from keras.applications import MobileNet, MobileNetV2, DenseNet121, DenseNet169, DenseNet201
 from keras.applications import NASNetLarge, NASNetMobile
+# 핸즈온 564쪽 참고
 
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, MaxPooling2D, MaxPool2D, Flatten, BatchNormalization, Activation
