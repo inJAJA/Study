@@ -13,7 +13,7 @@ sub = tf.subtract(node4, node3)
 
 # 3 * 4
 mul  = tf.multiply(node3, node4)       
-# mul2 = tf.matmul()                 # 행렬의 곱셈
+# mul2 = tf.matmul()                  # 행렬의 곱셈
 
 # 4 / 2
 div = tf.div(node4, node2)
@@ -27,5 +27,7 @@ print('3 * 4 =', sess.run(mul))       # 3 * 4 = 12.0
 print('4 / 2 =', sess.run(div))       # 4 / 2 = 2.0
 print('4 % 2 =', sess.run(mod))       # 4 % 2 = 0.0
 
+
+print(sess.run(node3 + node4))
 
 
