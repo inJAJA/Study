@@ -23,7 +23,7 @@ train = tf.train.GradientDescentOptimizer(learning_rate= 0.01).minimize(cost)
          
 
 with tf.Session() as sess:                        
-    sess.run(tf.global_variables_initializer())   
+    sess.run(tf.global_variables_initializer())          # 변수에 메모리를 할당하고 초기값을 설정하는 역할
                                      
     for step in range(2001):
         # _, cost_val, W_val, b_val = sess.run([train, cost, W, b], feed_dict = {x_train:[1, 2, 3], y_train:[3, 5, 7]}) 
