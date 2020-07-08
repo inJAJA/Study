@@ -100,3 +100,22 @@ print(a)
 # thrid  2016     A     3.6     NaN
 # four   2015     B     2.4     NaN
 # five   2016     B     2.9     NaN
+
+
+# dytpe
+dtypes = a.dtypes
+print(dtypes)
+# year         int64
+# names       object
+# points     float64
+# penalty     object
+
+
+# astype
+change_type = a.astype({'year':'float', 'penalty':'string'})
+print(change_type.dtypes)
+# year       float64
+# names       object
+# points     float64
+# penalty     string
+# dtype: object
