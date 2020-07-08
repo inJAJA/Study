@@ -20,7 +20,7 @@ cost = tf.reduce_mean(tf.square(hypothesis - y_train))   # cost = loss
 train = tf.train.GradientDescentOptimizer(learning_rate= 0.01).minimize(cost) # cost값 최소화
         # cost를 최소화하기 위해 각 Variable을 천천히 변경하는 optimizer 
 
-with tf.Session() as sess:                        # with을 쓰면 open, close를 안써도 됌 / Session을 계속 사용하기 위해 열어둔다
+with tf.Session() as sess:                        # with을 쓰면 close를 안써도 됌 / Session을 계속 사용하기 위해 열어둔다
     sess.run(tf.global_variables_initializer())   # 이 이후로 모든 변수들 초기화
                                      
     for step in range(2001):
