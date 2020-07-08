@@ -7,9 +7,9 @@ y = [3, 5, 7]
 x_train = tf.placeholder(tf.float32)
 y_train = tf.placeholder(tf.float32)
                                                         
-W = tf.Variable(tf.random_normal([1]), name = 'weight') 
-b = tf.Variable(tf.random_normal([1]), name = 'bias')
-                        #_normalization
+W = tf.Variable(tf.random_normal([1]), name = 'weight') # 난수를 주는 이유 
+b = tf.Variable(tf.random_normal([1]), name = 'bias')   # : 시작 위치가 달라져도 최적의 값을 찾아가는 것을 보기 위함 
+                        #_normalization                 # / 상수를 써도 상관 없다.
 
 # sess = tf.Session()
 # sess.run(tf.global_variables_initializer()) 
