@@ -57,6 +57,7 @@ with tf.Session() as sess:
 
     #1. Accuracy - sklearn
     y_pred = sess.run(tf.one_hot(y_pred, 3))
+    # y_test = sess.run(tf.argmax(y_test, 1))       # y_test(원핫), y_pred(argmax) 의 모양을 같게 만들어 주기 위해서
     acc = accuracy_score(y_test, y_pred)
     print('Accuracy :', acc)
 
