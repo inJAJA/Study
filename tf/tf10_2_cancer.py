@@ -35,7 +35,7 @@ predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)                         
 accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, y), dtype = tf.float32))  
                                   # tf.equal : predicte와 y가 같냐
                         # tf.cast : boolen형 일 때에 True = 1, False = 0
-                        #         : 입력 값을 부동소수점 값으로 변경합니다.
+                        #         : tensoor를 지정한 자료형으로 바꿔준다.
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
