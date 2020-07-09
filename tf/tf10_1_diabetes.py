@@ -1,4 +1,6 @@
+from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_diabetes
+from sklearn.metrics import r2_score
 import tensorflow as tf
 
 diabetes = load_diabetes()
@@ -7,6 +9,8 @@ x_data = diabetes.data
 y_data = diabetes.target
 
 y_data = y_data.reshape(-1, 1)
+
+x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, random_state = 66, train_size = 0.8)
 
 print(x_data.shape)           # (442, 10)
 print(y_data.shape)           # (442,)
@@ -33,7 +37,12 @@ sess.run(tf.global_variables_initializer())
 
 for step in range(2001):
     cost_val, hy_val, _= sess.run([cost, hypothesis, train],
-                                feed_dict = {x: x_data, y: y_data})
+                                feed_dict = {x: x_train, y: y_train})
 
     if step % 20 == 0 :
         print(step, 'cost :',cost_val, '\n 예측값 :', hy_val)
+
+y_pred = sess.run(hypothesis, feed_dict={x:x_test})
+
+r2 = r2_score(y_test, y_pred)
+print("R2 :", r2)
