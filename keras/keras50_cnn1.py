@@ -27,7 +27,7 @@ model.summary()
                                  행(장수)     세로    가로     색깔   = 1 (흑백), 3(컬러)
                                                               색깔끼리 나눠준다.
 # CNN_Output_Size
- : [(N - F + padding_size) / stride] + 1 
+ : [(N - F + 2*padding_size) / stride] + 1 
  :이 사이즈의 그림이 이전 filter 수많큼 생성된다.
                                                                          layer의 node수를 통해 data증폭
  ex) Conv2D(10, (3, 3), input_shape = (10, 10, 1)) => (None, 8, 8, 10) : (8 * 8) 이 10장 생성된다. (증폭)
