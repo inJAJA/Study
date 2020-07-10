@@ -61,7 +61,12 @@ layer8 = tf.matmul(layer7, w8) + b8
 # 9                       
 w9 = tf.Variable(tf.zeros([32, 10]), name = 'weight2')
 b9 = tf.Variable(tf.zeros([10]), name = 'bias1')
-hypothesis = tf.nn.softmax(tf.matmul(layer8, w9) + b9)                 # 마지막 output_layer
+hypothesis = tf.nn.softmax(tf.matmul(layer8, w9) + b9) 
+
+# 10                       
+w10 = tf.Variable(tf.zeros([32, 10]), name = 'weight2')
+b10 = tf.Variable(tf.zeros([10]), name = 'bias1')
+hypothesis = tf.nn.softmax(tf.matmul(layer8, w10) + b10)                 # 마지막 output_layer
 
 loss = tf.reduce_mean(-tf.reduce_sum(y * tf.log(hypothesis), axis = 1))
 

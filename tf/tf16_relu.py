@@ -18,7 +18,7 @@ x = tf.placeholder(tf.float32, shape = [None, 784])
 y = tf.placeholder(tf.float32, shape = [None, 10])
 
 
-# 1                           # input / output   
+# 1                   # input / output   
 w = tf.Variable(tf.zeros([784, 64]), name = 'weight1')
 b = tf.Variable(tf.zeros([64]), name = 'bias1')
 
