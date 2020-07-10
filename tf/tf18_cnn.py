@@ -112,7 +112,7 @@ for epoch in range(training_epochs):            # 15
 
     for i in range(total_batch):                # 600
         start = i*batch_size                    
-        end = start + batch_size                #
+        end = start + batch_size                
 
         batch_xs, batch_ys = x_train[start : end], y_train[start : end]
         
@@ -125,5 +125,4 @@ for epoch in range(training_epochs):            # 15
 
 prediction = tf.equal(tf.argmax(hypothesis, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
-print('Acc :', sess.run(accuracy, feed_dict = {x:x_test, y:y_test, keep_prob:1})) 
-
+print('Acc :', sess.run(accuracy, feed_dict = {x:x_test, y:y_test, keep_prob:1}))        # Acc : 0.9631
