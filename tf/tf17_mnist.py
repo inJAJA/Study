@@ -31,10 +31,18 @@ keep_prob = tf.placeholder(tf.float32)        # dropout
                                 # input / output   
 # w = tf.variable(tf.random_normal([784, 512]), name = 'weight1')  # 동일  
 w1 = tf.get_variable('w1', shape=[784, 512],                        # 초기 변수가 없으면 알아서 할당함/ 파라미터 많음
-                    initializer=tf.contrib.layers.xavier_initializer())                        
+                    initializer=tf.contrib.layers.xavier_initializer())
+print('=========== w1 ===========')                                            
+print(w1)                           # shape=(784, 512) 
 b1 = tf.Variable(tf.random_normal([512]), name = 'bias')
+print('=========== b1 ===========')
+print(b1)                           # shape=(512,) 
 L1 = tf.nn.selu(tf.matmul(x, w1) + b1)
+print('=========== L1 ===========')
+print(L1)                           # shape=(?, 512)
 L1 = tf.nn.dropout(L1, keep_prob=keep_prob)   
+print('=========== L1 ===========')
+print(L1)                           # shape=(?, 512)
 
 w2 = tf.get_variable('w2', shape=[512, 512],                       
                     initializer=tf.contrib.layers.xavier_initializer())                        
@@ -72,8 +80,8 @@ for epoch in range(training_epochs):            # 15
     ave_cost = 0
 
     for i in range(total_batch):                # 600
-        start = i*batch_size
-        end = start + batch_size
+        start = i*batch_size                    # 실질적으로 데이터 100개씩을 가지고 15 * 600번 돌려서 학습이 된다.
+        end = start + batch_size                # 조금식 선을 그린다 / 배치 사이즈를 안쓰면 한번에(60000개로) 대충 그리는 거
 
         batch_xs, batch_ys = x_train[start : end], y_train[start : end]
         
@@ -86,5 +94,6 @@ for epoch in range(training_epochs):            # 15
 
 prediction = tf.equal(tf.argmax(hypothesis, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
-print('Acc :', sess.run(accuracy, feed_dict = {x:x_test, y:y_test, keep_prob:0.9}))
-
+print('Acc :', sess.run(accuracy, feed_dict = {x:x_test, y:y_test, keep_prob:1})) 
+# keras에서 evaluate나 predict 할 때에는 가중치는 적용이 되지만 / 드랍아웃이 적용되어 있지 않는다.
+# 통상적으로 keep_prob는 1이 들어간다.
