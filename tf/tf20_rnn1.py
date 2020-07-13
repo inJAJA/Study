@@ -72,8 +72,8 @@ print(hypothesis)                                                    # (?, 6, 5)
 #3-1. 컴파일
 weights = tf.ones([batch_size, sequence_len])                                        
 sequence_loss = tf.contrib.seq2seq.sequence_loss(                   # sequence형 loss가 따로 있다.
-    logits = hypothesis, targets = Y, weights = weights )
-    #        y_pred            y_true
+    logits = hypothesis, targets = Y, weights = weights )           # h와 y의 모양이 다르지만 알아서 계산됌
+    #        y_pred            y_true                               # (?, 6, 5) / (1, 6)
 cost = tf.reduce_mean(sequence_loss)                                # sequence_loss의 전체 평균
 
 # train = tf.train.AdamOptimizer(learning_rate=1e-1).minimize(loss)
