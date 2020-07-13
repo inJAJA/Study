@@ -5,8 +5,8 @@ from flask import make_response
 
 @app.route('/')
 def index():
-    response = make_response('<h1> 잘 다라 치시오!! </h1>')
-    response.set_cookie('answer','42')
+    response = make_response('<h1> 잘 따라 치시오!! </h1>')
+    response.set_cookie('answer','42')                     # 'answer' :쿠키의 이름 / '42' : 값
     return response
 
 if __name__ == '__main__':
