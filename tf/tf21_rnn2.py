@@ -33,8 +33,9 @@ print('=================')
 seq_len = 1
 input_dim = 5
 batch_size = 5
-output = 11
-steps = 10
+output = 10
+steps = 300
+output_dim = 1
 
 X = tf.compat.v1.placeholder(tf.float32, (None, seq_len, input_dim))
 Y = tf.compat.v1.placeholder(tf.int32, (None, seq_len))
@@ -50,13 +51,21 @@ hypothesis, _states = tf.nn.dynamic_rnn(cell, X, dtype = tf.float32)
                             # model.add(LSTM)
 print(hypothesis)                                                   # (?, 1, 11)
 
+''' < 추정 > : 아마도 분류형 loss '''
 #3-1. 컴파일
-weights = tf.ones([batch_size, seq_len])                                        
-sequence_loss = tf.contrib.seq2seq.sequence_loss(                   # sequence형 loss가 따로 있다.
-    logits = hypothesis, targets = Y, weights = weights )           # h와 y의 모양이 다르지만 알아서 계산됌
+weights = tf.ones([batch_size, seq_len])                                       
+sequence_loss = tf.contrib.seq2seq.sequence_loss(                   
+    logits = hypothesis, targets = Y, weights = weights )           
     #        y_pred            y_true                               
     # [batch_size, sequence_length, num_classes] /[batch_size, sequence_length]  
     #               (?, 1, 11)                   / (5, 1)                                                              
+
+# node sequence_loss/SparseSoftmaxCrossEntropyWithLogits/SparseSoftmaxCrossEntropyWithLogits
+# Y를 알아서 one-hot-encoding하여 인식
+# Y의 가장 큰 값이 10이기 때문에 원핫인코딩하면 컬럼이 11개로 된다.
+# -> output = 11이상 부터 가능하다 
+#    / 10이하면 [ ERROR : Received a label value of 10 which is outside ]
+
 
 cost = tf.reduce_mean(sequence_loss)                                # sequence_loss의 전체 평균
 
@@ -74,8 +83,5 @@ with tf.Session() as sess:
         result = sess.run(prediction, feed_dict={X:x_data})
         print(step, 'loss :', loss, 'prediction :', result.reshape(-1), 'true Y :', y_data.reshape(-1))
         # print(sess.run(hypothesis, feed_dict = {X:x_data}))
-
-
-
 
 
