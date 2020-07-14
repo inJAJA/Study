@@ -5,7 +5,7 @@ import cv2
 
 categories = ["carrot","chicken","egg","fish",'flour',"mashroom","meat", "onion", "paprika","potato"]
 
-image = cv2.imread("D:/data/train/onion/onion36.jpg")
+image = cv2.imread("D:/data/pred/pred3.jpg")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 ret, bin_img = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
@@ -38,7 +38,7 @@ for i in range(1, n_labels):
         cv2.imshow('img', img)
         cv2.waitKey(0)
 
-        model = load_model('./model_train1_4.h5') 
+        model = load_model('./mini_project/project01_ingred_recipe/result/complete_train.h5') 
 
         img_digit = cv2.resize(img, (256, 256), interpolation = cv2.INTER_LINEAR)
                                                                 
