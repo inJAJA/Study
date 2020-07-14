@@ -25,3 +25,10 @@ while True:
     
     cv2.imshow('img', img)
     cv2.waitKey(1)
+
+'''
+# dlib install
+1. activate base(가상환경 이름)
+2. conda update --all
+3. conda install -c conda-forge dlib
+'''
