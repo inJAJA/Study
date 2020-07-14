@@ -60,6 +60,7 @@ Y_pred = tf.contrib.layers.fully_connected(
     # We use the last cell's output. 
     # 예를들어 1일차부터 5일차까지 출력을 다 쓰는게 아니라 5일까지 모은 데이터의 출력(가장 마지막 출력)을 쓰는 것이므로
     # 3차원 -> 2차원
+    # [참고] https://jfun.tistory.com/194
 
 cost = tf.reduce_sum(tf.square(Y_pred - Y)) # sum of the squares
 
