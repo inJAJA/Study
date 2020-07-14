@@ -6,14 +6,14 @@ database = 'bitdb'
 username = 'bit2'
 password = '1234'
 
-conn = pyo.connect('DRIVER={ODBC Driver 17 for SQL Server}; SERVER=' +server+
+conn = pyo.connect('DRIVER={ODBC Driver 17 for SQL Server}; SERVER=' +server+    # 서버 연결
                     '; PORT=1433; DATABASE='+database+
                     '; UID='+username+
                     '; PWD='+password)
 
 cursor = conn.cursor()
 
-tsql = 'SELECT * FROM iris2'
+tsql = 'SELECT * FROM iris2'                                                    
 
 # with cursor.execute(tsql):
 #     row = cursor.fetchone()
@@ -28,8 +28,8 @@ app = Flask(__name__)
 
 @app.route('/sqltable')
 def showsql():
-    cursor.execute(tsql) # SELECT * FROM iris2를 실행
-    return render_template('myweb.html', rows = cursor.fetchall())
+    cursor.execute(tsql)                                                # SELECT * FROM iris2를 실행
+    return render_template('myweb.html', rows = cursor.fetchall())      # myweb에 rows를 보냄
 
 if __name__ == '__main__':
     app.run(host = '127.0.0.1', port =5000, debug=False)
