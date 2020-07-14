@@ -19,7 +19,7 @@ with cursor.execute(tsql):
     row = cursor.fetchone()
 
     while row:
-        print(str(row[0])+' '+str(row[1])+' '+str(row[3])+' '+
+        print(str(row[0])+' '+str(row[1])+' '+str(row[2])+' '+
                str(row[3]) + ' '+ str(row[4]))
         row = cursor.fetchone()
 
