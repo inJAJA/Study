@@ -12,12 +12,16 @@ conn= ms.connect(server='127.0.0.1', user='bit2',       # mssql에 연결
 
 cursor = conn.cursor()
 
-cursor.execute('SELECT * FROM iris2;')
+# cursor.execute('SELECT * FROM iris2;')
+# cursor.execute('SELECT * FROM iris2;')
+cursor.execute('SELECT * FROM sonar;')
+
 
 row = cursor.fetchone()                                 # .fetchone() : 한줄을 가져 온다
 
 while row :
-    print('첫컬럼 : %s, 둘컬럼 : %s'%(row[0], row[1]))
+    # print('첫컬럼 : %s, 둘컬럼 : %s'%(row[0], row[1]))
+    print('첫컬럼 : %s, 둘컬럼 : %s 세컬럼 : %s'%(row[0], row[1], row[2]))
     row = cursor.fetchone()
 
 conn.close()                                            # 연결 끊기
