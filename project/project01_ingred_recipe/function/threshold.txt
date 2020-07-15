@@ -1,0 +1,10 @@
+# threshold( img, threshold_value, value, flag)
+
+threshold_value = 문턱값
+value = 문턱값보다 클때 적용되는 최댓값
+flg = 문턱값 적용 방법 또는 스타일
+cv.THRESH_BINARY       : threshold값보다 크면 value, 작으면 0                   : 이진
+cv.THRESH_BINARY_INV :                                   0,          value              : 이진 반대로
+cv.THRESH_TRUNC        :                 threshold_value,         픽섹값 그대로   : 원본과 유사           
+cv.THRESH_TOERO        :                   픽셀값 그대로,          0                  : 이진(검), 연한쪽 그대로
+cv.THRESH_TOZERO_INV:                                    0,          픽셀 그대로    : 이진(검), 찐한쪽 그대로
