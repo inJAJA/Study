@@ -4,22 +4,21 @@ import glob
 import os
 import re
 
-path = 'D:/data/project/breed'      # dataset 상위 폴더 경로
+train_path = 'D:/data/project/breed'      # dataset 상위 폴더 경로
+pred_path = 'D:/data/project/testset'
 
 # 카테고리
 def categories(top_folder_path):             # folder이름으로 카테고리 생성
     category = os.listdir(top_folder_path)
-    print(category)
     return category
 
-cate = categories(path)
+cate = categories(train_path)
 np.save('./project/project02/data/category.npy', cate)
 print('--------- categories save complete -------------')
 
 
 # 이미지 불러오기
 def load_image_label(path, w, h):   # 폴더별로 이미지 불러오고 labeling
-    groups_floder_path = path
     folder_name = os.listdir(path) 
     num_classes = len(folder_name)               # 카테고리 갯수
 
@@ -34,7 +33,7 @@ def load_image_label(path, w, h):   # 폴더별로 이미지 불러오고 labeli
         # one-hot encoding
         label = [0 for i in range(num_classes)]             # [0 0 0 .... 0 0]    
         label[idex] = 1                                     # 해당 자리에 1을 채워 넣음 -> 원핫 인코딩
-        image_dir = groups_floder_path + '/'+ folder + '/'  
+        image_dir = path + '/'+ folder + '/'  
 
         for top, dir, f  in os.walk(image_dir):
             # for filename, i in zip(f, range(101)): 
@@ -49,10 +48,16 @@ def load_image_label(path, w, h):   # 폴더별로 이미지 불러오고 labeli
 
     return np.array(X), np.array(Y)
 
-X, Y = load_image_label(path, 112, 112)
+X, Y = load_image_label(train_path, 112, 112)
 print(X.shape)
-print(Y.shape)                                  
+print(Y.shape)                          
+
+x_pred, y_pred = load_image_label(pred_path, 112, 112)
+print(x_pred.shape)
 
 np.save('./project/project02/data/dog_image_2.npy', X)
 np.save('./project/project02/data/dog_label_2.npy', Y)
 print('-----Data Save Complete------')
+
+np.save('./project/project02/data/pred_img.npy', x_pred)
+print('----- predict data save complete ------')

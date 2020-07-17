@@ -1,10 +1,13 @@
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Flatten
-from keras.applications import InceptionV3, MobileNet
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.applications import VGG16, VGG19, Xception, ResNet101, ResNet101V2, ResNet152
+from keras.applications import ResNet152V2, ResNet50, ResNet50V2, InceptionV3, InceptionResNetV2
+from keras.applications import MobileNet, MobileNetV2, DenseNet121, DenseNet169, DenseNet201
+from keras.applications import NASNetLarge, NASNetMobile
 import time
 
 start = time.time()
@@ -22,22 +25,22 @@ print('======== data load ========')
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.1, random_state = 66)
 
 # model
-takemodel = MobileNet(include_top=False, input_shape = (112, 112, 3))
+takemodel = DenseNet201(include_top=False, input_shape = (112, 112, 3))
 
 model = Sequential()
 model.add(takemodel)
 model.add(Flatten())
-model.add(Dense(11, activation = 'softmax'))
+model.add(Dense(12, activation = 'softmax'))
 
 model.summary()
 
-cp = ModelCheckpoint('./project/project02/model_save/best.hdf5', monitor = 'val_loss',
+cp = ModelCheckpoint('./project/project02/model_save/best_xp64.hdf5', monitor = 'val_loss',
                     save_best_only = True, save_weights_only = False)
 es = EarlyStopping(monitor= 'val_loss', patience = 50, verbose =1)
 
 #3. compile, fit
 model.compile(optimizer = Adam(1e-4), loss = 'categorical_crossentropy', metrics = ['acc'])                             
-hist = model.fit(x_train, y_train, epochs = 300, batch_size = 128, verbose = 1, 
+hist = model.fit(x_train, y_train, epochs = 300, batch_size = 32, verbose = 1, 
                  validation_split =0.3 ,shuffle = True, callbacks = [es, cp])
 
 
