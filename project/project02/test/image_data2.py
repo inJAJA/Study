@@ -4,7 +4,8 @@ import glob
 import os
 import re
 
-''' os.walk 사용 O'''
+''' 단순 이미지 불러오기
+    os.walk 사용 O'''
 
 train_path = 'D:/data/project/breed'      # dataset 상위 폴더 경로
 pred_path = 'D:/data/project/testset'

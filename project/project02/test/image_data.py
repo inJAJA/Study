@@ -2,7 +2,10 @@ import numpy as np
 import cv2                          
 import glob
 import os
-import re                                 # os.walk뺀거
+import re                                 
+
+''' 단순 이미지 불러오기 
+    os.walk 사용 X'''
 
 train_path = 'D:/data/project/breed'      # dataset 상위 폴더 경로
 pred_path = 'D:/data/project/testset'
