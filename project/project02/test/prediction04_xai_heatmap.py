@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 # data
 #------------- only one file -------------------
-image = 'D:/data/project/face_test/dog_ball.jpg'
+image = 'D:/data/project/face_test/face.jpg'
 dog = './project/project02/weight/dogHeadDetector.dat'
 human = './project/project02/weight/mmod_human_face_detector.dat'
 
@@ -35,24 +35,28 @@ def face_image(image, det_path, w, h):
 # f = os.listdir('D:/data\project/breed_final')
 # print(f)
 
-x_pred = face_image(image, dog, 128, 128 )
+x_pred = face_image(image, human, 128, 128 )
 print(x_pred.shape)
 
 
 # load_model
 model = load_model('./project/project02/model_save/best_xception.hdf5')
 
-try:   
-    #--------------------------------------------------------------
-    from lime.lime_image import LimeImageExplainer
-    top_labels = 3
+#------------------------------- XAI -------------------------------
+from lime.lime_image import LimeImageExplainer
+top_labels = 3
 
+try: 
     explainer = LimeImageExplainer()
-    explanation = explainer.explain_instance(x_pred[0], model.predict, hide_color = 0, top_labels = top_labels, num_samples = 1000)
+    explanation = explainer.explain_instance(x_pred[0], model.predict,hide_color = 0, top_labels = top_labels, num_samples = 1000)
 
     from skimage.segmentation import mark_boundaries
-    temp, mask = explanation.get_image_and_mask(explanation.top_labels[0], positive_only=True, hide_rest = True)
-    plt.imshow(mark_boundaries(temp / 2 + 0.5, mask))
+    ind = explanation.top_labels[0]
+    dict_heatmap = dict(explanation.local_exp[ind])
+    heatmap = np.vectorize(dict_heatmap.get)(explanation.segments)
+
+    plt.imshow(heatmap, cmap = 'RdBu', vmin = -heatmap.max(), vmax = heatmap.max())
+    plt.colorbar()
     #--------------------------------------------------------------
 
     # predict
@@ -61,7 +65,7 @@ try:
 
     # 카테고리 불러오기
     categories = ['Bichon_frise', 'Border_collie', 'Bulldog', 'Chihuahua', 'Corgi', 'Dachshund', 
-                    'Golden_retriever', 'Husky', 'Jindo_dog', 'Maltese', 'Pug', 'Yorkshire_terrier']
+                        'Golden_retriever', 'Husky', 'Jindo_dog', 'Maltese', 'Pug', 'Yorkshire_terrier']
 
     '''
     # filename = os.listdir(path)
@@ -79,5 +83,5 @@ try:
         print('예측 견종 :',pred  )
     plt.show()
 
-except:                             # 사진이 인식 안되었을 때
+except:
     print('인식된 사진이 없습니다.')
