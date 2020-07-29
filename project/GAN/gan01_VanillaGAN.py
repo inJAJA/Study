@@ -78,7 +78,7 @@ def saveGeneratedImages(epoch, examples=100, dim=(10, 10), figsize=(10, 10)):
         plt.imshow(generatedImages[i], interpolation='nearest', cmap='gray_r')
         plt.axis('off')
     plt.tight_layout()
-    plt.savefig('./gan_generated_image_epoch_%d.png' % epoch)
+    plt.savefig('./gan01_VanillaGAN_image_epoch_%d.png' % epoch)
 
 def train(epochs = 1, batch_size = 128):
     batchCount = int(x_train.shape[0] / batch_size)
