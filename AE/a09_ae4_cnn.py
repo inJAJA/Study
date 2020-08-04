@@ -1,10 +1,20 @@
+# a08_ae3_mlp 복붙
+# cnn으로 오토인코더 구성하시오.
+
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, Conv2D, UpSampling2D
 
 def autoencoder(hidden_layer_size):
     model = Sequential()
-    model.add(Dense(units = hidden_layer_size, input_shape=(784, ), activation = 'relu'))
-    model.add(Dense(units = 784, activation = 'sigmoid'))
+    model.add(Conv2D(filters = 256, kernel_size = (3, 3), padding = 'same', 
+                    input_shape= (28, 28, 1), activation = 'relu'))
+    model.add(Conv2D(filters = 128, kernel_size = (3, 3), padding = 'same', activation = 'relu'))
+    model.add(Conv2D(filters = hidden_layer_size, kernel_size = (3, 3), padding = 'same', activation = 'relu'))
+    model.add(Conv2D(filters = 128, kernel_size = (3, 3), padding = 'same', activation = 'relu'))
+    model.add(Conv2D(filters = 256, kernel_size = (3, 3), padding = 'same', activation = 'relu'))
+    model.add(Conv2D(filters = 1, kernel_size = (3, 3), padding = 'same', activation = 'sigmoid'))
+
+    model.summary()
 
     return model
 
@@ -14,18 +24,16 @@ train_set, test_set = mnist.load_data()
 x_train, y_train = train_set
 x_test, y_test = test_set
 
-x_train = x_train.reshape((x_train.shape[0], x_train.shape[1]*x_train.shape[2]))
-x_test = x_test.reshape((x_test.shape[0], x_test.shape[1]*x_test.shape[2]))
+x_train = x_train.reshape((x_train.shape[0], x_train.shape[1], x_train.shape[2], 1))
+x_test = x_test.reshape((x_test.shape[0], x_test.shape[1], x_test.shape[2], 1))
 
 x_train = x_train/255.
 x_test = x_test/255.
 
-
-
-model = autoencoder(hidden_layer_size= 154)
-                                                                                    # sigmoid를 썼기 때문에 'mse'를 사용해도 된다
-# model.compile(optimizer = 'adam', loss = 'mse', metrics = ['acc'])                # loss: 0.0102 - acc: 0.0118
-model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])  # loss: 0.0935 - acc: 0.8141
+model = autoencoder(hidden_layer_size= 64)
+                                                                               # sigmoid를 썼기 때문에 'mse'를 사용해도 된다
+# model.compile(optimizer = 'adam', loss = 'mse', metrics = ['acc'])                # loss: 0.0102 -> 0.0041 
+model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])  # loss: 0.0935 -> 0.0744
                                                                                     # loss를 보고 결정해야함 / mse지표를 쓰면 acc의 값은 정확 X
 
 model.fit(x_train, x_train , epochs = 10)

@@ -1,9 +1,16 @@
+# a06_ae 복붙
+
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
 def autoencoder(hidden_layer_size):
     model = Sequential()
-    model.add(Dense(units = hidden_layer_size, input_shape=(784, ), activation = 'relu'))
+    model.add(Dense(units = 512, input_shape=(784, ), activation = 'relu'))
+    model.add(Dense(units = 256, activation = 'relu'))
+    model.add(Dense(units = hidden_layer_size, activation = 'relu'))
+    model.add(Dense(units = 256, activation = 'relu'))
+    model.add(Dense(units = 512, activation = 'relu'))
     model.add(Dense(units = 784, activation = 'sigmoid'))
 
     return model
@@ -20,12 +27,10 @@ x_test = x_test.reshape((x_test.shape[0], x_test.shape[1]*x_test.shape[2]))
 x_train = x_train/255.
 x_test = x_test/255.
 
-
-
-model = autoencoder(hidden_layer_size= 154)
+model = autoencoder(hidden_layer_size= 64)
                                                                                     # sigmoid를 썼기 때문에 'mse'를 사용해도 된다
-# model.compile(optimizer = 'adam', loss = 'mse', metrics = ['acc'])                # loss: 0.0102 - acc: 0.0118
-model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])  # loss: 0.0935 - acc: 0.8141
+# model.compile(optimizer = 'adam', loss = 'mse', metrics = ['acc'])                # loss: 0.0102 -> 0.0041 
+model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])  # loss: 0.0935 -> 0.0744
                                                                                     # loss를 보고 결정해야함 / mse지표를 쓰면 acc의 값은 정확 X
 
 model.fit(x_train, x_train , epochs = 10)
