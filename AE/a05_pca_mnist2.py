@@ -25,21 +25,21 @@ print(y_train.shape)
 
 x_train = x_train.reshape(60000, 28*28 ).astype('float32')/255 
 x_test = x_test.reshape(10000, 28*28).astype('float32')/255
-print(x_train.shape)                              # (60000, 784)
-print(x_test.shape)                               # (10000, 784)
+print(x_train.shape)                             # (60000, 784)
+print(x_test.shape)                              # (10000, 784)
 
 X = np.append(x_train, x_test, axis = 0)
 
 from sklearn.decomposition import PCA
 pca = PCA(n_components = 154)
-# x_train = pca.fit_transform(x_train)    # x_test에 대한 특성이 배제됌
+# x_train = pca.fit_transform(x_train)           # x_test에 대한 특성이 배제됌
 # x_test = pca.transform(x_test)
-X = pca.fit_transform(X)
+X = pca.fit_transform(X)                         # append시켜서 한꺼번에 pca
 
 x_train = X[:60000]
 x_test = X[60000:]
-print(x_train.shape)                              # (60000, 154)
-print(x_test.shape)                               # (10000, 154)
+print(x_train.shape)                             # (60000, 154)
+print(x_test.shape)                              # (10000, 154)
 
 
 #2. 모델 구성
@@ -78,4 +78,5 @@ print('loss: ', loss)
 print('acc: ', acc)
 
 # acc:  0.9785000085830688
-# acc:  0.9763000011444092 -> pca후
+# acc:  0.9763000011444092 -> pca후 : pca 따로따로
+# acc:  0.9785000085830688 -> pca후 : pca 같이
