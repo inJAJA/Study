@@ -17,7 +17,7 @@ def face_detector(path, folder, w, h):
     # X = []
 
     hdf = h5py.File('D:/data/test.hdf5', 'a')
-    imageset = hdf.create_dataset('Doberman', (600, w, h, 3), maxshape=(None, w, h, 3))
+    imageset = hdf.create_dataset(folder, (600, w, h, 3), maxshape=(None, w, h, 3))
 
     k = 0
     for filename in f[25:35]:                  # 파일 별로 이미지 불러오기
