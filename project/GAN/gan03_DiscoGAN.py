@@ -1,3 +1,6 @@
+
+''' tensorflow==1.14.0, keras==2.3.1, keras-contrib==2.0.8'''
+
 from __future__ import print_function, division
 import scipy
 
@@ -92,9 +95,9 @@ class DiscoGAN():
 
     def build_generator(self):
         '''U-Net Generator'''
-        def conv2d(layer_input, filter, f_size = 4, normalize=True):
+        def conv2d(layer_input, filters, f_size=4, normalize=True):
             ''' Layers used during downsampling'''
-            d = Conv2D(filters, kener_size = f_size, strides = 2, padding = 'same')(layer_input)
+            d = Conv2D(filters, kernel_size = f_size, strides = 2, padding = 'same')(layer_input)
             d = LeakyReLU(alpha=0.2)(d)
             if normalize:
                 d = InstanceNormalization()(d)
@@ -137,7 +140,7 @@ class DiscoGAN():
 
     def build_discriminator(self):
 
-        def d_layer(layer_input, filters, f_size=4, notmalization = True):
+        def d_layer(layer_input, filters, f_size=4, normalization = True):
             '''Discriminator layer'''
             d = Conv2D(filters, kernel_size = f_size, strides = 2, padding = 'same')(layer_input)
             d = LeakyReLU(alpha = 0.2)(d)
@@ -147,12 +150,12 @@ class DiscoGAN():
 
         img = Input(shape = self.img_shape)
 
-        d1 = d_layer(img, self.df, normalization = False)
+        d1 = d_layer(img, self.df, normalization=False)
         d2 = d_layer(d1, self.df*2)
         d3 = d_layer(d2, self.df*4)
         d4 = d_layer(d3, self.df*8)
 
-        validity = Conv2d(1, kernel_size = 4, strides=1, padding='same')(d4)
+        validity = Conv2D(1, kernel_size = 4, strides=1, padding='same')(d4)
 
         return Model(img, validity)
 
@@ -161,9 +164,9 @@ class DiscoGAN():
 
         # Adversarial loss ground truths
         valid = np.ones((batch_size, ) + self.disc_patch)
-        fake = np.zeros((batch_size, ) + self.disc_patch)
+        fake = np.zeros((batch_size,) + self.disc_patch)
 
-        for epoch in range(epoch):
+        for epoch in range(epochs):
 
             for batch_i, (imgs_A, imgs_B) in enumerate(self.data_loader.load_batch(batch_size)):    # imgs : input images
                 #----------------------
@@ -174,10 +177,10 @@ class DiscoGAN():
                 fake_B = self.g_AB.predict(imgs_A)      # 가짜 이미지 생성
                 fake_A = self.g_BA.predict(imgs_B)
 
-                # Train the discriminators (original images = Real / translated = Fake)
+                # Train the discriminators (original images = real / translated = Fake)
                 dA_loss_real = self.d_A.train_on_batch(imgs_A, valid)
                 dA_loss_fake = self.d_A.train_on_batch(fake_A, fake)
-                dA_loss = 0.5 * np.add(dA_loss_real, dA_loss, fake)
+                dA_loss = 0.5 * np.add(dA_loss_real, dA_loss_fake)
 
                 dB_loss_real = self.d_B.train_on_batch(imgs_B, valid)
                 dB_loss_fake = self.d_B.train_on_batch(fake_B, fake)
@@ -206,7 +209,7 @@ class DiscoGAN():
                     self.sample_images(epoch, batch_i)
 
     def sample_images(self, epoch, batch_i):
-        os.makedirs('images/%s' % self.dataset_name, exist_ok=True)
+        os.makedirs('D:/images/%s' % self.dataset_name, exist_ok=True)
         r, c = 2, 3
 
         imgs_A, imgs_B = self.data_loader.load_data(batch_size=1, is_testing=True)
@@ -232,7 +235,7 @@ class DiscoGAN():
                 axs[i, j].set_title(titles[j])
                 axs[i,j].axis('off')
                 cnt += 1
-        fig.savefig("images/%s/%d_%d.png" % (self.dataset_name, epoch, batch_i))
+        fig.savefig("D:/images/%s/%d_%d.png" % (self.dataset_name, epoch, batch_i))
         plt.close()
 
 
