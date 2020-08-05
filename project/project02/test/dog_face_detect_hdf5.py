@@ -6,7 +6,7 @@ import h5py
 
 start = time.time()
 
-train_path = 'D:/data/breed'
+train_path = 'C:/Users/bitcamp/Desktop'
 
 def face_detector(path, folder, w, h):
     print('---------- START %s ---------'%(folder))
@@ -16,11 +16,11 @@ def face_detector(path, folder, w, h):
 
     # X = []
 
-    hdf = h5py.File('D:/data/test.hdf5', 'a')
-    imageset = hdf.create_dataset(folder, (600, w, h, 3), maxshape=(None, w, h, 3))
+    hdf = h5py.File('D:/data/face_Italian_Greyhound.hdf5', 'a')
+    imageset = hdf.create_dataset(folder, (200, w, h, 3), maxshape=(None, w, h, 3))
 
     k = 0
-    for filename in f[25:35]:                  # 파일 별로 이미지 불러오기
+    for filename in f:                  # 파일 별로 이미지 불러오기
         img = cv2.imread(image_dir + filename)
         x = img.shape[1]
         y = img.shape[0]
@@ -71,4 +71,4 @@ def face_detector(path, folder, w, h):
     print('---------- END %s ---------'%(folder))
 
     
-face_detector(train_path, 'Doberman', 512, 512)
+face_detector(train_path, 'Italian_Greyhound', 512, 512)
