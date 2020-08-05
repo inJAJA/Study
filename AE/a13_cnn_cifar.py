@@ -35,8 +35,8 @@ x_test = x_test/255.
 
 model = autoencoder(hidden_layer_size= 154)
                                                                                     
-# model.compile(optimizer = 'adam', loss = 'mse', metrics = ['acc'])      # loss: 8.7117e-05 - acc: 0.9133          
-model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])  
+# model.compile(optimizer = 'adam', loss = 'mse', metrics = ['acc'])                # loss: 8.7117e-05 - acc: 0.9133          
+model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])  # loss: 0.5470 - acc: 0.0121
                                                                                     
 
 # model.fit(x_train_noised, x_train_noised , epochs = 10)     
