@@ -20,7 +20,8 @@ x_test = x_test.reshape((x_test.shape[0], x_test.shape[1]*x_test.shape[2]))
 x_train = x_train/255.
 x_test = x_test/255.
 
-
+# pca         : 선형
+# autoencoder : 비선형
 
 model = autoencoder(hidden_layer_size= 154)
                                                                                     # sigmoid를 썼기 때문에 'mse'를 사용해도 된다

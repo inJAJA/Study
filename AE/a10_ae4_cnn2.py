@@ -6,13 +6,12 @@ from tensorflow.keras.layers import Dense, Conv2D, Conv2DTranspose
 
 def autoencoder(hidden_layer_size):
     model = Sequential()
-    model = Sequential()
     model.add(Conv2D(filters = 256, kernel_size = (3, 3), padding = 'valid', 
                     input_shape= (28, 28, 1), activation = 'relu'))
     model.add(Conv2D(filters = 128, kernel_size = (3, 3), padding = 'valid', activation = 'relu'))
     model.add(Conv2D(filters = hidden_layer_size, kernel_size = (3, 3), padding = 'valid', activation = 'relu'))
-    model.add(Conv2DTranspose(filters = 128, kernel_size = (3, 3), padding = 'valid', activation = 'relu'))
-    model.add(Conv2DTranspose(filters = 256, kernel_size = (3, 3), padding = 'valid', activation = 'relu'))
+    model.add(Conv2DTranspose(filters = 156, kernel_size = (3, 3), padding = 'valid', activation = 'relu'))  # Conv2D쓴만큼 Conv2DTranspose사용       
+    model.add(Conv2DTranspose(filters = 300, kernel_size = (3, 3), padding = 'valid', activation = 'relu'))
     model.add(Conv2DTranspose(filters = 1, kernel_size = (3, 3), padding = 'valid', activation = 'sigmoid'))
  
     model.summary()
@@ -32,7 +31,7 @@ x_train = x_train/255.
 x_test = x_test/255.
 
 model = autoencoder(hidden_layer_size= 64)
-                                                                                  # sigmoid를 썼기 때문에 'mse'를 사용해도 된다
+"""                                                                                # sigmoid를 썼기 때문에 'mse'를 사용해도 된다
 # model.compile(optimizer = 'adam', loss = 'mse', metrics = ['acc'])                # loss: 0.0102 -> 0.0041 
 model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])  # loss: 0.0935 -> 0.0744
                                                                                     # loss를 보고 결정해야함 / mse지표를 쓰면 acc의 값은 정확 X
@@ -66,3 +65,10 @@ for i, ax in enumerate([ax6, ax7, ax8, ax9, ax10]):
     ax.set_xticks([])
     ax.set_yticks([])
 plt.show()
+
+'''
+UpSampling2D(size = (2, 2))     # (h, w)를 2배로 늘림
+
+Conv2DTranspose( units, (5, 5), padding = 'same')
+'''
+"""
