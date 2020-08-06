@@ -2,7 +2,7 @@ from tensorflow.keras.datasets import mnist
 from tensorflow.keras.layers import Input, Dense, Reshape, Flatten, Dropout
 from tensorflow.keras.layers import BatchNormalization, Activation, ZeroPadding2D
 from tensorflow.keras.layers import LeakyReLU
-from tensorflow.keras.layers import UpSampling2D, Conv2D, Conv2DTranspose
+from tensorflow.keras.layers import UpSampling2D, Conv2D, Conv2DTranspose, MaxPooling2D 
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.optimizers import Adam
 
@@ -27,7 +27,7 @@ class DCGAN():
         self.latent_dim = z
         self.noise_shape = self.img_shape
 
-        optimizer = Adam(2e-6, 0.5)
+        optimizer = Adam(1e-4, 0.5)
 
         # Build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -61,6 +61,8 @@ class DCGAN():
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
 
+        model.add(MaxPooling2D(2))
+
         model.add(Conv2D(128*2, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
@@ -68,24 +70,53 @@ class DCGAN():
         model.add(Conv2D(64, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
+        model.add(MaxPooling2D(2))
 
         model.add(Conv2D(32, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
 
-        model.add(Conv2DTranspose(64, kernel_size=3, padding="valid"))
+        model.add(MaxPooling2D(2))
+
+
+        model.add(Dense(123))
+
+        model.add(Dense(123))
+
+        model.add(UpSampling2D(3))
+
+        model.add(Conv2D(32, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
 
-        model.add(Conv2DTranspose(128, kernel_size=3, padding="valid"))
+        model.add(Conv2D(64, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
 
-        model.add(Conv2DTranspose(128*2, kernel_size=3, padding="valid"))
+        model.add(UpSampling2D())
+
+        model.add(Conv2D(128, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
 
-        model.add(Conv2DTranspose(self.channels, kernel_size=3, padding="valid"))
+        model.add(Conv2D(128, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+        model.add(UpSampling2D())
+
+        model.add(Conv2D(128, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+        model.add(UpSampling2D())
+
+        model.add(Conv2D(128*2, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        
+
+
+        model.add(Conv2D(self.channels, kernel_size=3, padding="valid"))
         model.add(Activation("tanh"))
 
         model.summary()
@@ -156,8 +187,12 @@ class DCGAN():
             gen_imgs = self.generator.predict(imgs_n)
 
             # Train the discriminator (real classified as ones and generated as zeros)
+            # print(self.discriminator.trainable)     # False
+
             d_loss_real = self.discriminator.train_on_batch(imgs, valid)
             d_loss_fake = self.discriminator.train_on_batch(gen_imgs, fake)
+            # print(d_loss_real, d_loss_fake)
+
             d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
 
             # ---------------------
@@ -215,4 +250,4 @@ class DCGAN():
         plt.close()
 
 dcgan = DCGAN(64, 64, 3)
-dcgan.train(epochs=50000, batch_size=64, save_interval=200)
+dcgan.train(epochs=50000, batch_size=12, save_interval=100)
