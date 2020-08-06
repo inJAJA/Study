@@ -14,4 +14,7 @@ f = Tcl().call('lsort', '-dict', filename)                  # filename sort
 
 path = [file_dir+f"/{i}" for i in f]
 paths = [ Image.open(i) for i in path]
-imageio.mimsave('D:/Study/project/GAN/result/pngs/lsgan_0.0002.gif', paths, fps=2)
+
+# save
+save_name = 'lsgan_02'
+imageio.mimsave('D:/Study/project/GAN/result/pngs/%s.gif'%(save_name), paths, fps=2)
