@@ -18,16 +18,16 @@ import sys
 import numpy as np
 
 class DCGAN():
-    def __init__(self, rows, cols, channels, z = 10):
+    def __init__(self, rows, cols, channels):
         # Input shape
         self.img_rows = rows
         self.img_cols = cols
         self.channels = channels
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
-        self.latent_dim = z
-        self.noise_shape = self.img_shape
+        self.latent_dim = self.img_rows*self.img_cols*self.channels
+        self.noise_shape = (self.latent_dim, )
 
-        optimizer = Adam(0.0002, 0.5)
+        optimizer = Adam(2e-6, 0.5)
 
         # Build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -57,13 +57,19 @@ class DCGAN():
 
         model = Sequential()
 
-        # model.add(Dense(128 * 7 * 7, activation="relu", input_dim=self.latent_dim))
-        # model.add(Reshape((7, 7, 128)))
-        # model.add(UpSampling2D())
-        model.add(Conv2D(128, kernel_size=3, padding="same", input_shape= (self.noise_shape)))
+        self.input = int(self.img_rows/2**3)
+
+        model.add(Dense(128 *self.input*self.input, activation="relu", input_shape= (self.noise_shape)))
+        model.add(Reshape((self.input, self.input, 128)))
+        model.add(UpSampling2D())
+        model.add(Conv2D(128*2, kernel_size=3, padding="same"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
-        # model.add(UpSampling2D())
+        model.add(UpSampling2D())
+        model.add(Conv2D(128, kernel_size=3, padding="same"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+        model.add(UpSampling2D())
         model.add(Conv2D(64, kernel_size=3, padding="same"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
@@ -135,6 +141,7 @@ class DCGAN():
             # Sample noise and generate a batch of new images
             # noise = np.random.normal(0, 1, (batch_size, self.latent_dim))
             imgs_n = noise[idx]
+            imgs_n = imgs_n.reshape(-1, self.latent_dim)
             gen_imgs = self.generator.predict(imgs_n)
 
             # Train the discriminator (real classified as ones and generated as zeros)
@@ -153,7 +160,7 @@ class DCGAN():
             print ("%d [D loss: %f, acc.: %.2f%%] [G loss: %f]" % (epoch, d_loss[0], 100*d_loss[1], g_loss))
 
             # If at save interval => save generated image samples
-            if epoch % save_interval == 0:
+            if (epoch % save_interval == 0) or epoch == epochs:
                 self.save_imgs(epoch)
 
     def save_imgs(self, epoch):
@@ -165,9 +172,10 @@ class DCGAN():
         human = human / 127.5 -1.
         dog = dog / 127.5 - 1.
 
-        print(human.shape)
+        x_pred = human.reshape(-1, self.latent_dim)
+        print(x_pred.shape)
 
-        gen_imgs = self.generator.predict(human)
+        gen_imgs = self.generator.predict(x_pred)
 
         # Rescale images 0 - 1
         human = 0.5 * human + 0.5
@@ -196,5 +204,5 @@ class DCGAN():
         fig.savefig("./project/GAN/result/gan02_dcgan_mnist_%d.png" % epoch)
         plt.close()
 
-dcgan = DCGAN(128, 128, 3)
+dcgan = DCGAN(64, 64, 3)
 dcgan.train(epochs=5000, batch_size=64, save_interval=200)
