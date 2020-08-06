@@ -2,12 +2,12 @@ from tensorflow.keras.datasets import mnist
 from tensorflow.keras.layers import Input, Dense, Reshape, Flatten, Dropout
 from tensorflow.keras.layers import BatchNormalization, Activation, ZeroPadding2D
 from tensorflow.keras.layers import LeakyReLU
-from tensorflow.keras.layers import UpSampling2D, Conv2D
+from tensorflow.keras.layers import UpSampling2D, Conv2D, Conv2DTranspose
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.optimizers import Adam
 
 #-------------------------------------
-from DCGAN_image_load import load_image
+from Image_load import load_image
 #-------------------------------------
 
 
@@ -27,7 +27,7 @@ class DCGAN():
         self.latent_dim = z
         self.noise_shape = self.img_shape
 
-        optimizer = Adam(0.0002, 0.5)
+        optimizer = Adam(2e-6, 0.5)
 
         # Build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -57,17 +57,35 @@ class DCGAN():
 
         model = Sequential()
 
-        # model.add(Dense(128 * 7 * 7, activation="relu", input_dim=self.latent_dim))
-        # model.add(Reshape((7, 7, 128)))
-        # model.add(UpSampling2D())
-        model.add(Conv2D(128, kernel_size=3, padding="same", input_shape= (self.noise_shape)))
+        model.add(Conv2D(128*4, kernel_size=3, padding="valid", input_shape= (self.noise_shape)))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
-        # model.add(UpSampling2D())
-        model.add(Conv2D(64, kernel_size=3, padding="same"))
+
+        model.add(Conv2D(128*2, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
-        model.add(Conv2D(self.channels, kernel_size=3, padding="same"))
+
+        model.add(Conv2D(64, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(Conv2D(32, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(Conv2DTranspose(64, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(Conv2DTranspose(128, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(Conv2DTranspose(128*2, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(Conv2DTranspose(self.channels, kernel_size=3, padding="valid"))
         model.add(Activation("tanh"))
 
         model.summary()
@@ -193,8 +211,8 @@ class DCGAN():
             if k ==0:
                 axs[2, k].set_ylabel('OUTPUT', size = 20)
             
-        fig.savefig("./project/GAN/result/gan02_dcgan_mnist_%d.png" % epoch)
+        fig.savefig("./project/GAN/result/conv2d/02/dcgan_%d.png" % epoch)
         plt.close()
 
-dcgan = DCGAN(128, 128, 3)
-dcgan.train(epochs=5000, batch_size=64, save_interval=200)
+dcgan = DCGAN(64, 64, 3)
+dcgan.train(epochs=50000, batch_size=64, save_interval=200)
