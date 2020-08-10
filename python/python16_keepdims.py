@@ -7,13 +7,24 @@ print(a)                                    # [[0 1 2 3 4]
 sum = np.sum(a)
 print(sum)                                  # 45
 
-# keepdims : 차원을 유지함
+## keepdims : 차원을 유지함
 a1 = np.sum(a, keepdims=True)
 print(a1)                                   # [[45]]
+
+# axis = 0
+a2 = np.sum(a, axis = 0)
+print(a2)                                   # [ 5  7  9 11 13]
 
 a2 = np.sum(a, axis = 0, keepdims= True)
 print(a2)                                   # [[ 5  7  9 11 13]]
 
+
+# axis = 1
+a3 = np.sum(a, axis= 1)
+print(a3)                                   # [10 35]
+
 a3 = np.sum(a, axis = 1, keepdims= True)
 print(a3)                                   # [[10]
                                             #  [35]]
+
+                                    
