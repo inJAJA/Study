@@ -12,6 +12,9 @@ import torch
 # C++이 설치가 안되어 있어서 import시 errror 뜸
 -> error 메세지에 뜬 주소에서 C++다운.설치 후 실행시 정상 작동 함
 '''
+print(torch.cuda.get_device_name(0))    # GeForce RTX 2080
+
+print(torch.cuda.is_available())        # True : cuda 사용 여부
 
 import torch.autograd   # 자동 미분을 위한 함수 포함
                         # enable_grad / no_grad: 자동 미분의 on, off를 제어
