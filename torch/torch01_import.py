@@ -16,6 +16,8 @@ print(torch.cuda.get_device_name(0))    # GeForce RTX 2080
 
 print(torch.cuda.is_available())        # True : cuda 사용 여부
 
+print(torch.__version__)                # 1.6.0
+
 import torch.autograd   # 자동 미분을 위한 함수 포함
                         # enable_grad / no_grad: 자동 미분의 on, off를 제어
                         # Function : 자체 미분 가능 함수를 정의할 때 사용하는 기반 클래스
