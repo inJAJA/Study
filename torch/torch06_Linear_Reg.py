@@ -38,7 +38,7 @@ print(cost)
 '''
 
 # Gradient Descent
-optimizer = optim.SGD([W, b], lr = 0.01)
+optimizer = optim.SGD([W, b], lr = 0.01)    # 학습 대상 : w, b
 
 nb_epochs = 2000
 for epoch in range(nb_epochs + 1 ):
