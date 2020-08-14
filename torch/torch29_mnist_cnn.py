@@ -126,4 +126,5 @@ with torch.no_grad():
     prediction = model(X_test)
     correct_prediction = torch.argmax(prediction, 1) == Y_test
     accuracy = correct_prediction.float().mean()
-    print('Accuracy:', accuracy.item())
+    print('Accuracy:', accuracy.item())                         # Accuracy: 0.9860000014305115
+    
