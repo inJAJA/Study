@@ -423,17 +423,19 @@ class WGAN(object):
         
         #Train Alternating
         a = self.train_dis()                
-        b = self.train_gen()
+        self.b = self.train_gen()
         
         #Print info
         if self.GAN.steps % 20 == 0 and not self.silent:
             print("\n\nRound " + str(self.GAN.steps) + ":")
             print("D: " + str(a))
-            print("G: " + str(b))
+            print("G: " + str(self.b))
             s = round((time.clock() - self.lastblip) * 1000) / 1000
             print("T: " + str(s) + " sec")
             self.lastblip = time.clock()
-            print('--------------------custom2-------------------')
+
+            self.evalTrunc(self.GAN.steps)
+            print('-------------------- save -------------------')
             
             #Save Model
             if self.GAN.steps % 500 == 0:
@@ -516,7 +518,7 @@ class WGAN(object):
         
         x = Image.fromarray(np.uint8(c1*255))
         
-        x.save("GAN/Results/4/t"+str(num)+".jpg")         # image 저장 -> 경로
+        x.save("GAN/Results/4/t"+str(num)+"_loss%.6f.jpg"%(self.b))         # image 저장 -> 경로
         
     
     def saveModel(self, model, name, num): #Save a Model
@@ -567,17 +569,18 @@ if __name__ == "__main__":
     model = WGAN(lr = 0.0001, silent = False)
     # model.load(101)
     cnt = 0
-    while True:
+    while True:                     # 무한번 반복
         with K.tf.device('/gpu:0'):
             model.train()
 
+            '''
         # for i in range(10):
             if  cnt % 20 ==0:
                 model.evalTrunc(cnt)
 
             cnt+=1
             
-            '''
+            
             if cnt == 50000:
                 break
             '''
