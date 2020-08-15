@@ -199,15 +199,15 @@ class ConvBlock(nn.Module):
             nn.LeakyReLU(0.2),
         )
 
-        if downsample:
-            if fused:
+        if downsample:  # True
+            if fused:       # True
                 self.conv2 = nn.Sequential(
                     Blur(out_channel),
                     FusedDownsample(out_channel, out_channel, kernel2, padding = pad2),
                     nn.LeakyReLU(0.2)
                 )
             
-            else:
+            else:           # False
                 self.conv2 = nn.Sequential(
                     Blur(out_channel),
                     EqualConv2d(out_channel, out_channel, kernel2, padding = pad2),
@@ -215,7 +215,7 @@ class ConvBlock(nn.Module):
                     nn.LeakyReLU(0.2),
                 )
 
-        else:
+        else:           # False
             self.conv2 = nn.Sequential(
                 EqualConv2d(out_channel, out_channel, kernel2, padding = pad2),
                 nn.LeakyReLU(0.2),
@@ -223,11 +223,11 @@ class ConvBlock(nn.Module):
 
     def forward(self, input):
         out = self.conv1(input)
-        out = self.con2(out)
+        out = self.conv2(out)
 
         return out
 
-class AdaptiveInstanceNorm(nn.Module):
+class AdaptiveInstanceNorm(nn.Module):          # AdaIN
     def __init__(self, in_channel, style_dim):
         super().__init__()
 
@@ -269,6 +269,8 @@ class ConstantInput(nn.Module):
 
         return out
 
+
+#-----------------------------------------------------------------------------
 class StyleConvBlock(nn.Module):
     def __init__(
         self,
@@ -318,7 +320,7 @@ class StyleConvBlock(nn.Module):
         self.adain2 = AdaptiveInstanceNorm(out_channel, style_dim)
         self.lrelu2 = nn.LeakyReLU(0.2)
 
-    def forward(slef, input, style, noise):
+    def forward(self, input, style, noise):
         out = self.conv1(input)
         out = self.noise1(out, noise)
         out = self.lrelu1(out)
@@ -330,13 +332,15 @@ class StyleConvBlock(nn.Module):
         out = self.adain2(out, style)
 
         return out
+
+#---------------------------------------------------------------------------------------------------
 class Generator(nn.Module):
     def __init__(self, code_dim, fused=True):
         super().__init__()
 
         self.progression = nn.ModuleList(                       # nn.ModuleList : foward method가 필요 X
-            [
-                StyledConvBlock(512, 512, 3, 1, initial=True),  # 4
+            [                   # in, out, kernel, padding
+                StyledConvBlock(512, 512, 3, 1, initial=True),  # 4            
                 StyledConvBlock(512, 512, 3, 1, upsample=True),  # 8
                 StyledConvBlock(512, 512, 3, 1, upsample=True),  # 16
                 StyledConvBlock(512, 512, 3, 1, upsample=True),  # 32
