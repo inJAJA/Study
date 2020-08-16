@@ -36,7 +36,7 @@ def sample(generator, step, mena_style, n_smaple, device):
     return image
 
 @torch.no_grad()
-def style_mixing(generator, step, mean_style, n_source, n_target, device):
+def style_mixing(generator, step, mean_style, n_source, n_target, device):  # image generator
     source_code = torch.randn(n_source, 512).to(device)
     target_code = torch.randn(n_target, 512).to(device)
 
