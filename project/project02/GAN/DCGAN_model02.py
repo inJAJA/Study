@@ -2,12 +2,14 @@ from tensorflow.keras.datasets import mnist
 from tensorflow.keras.layers import Input, Dense, Reshape, Flatten, Dropout
 from tensorflow.keras.layers import BatchNormalization, Activation, ZeroPadding2D
 from tensorflow.keras.layers import LeakyReLU
-from tensorflow.keras.layers import UpSampling2D, Conv2D
+from tensorflow.keras.layers import UpSampling2D, Conv2D, Conv2DTranspose, MaxPooling2D 
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.optimizers import Adam
 
 #-------------------------------------
-from DCGAN_image_load import load_image
+from Image_load import load_image
+import datetime
+import os
 #-------------------------------------
 
 
@@ -18,16 +20,52 @@ import sys
 import numpy as np
 
 class DCGAN():
-    def __init__(self, rows, cols, channels):
+    def __init__(self, rows, cols, channels, z = 10):
         # Input shape
         self.img_rows = rows
         self.img_cols = cols
         self.channels = channels
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
-        self.latent_dim = self.img_rows*self.img_cols*self.channels
-        self.noise_shape = (self.latent_dim, )
+        self.latent_dim = z
+        self.noise_shape = self.img_shape
 
-        optimizer = Adam(2e-6, 0.5)
+        optimizer = Adam(1e-4, 0.5)
+
+        # Build and compile the discriminator
+        self.discriminator = self.build_discriminator()
+        self.discriminator.compile(loss='binary_crossentropy',
+            optimizer=optimizer,
+            metrics=['accuracy'])
+
+        # Build the generator
+        self.generator = self.build_generator()
+
+        # The generator takes noise as input and generates imgs
+        z = Input(shape=(self.noise_shape))
+        img = self.generator(z)
+
+        # For the combined model we will only train the generator
+        self.discriminator.trainable = False
+
+        # The discriminator takes generated images as input and determines validity
+        valid = self.discriminator(img)
+
+        # The combined model  (stacked generator and discriminator)
+        # Trains the generator to fool the discriminator
+        self.combined = Model(z, valid)
+        self.combined.compile(loss='binary_crossentropy', optimizer=optimizer)
+
+class DCGAN():
+    def __init__(self, rows, cols, channels, z = 10):
+        # Input shape
+        self.img_rows = rows
+        self.img_cols = cols
+        self.channels = channels
+        self.img_shape = (self.img_rows, self.img_cols, self.channels)
+        self.latent_dim = z
+        self.noise_shape = self.img_shape
+
+        optimizer = Adam(1e-4, 0.5)
 
         # Build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -54,26 +92,68 @@ class DCGAN():
         self.combined.compile(loss='binary_crossentropy', optimizer=optimizer)
 
     def build_generator(self):
-
+    
         model = Sequential()
 
-        self.input = int(self.img_rows/2**3)
+        model.add(Conv2D(128*4, kernel_size=3, padding="valid", input_shape= (self.noise_shape)))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
 
-        model.add(Dense(128 *self.input*self.input, activation="relu", input_shape= (self.noise_shape)))
-        model.add(Reshape((self.input, self.input, 128)))
-        model.add(UpSampling2D())
-        model.add(Conv2D(128*2, kernel_size=3, padding="same"))
+        model.add(MaxPooling2D(2))
+
+        model.add(Conv2D(128*2, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
-        model.add(UpSampling2D())
-        model.add(Conv2D(128, kernel_size=3, padding="same"))
+
+        model.add(Conv2D(64, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
-        model.add(UpSampling2D())
-        model.add(Conv2D(64, kernel_size=3, padding="same"))
+        model.add(MaxPooling2D(2))
+
+        model.add(Conv2D(32, kernel_size=3, padding="valid"))
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
-        model.add(Conv2D(self.channels, kernel_size=3, padding="same"))
+
+        model.add(MaxPooling2D(2))
+
+
+        model.add(Dense(123))
+
+        model.add(Dense(123))
+
+        model.add(UpSampling2D(3))
+
+        model.add(Conv2D(32, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(Conv2D(64, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(UpSampling2D())
+
+        model.add(Conv2D(128, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(Conv2D(128, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(UpSampling2D())
+
+        model.add(Conv2D(128, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+        
+        model.add(UpSampling2D())
+
+        model.add(Conv2D(128*2, kernel_size=3, padding="valid"))
+        model.add(BatchNormalization(momentum=0.8))
+        model.add(Activation("relu"))
+
+        model.add(Conv2D(self.channels, kernel_size=3, padding="valid"))
         model.add(Activation("tanh"))
 
         model.summary()
@@ -82,7 +162,6 @@ class DCGAN():
         img = model(noise)
 
         return Model(noise, img)
-
     def build_discriminator(self):
 
         model = Sequential()
@@ -128,6 +207,11 @@ class DCGAN():
         valid = np.ones((batch_size, 1))
         fake = np.zeros((batch_size, 1))
 
+        # save folder create
+        s = datetime.datetime.now().strftime('%m-%d_%H-%M')
+        self.path = './project/GAN/result/conv2d/%s'%(s)
+        os.mkdir(self.path)
+
         for epoch in range(epochs):
 
             # ---------------------
@@ -141,12 +225,15 @@ class DCGAN():
             # Sample noise and generate a batch of new images
             # noise = np.random.normal(0, 1, (batch_size, self.latent_dim))
             imgs_n = noise[idx]
-            imgs_n = imgs_n.reshape(-1, self.latent_dim)
             gen_imgs = self.generator.predict(imgs_n)
 
             # Train the discriminator (real classified as ones and generated as zeros)
+            # print(self.discriminator.trainable)     # False
+
             d_loss_real = self.discriminator.train_on_batch(imgs, valid)
             d_loss_fake = self.discriminator.train_on_batch(gen_imgs, fake)
+            # print(d_loss_real, d_loss_fake)
+
             d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
 
             # ---------------------
@@ -160,7 +247,7 @@ class DCGAN():
             print ("%d [D loss: %f, acc.: %.2f%%] [G loss: %f]" % (epoch, d_loss[0], 100*d_loss[1], g_loss))
 
             # If at save interval => save generated image samples
-            if (epoch % save_interval == 0) or epoch == epochs:
+            if epoch % save_interval == 0:
                 self.save_imgs(epoch)
 
     def save_imgs(self, epoch):
@@ -172,10 +259,9 @@ class DCGAN():
         human = human / 127.5 -1.
         dog = dog / 127.5 - 1.
 
-        x_pred = human.reshape(-1, self.latent_dim)
-        print(x_pred.shape)
+        print(human.shape)
 
-        gen_imgs = self.generator.predict(x_pred)
+        gen_imgs = self.generator.predict(human)
 
         # Rescale images 0 - 1
         human = 0.5 * human + 0.5
@@ -200,9 +286,9 @@ class DCGAN():
             axs[2,k].axis('off')
             if k ==0:
                 axs[2, k].set_ylabel('OUTPUT', size = 20)
-            
-        fig.savefig("./project/GAN/result/gan02_dcgan_mnist_%d.png" % epoch)
+        
+        fig.savefig(self.path + "/dcgan_%d.png" % epoch)
         plt.close()
 
 dcgan = DCGAN(64, 64, 3)
-dcgan.train(epochs=5000, batch_size=64, save_interval=200)
+dcgan.train(epochs=50000, batch_size=12, save_interval=100)
