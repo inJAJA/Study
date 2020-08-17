@@ -10,14 +10,17 @@ from random import random
 #Config Stuff
 im_size = 256           # image_size
 latent_size = (im_size, im_size, 3)      # noise size
-BATCH_SIZE = 8        
-directory1 = "FFHQ"  # image 폴더
-n_images1 = 7000         # data 수
+BATCH_SIZE = 4        
+directory1 = "D:/data/Gan/FFHQ"  # image 폴더
+n_images1 = 389         # data 수
 suff1 = 'png'            # image 확장자명
 
-directory2 = "AnimalFace\Image\DogHead"  # image 폴더
+directory2 = "C:/Users/bitcamp/Downloads/AnimalFace/Image/DogHead"  # image 폴더
 n_images2 = 389         # data 수
 suff2 = 'jpg'            # image 확장자명
+
+save_image = 'D:/data/Gan/Results/1/'
+save_model = 'D:/data/Gan/Model/'
 
 #Style Z
 def noise(n):
@@ -66,7 +69,7 @@ def normalize(arr):
 class dataGenerator(object):
     
     def __init__(self, loc, n, flip = True, suffix = 'png'):
-        self.loc = "D:/"+loc       # data 경로
+        self.loc = loc       # data 경로
         self.flip = flip
         self.suffix = suffix            # 확장자
         self.n = n                      # 데이터 양
@@ -78,7 +81,7 @@ class dataGenerator(object):
         
         for i in idx:
             # print(i)
-            if self.loc == "D:/"+directory2:  
+            if self.loc == directory2:  
                 temp = Image.open(self.loc+"/dog{0:06d}.".format(i)+self.suffix+"").convert('RGB')
             else:
                 temp = Image.open(self.loc+"/{0:05d}.".format(i)+self.suffix+"").convert('RGB')
@@ -439,7 +442,7 @@ class WGAN(object):
             
             #Save Model
             if self.GAN.steps % 500 == 0:
-                self.save(floor(self.GAN.steps / 10000))    # floor :내림 / round : 반올림
+                self.save(floor(self.GAN.steps / 1000))    # floor :내림 / round : 반올림
             if self.GAN.steps % 1000 == 0:
                 self.evaluate(floor(self.GAN.steps / 1000))
             
@@ -482,7 +485,7 @@ class WGAN(object):
         
         x = Image.fromarray(np.uint8(c1*255))               # .fromarray() : numpy -> image
         
-        x.save("GAN/Results/4i"+str(num)+".jpg")
+        x.save(save_image + "i"+str(num)+".jpg")
         
     def evaluate2(self, s1, s2, n1, n2, num = 0, weight = 0.5):
         
@@ -500,7 +503,7 @@ class WGAN(object):
         
         x = Image.fromarray(np.uint8(c1*255))
         
-        x.save("GAN/Results/4i"+str(num)+".jpg")
+        x.save(save_image +"i"+str(num)+".jpg")
         
     def evalTrunc(self, num = 0, trunc = 1.8):
         
@@ -518,25 +521,25 @@ class WGAN(object):
         
         x = Image.fromarray(np.uint8(c1*255))
         
-        x.save("GAN/Results/4/t"+str(num)+"_loss%.6f.jpg"%(self.b))         # image 저장 -> 경로
+        x.save(save_image +"t"+str(num)+"_loss%.6f.jpg"%(self.b))         # image 저장 -> 경로
         
     
     def saveModel(self, model, name, num): #Save a Model
 
         json = model.to_json()
-        with open("Models/"+name+".json", "w") as json_file:
+        with open(save_model + name+".json", "w") as json_file:
             json_file.write(json)
 
-        model.save_weights("GAN/Models/"+name+"_"+str(num)+".h5")
+        model.save_weights(save_model + name+"_"+str(num)+".h5")
         
     def loadModel(self, name, num): #Load a Model
         
-        file = open("GAN/Models/"+name+".json", 'r')
+        file = open(save_model + name+".json", 'r')
         json = file.read()
         file.close()
         
         mod = model_from_json(json, custom_objects = {'AdaInstanceNormalization': AdaInstanceNormalization})
-        mod.load_weights("GAN/Models/"+name+"_"+str(num)+".h5")
+        mod.load_weights(save_model + name+"_"+str(num)+".h5")
         
         return mod
     
@@ -566,11 +569,11 @@ class WGAN(object):
 import keras.backend.tensorflow_backend as K
         
 if __name__ == "__main__":
-    model = WGAN(lr = 0.0001, silent = False)
+    model = WGAN(lr = 0.08, silent = False)
     # model.load(101)
     cnt = 0
     while True:                     # 무한번 반복
-        with K.tf.device('/gpu:0'):
+        # with K.tf.device('/gpu:0'):
             model.train()
 
             '''
