@@ -580,11 +580,11 @@ class StyleGAN:
             samples = interpolate(samples, scale_factor=scale_factor)
 
         # save the images:
-        save_image(samples, img_file, nrow=int(np.sqrt(len(samples))),
+        save_image(samples, img_file, nrow=int(np.sqrt(len(samples))),          # 이미지 저장
                    normalize=True, scale_each=True, pad_value=128, padding=1)
 
-    def train(self, dataset, num_workers, epochs, batch_sizes, fade_in_percentage, logger, output,
-              num_samples=36, start_depth=0, feedback_factor=100, checkpoint_factor=1):
+    def train(self, dataset, num_workers, epochs, batch_sizes, fade_in_percentage, logger, output, 
+              num_samples=36, start_depth=0, feedback_factor=100, checkpoint_factor=1):              # 훈련
         """
         Utility method for training the GAN. Note that you don't have to necessarily use this
         you can use the optimize_generator and optimize_discriminator for your own training routine.
@@ -637,7 +637,7 @@ class StyleGAN:
             # TODO
             data = get_data_loader(dataset, batch_sizes[current_depth], num_workers)
 
-            for epoch in range(1, epochs[current_depth] + 1):
+            for epoch in range(1, epochs[current_depth] + 1):                           # 에포
                 start = timeit.default_timer()  # record time at the start of epoch
 
                 logger.info("Epoch: [%d]" % epoch)
@@ -674,7 +674,7 @@ class StyleGAN:
                         gen_img_file = os.path.join(output, 'samples', "gen_" + str(current_depth)
                                                     + "_" + str(epoch) + "_" + str(i) + ".png")
 
-                        with torch.no_grad():
+                        with torch.no_grad():   # 훈련 X
                             self.create_grid(
                                 samples=self.gen(fixed_input, current_depth, alpha).detach() if not self.use_ema
                                 else self.gen_shadow(fixed_input, current_depth, alpha).detach(),
