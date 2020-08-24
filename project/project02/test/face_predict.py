@@ -3,38 +3,42 @@ import cv2
 import glob
 from tensorflow.keras.models import load_model
 import efficientnet.tfkeras as efn
-
+from tensorflow.keras.models import load_model, Model
 
 # import sklearn as sk
 import h5py
 import numpy as np
 
 image_path = 'D:/data/HUMAN_face.hdf5'
-f = h5py.File(image_path)
-x = f['autoencoder'][:2]
-
-print(x.shape)
+f = h5py.File(image_path, 'r')
 
 model = load_model('D:/weight/efficientnet_true2.hdf5')
 
 filename = os.listdir('D:\FFHQ')    # 원본 이미지 불러오기 위한 파일 이름
 
 # import keras.backend.tensorflow_backend as K
+t = open("./GAN/precit_list.txt", 'w', encoding='utf-8')
 
-for x_pred, f in zip(x, filename):
-    x_pred = x_pred[None, ...]
-    # x_pred = x_pred.reshape(1, 256, 256, 3)
+for s in range(0, 70400, 100):
+    batch = s + 100
 
-    prediction = model.predict(x_pred)
+    x = f['autoencoder'][s:batch]
+    fl = filename[s:batch]
 
-    per = np.max(prediction, axis = 1)
+    for x_pred, ff in zip(x, fl):
+        x_pred = x_pred[None, ...]
+        # x_pred = x_pred.reshape(1, 256, 256, 3)
 
-    prediction = (np.argmax(prediction, axis = 1) + 1)[:]
-    print(f, '예측값 :', prediction, 'Percentage :', per*100)
+        prediction = model.predict(x_pred)
 
-    img = cv2.imread('D:/FFHQ/'+f, cv2.IMREAD_COLOR)
-    cv2.imwrite('D:/predict/%i/%s_%d.jpg'%(prediction, f, per*100), img)
+        per = np.max(prediction, axis = 1)
 
+        one = np.argmax(prediction, axis = 1) + 1
+        print(ff, '예측값 :', one, 'max :', per *100)
+
+        img = cv2.imread('D:/FFHQ/'+ff, cv2.IMREAD_COLOR)
+        cv2.imwrite('D:/predict/%i/%s_%d.jpg'%(one, ff, per*100), img)
+        t.write(ff+' '+str(one[0])+' '+str(per[0]) + '\n' )
 
 
 '''
