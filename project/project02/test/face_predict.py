@@ -17,7 +17,7 @@ model = load_model('D:/weight/efficientnet_true2.hdf5')
 filename = os.listdir('D:\FFHQ')    # 원본 이미지 불러오기 위한 파일 이름
 
 # import keras.backend.tensorflow_backend as K
-t = open("./GAN/precit_list.txt", 'w', encoding='utf-8')
+t = open("./GAN/predict_list.txt", 'w', encoding='utf-8')
 
 for s in range(0, 70400, 100):
     batch = s + 100
@@ -31,13 +31,13 @@ for s in range(0, 70400, 100):
 
         prediction = model.predict(x_pred)
 
-        per = np.max(prediction, axis = 1)
+        per = np.round(np.max(prediction, axis = 1)*100, 2)
 
         one = np.argmax(prediction, axis = 1) + 1
-        print(ff, '예측값 :', one, 'max :', per *100)
+        print(ff, '예측값 :', one, 'max :', per)
 
         img = cv2.imread('D:/FFHQ/'+ff, cv2.IMREAD_COLOR)
-        cv2.imwrite('D:/predict/%i/%s_%d.jpg'%(one, ff, per*100), img)
+        cv2.imwrite('D:/predict/%i/%s_%d.jpg'%(one, ff, per), img)
         t.write(ff+' '+str(one[0])+' '+str(per[0]) + '\n' )
 
 
