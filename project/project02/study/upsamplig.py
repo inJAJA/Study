@@ -38,10 +38,10 @@ fig, (ax1, ax2) = plt.subplots(1, 2)
 
 ax1.imshow(x_train[0].reshape(28, 28))
 ax1.set_title('origin 28x28')
-ax1.axis([0, 56, 56, 0])
+ax1.axis([0, 55, 55, 0])
 
 ax2.imshow(x_pred.reshape(56, 56))
 ax2.set_title('Upsampling 56x56')
-ax2.axis([0, 56, 56, 0])
+ax2.axis([0, 55, 55, 0])
 
 plt.show()
