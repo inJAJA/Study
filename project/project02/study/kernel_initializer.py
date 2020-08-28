@@ -26,7 +26,7 @@ def weight_init(method=None):
     '''
     w = 0
     if method == 'large':
-        w = np.random.randn(node_num, node_num) * 1
+        w = np.random.randn(node_num, node_num) * 1      # np.random.randn : 가우시안 표준 정규 분포 (0 기준, 표준편차 1)
     elif method == 'small':
         w = np.random.randn(node_num, node_num) * 0.01
     elif method == 'xavier':
@@ -101,4 +101,21 @@ plt.show()
 
 # Xavier 초기값에서 sqrt(2) 배
 # -> ReLU는 입력이 음수일 때 출력이 전부 0이기 때문에 더 넓게 분포시키기 위해서
+'''
+
+'''
+# np.random.normal(loc, scale, size) : 정규분포(normal disttribution)
+ : 평균(기준) = loc
+ : 표준편차   = scale
+ : 난수 생성 크기 = size 
+
+# np.random.randn()
+ : 평균(기준) = 0
+ : 표준편차   = 1
+
+# np.random.unifrom(low, high, size) : 균등분포(uniform distribution)
+ : 최솟값 = low
+ : 최댓값 = high
+ : 난수 생성 크기 = size
+ : 균등한 분포로 생성
 '''
