@@ -20,7 +20,7 @@ class AdaInstanceNormalization(Layer):
     
     def build(self, input_shape):
     
-        dim = input_shape[0][self.axis]
+        dim = input_shape[0][self.axis] # input_shape의 [0, self.axis]번째 값
         if dim is None:
             raise ValueError('Axis ' + str(self.axis) + ' of '
                              'input tensor should have a defined dimension '
@@ -30,21 +30,21 @@ class AdaInstanceNormalization(Layer):
         super(AdaInstanceNormalization, self).build(input_shape) 
     
     def call(self, inputs, training=None):
-        input_shape = K.int_shape(inputs[0])
+        input_shape = K.int_shape(inputs[0])    # out 
         reduction_axes = list(range(0, len(input_shape)))
         
-        beta = inputs[1]
-        gamma = inputs[2]
+        beta = inputs[1]    # b = sty
+        gamma = inputs[2]   # g = sty
 
         if self.axis is not None:
             del reduction_axes[self.axis]
 
         del reduction_axes[0]
-        mean = K.mean(inputs[0], reduction_axes, keepdims=True)
-        stddev = K.std(inputs[0], reduction_axes, keepdims=True) + self.epsilon
+        mean = K.mean(inputs[0], reduction_axes, keepdims=True)                 # 평균
+        stddev = K.std(inputs[0], reduction_axes, keepdims=True) + self.epsilon # 표준 편차
         normed = (inputs[0] - mean) / stddev
 
-        return normed * gamma + beta
+        return normed * gamma + beta    # y_s * ((x - mean(x)) / S(x)) + mean(y)
     
     def get_config(self):
         config = {
