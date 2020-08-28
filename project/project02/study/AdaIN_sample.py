@@ -54,4 +54,8 @@ axes[0].set_title('Contents Image')
 axes[1].set_title('Style Image')
 axes[2].set_title('Mix_Style')
 
+axes[0].axis('off')
+axes[1].axis('off')
+axes[2].axis('off')
+
 plt.show()
