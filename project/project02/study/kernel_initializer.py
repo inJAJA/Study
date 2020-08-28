@@ -48,7 +48,11 @@ for i in range(hidden_layer_size):
     if i != 0:
         x = activations[i-1]
 
-    w = weight_init('small')
+    # w = weight_init('large')
+    # w = weight_init('small')
+    w = weight_init('xavier')
+    # w = weight_init('he')
+
     a = np.dot(x, w)
 
     # z = sigmoid(a)
