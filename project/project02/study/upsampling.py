@@ -8,12 +8,14 @@ from keras.datasets import mnist
 
 x_train = x_train.reshape(-1, 28, 28, 1)
 
-x = Input(shape = (28, 28, 1))
-up = UpSampling2D()(x)
+def upsample(interpolation = None):
+    x = Input(shape = (28, 28, 1))
+    up = UpSampling2D(interpolation=interpolation)(x)
 
-model = Model(x, up)
+    model = Model(x, up)
+    model.summary()
 
-model.summary()
+    return model
 '''
 Model: "model_1"
 _________________________________________________________________       
@@ -29,19 +31,28 @@ Non-trainable params: 0
 _________________________________________________________________ 
 '''
 
-x_pred = model.predict(x_train[0][None, ...])
-print(x_pred.shape)
+x_pred1 = upsample('nearest').predict(x_train[0][None, ...])
+print(x_pred1.shape)
 
-# image
+x_pred2 = upsample('bilinear').predict(x_train[0][None, ...])
+
+# draw image
 import matplotlib.pyplot as plt
-fig, (ax1, ax2) = plt.subplots(1, 2)
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
 
+# origin
 ax1.imshow(x_train[0].reshape(28, 28))
 ax1.set_title('origin 28x28')
 ax1.axis([0, 55, 55, 0])
 
-ax2.imshow(x_pred.reshape(56, 56))
-ax2.set_title('Upsampling 56x56')
+# nearest
+ax2.imshow(x_pred1.reshape(56, 56))
+ax2.set_title('Upsampling_nearest 56x56')
 ax2.axis([0, 55, 55, 0])
+
+# bilinear
+ax3.imshow(x_pred2.reshape(56, 56))
+ax3.set_title('Upsampling_bilinear 56x56')
+ax3.axis([0, 55, 55, 0])
 
 plt.show()
