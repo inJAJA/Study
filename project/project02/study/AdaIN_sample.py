@@ -3,17 +3,20 @@ from keras import backend as K
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+import h5py
 
 # load Image
-x = cv2.imread('D:\image/image4.jpg')
-x = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
-x = cv2.resize(x, dsize = (750, 400), interpolation = cv2.INTER_LINEAR)/255.
-x = x.reshape(-1, 400, 750, 3)
+f = h5py.File('D:/data/HDF5/face_Doberman.hdf5', 'r')   # Dog Image
+x = f['doberman'][10]
+# x = cv2.imread('D:\image/image4.jpg')
+# x = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
+x = cv2.resize(x, dsize = (256, 256), interpolation = cv2.INTER_LINEAR)#/255.
+x = x.reshape(-1, 256, 256, 3)
 
-y = cv2.imread('D:/image/image2.jpg')
+y = cv2.imread('D:/data/Gan/FFHQ/02000/02010.png')      # Human Image
 y = cv2.cvtColor(y, cv2.COLOR_BGR2RGB)
-y = cv2.resize(y, dsize=(750, 400), interpolation = cv2.INTER_LINEAR)/ 255.
-y = y.reshape(-1, 400, 750, 3)
+y = cv2.resize(y, dsize=(256, 256), interpolation = cv2.INTER_LINEAR)/ 255.
+y = y.reshape(-1, 256, 256, 3)
 
 # keras backend를 사용하기 위해서 numpy -> tensor로 변환
 x = tf.convert_to_tensor(x, np.float32)
@@ -28,9 +31,6 @@ input_shape = K.int_shape(x)
 reduction_axes = list(range(0, len(input_shape)))
 print(reduction_axes)              # [0, 1, 2]
 
-beta = y
-gamma = y
-
 if axis is not None:
     del reduction_axes[axis]
 
@@ -38,14 +38,14 @@ del reduction_axes[0]
 
 print(reduction_axes)
 
-gamma = K.std(y, reduction_axes, keepdims=True) + epsilon
-beta = K.mean(y, reduction_axes, keepdims=True)
+gamma = K.std(y, reduction_axes, keepdims=True) + epsilon   # S(y)
+beta = K.mean(y, reduction_axes, keepdims=True)             # mean(y)
 print(beta.shape)                   # (1, 1, 1, 3)
 print(gamma.shape)                  # (1, 1, 1, 3)
 
 # Adain
-mean = K.mean(x, reduction_axes, keepdims=True)
-stddev = K.std(x, reduction_axes, keepdims=True) + epsilon
+mean = K.mean(x, reduction_axes, keepdims=True)             # mean(x)
+stddev = K.std(x, reduction_axes, keepdims=True) + epsilon  # S(x)
 normed = (x - mean) / stddev
 
 print(mean.shape)                   # (1, 1, 1, 3)
@@ -57,11 +57,11 @@ image = normed * gamma + beta
 print(image.shape)                  # (1, 400, 750, 3)
 
 
-normed = K.reshape(normed, (400, 750, 3))
+normed = K.reshape(normed, (256, 256, 3))
 
-x = K.reshape(x, (400, 750, 3))
-y = K.reshape(y, (400, 750, 3))
-image = K.reshape(image, (400, 750, 3))
+x = K.reshape(x, (256, 256, 3))
+y = K.reshape(y, (256, 256, 3))
+image = K.reshape(image, (256, 256, 3))
 
 # show Image
 fig, axes = plt.subplots(1, 3)
