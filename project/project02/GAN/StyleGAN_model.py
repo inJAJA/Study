@@ -1,3 +1,6 @@
+# noise로 사람 사진(FFHQ 데이터 전체) = 7000개 사용
+# discriminator에 real image로 강아지 사진(우리 분류모델에 들어가는 강아지 얼굴만 잘라서 저장한 데이터) = 700개 사용()
+# 581번째 줄 gpu 1번상 사용하여 모델을 돌림
 
 #import numpy as np
 from PIL import Image
@@ -6,22 +9,21 @@ import numpy as np
 import time
 from functools import partial
 from random import random
+import h5py
 
 #Config Stuff
-im_size = 256           # image_size
+im_size = 256                   # image_size
 latent_size = (im_size, im_size, 3)      # noise size
-BATCH_SIZE = 4        
-directory1 = "D:/data/Gan/FFHQ"  # image 폴더
-n_images1 = 389         # data 수
-suff1 = 'png'            # image 확장자명
+BATCH_SIZE = 8        
+directory1 = "FFHQ"             # image 폴더
+n_images1 = 7000                # data 수
+suff1 = 'png'                   # image 확장자명
 
-directory2 = "C:/Users/bitcamp/Downloads/AnimalFace/Image/DogHead"  # image 폴더
-n_images2 = 389         # data 수
-suff2 = 'jpg'            # image 확장자명
+directory2 = "data/DATA.hdf5"   # image 폴더
+n_images2 = 7000                # data 수
+suff2 = 'jpg'                   # image 확장자명
 
-save_image = 'D:/data/Gan/Results/1/'
-save_model = 'D:/data/Gan/Model/'
-
+foldername = 13                 # 저장되는 폴더 이름 => 경로: GAN/Results/"+str(foldername)
 #Style Z
 def noise(n):
     return np.random.normal(0.0, 1.0, size = [n, latent_size])
@@ -69,7 +71,7 @@ def normalize(arr):
 class dataGenerator(object):
     
     def __init__(self, loc, n, flip = True, suffix = 'png'):
-        self.loc = loc       # data 경로
+        self.loc = "D:/"+loc       # data 경로
         self.flip = flip
         self.suffix = suffix            # 확장자
         self.n = n                      # 데이터 양
@@ -81,13 +83,15 @@ class dataGenerator(object):
         
         for i in idx:
             # print(i)
-            if self.loc == directory2:  
-                temp = Image.open(self.loc+"/dog{0:06d}.".format(i)+self.suffix+"").convert('RGB')
+            if self.loc == "D:/"+directory2:  
+                file = h5py.File(self.loc, 'r') 
+                temp = file['256'][i]
+                temp1 = np.array(temp)
             else:
                 temp = Image.open(self.loc+"/{0:05d}.".format(i)+self.suffix+"").convert('RGB')
             # temp = Image.open(self.loc+"/00000."+self.suffix+"").convert('RGB')
-            temp1 = temp.resize((256, 256))
-            temp1 = np.array(temp1.convert('RGB'), dtype='float32') / 255
+                temp1 = temp.resize((256, 256))
+                temp1 = np.array(temp1.convert('RGB'), dtype='float32') / 255
             if self.flip and random() > 0.5:
                 temp1 = np.flip(temp1, 1)                           # axis = 1 로 뒤집기
                 
@@ -106,7 +110,7 @@ from keras.models import model_from_json, Model
 from keras.optimizers import Adam
 import keras.backend as K
 
-from StyleGAN_AdaIN import AdaInstanceNormalization
+from AdaIN import AdaInstanceNormalization
 
 
 #r1/r2 gradient penalty
@@ -237,7 +241,7 @@ class GAN(object):
             return self.G
         
         #Style FC, I only used 2 fully connected layers instead of 8 for faster training
-        inp_s = Input(shape = latent_size)                        # noise
+        inp_s = Input(shape = latent_size)                        # noise        
 
         sty = Conv2D(512, (3, 3), padding = 'same', kernel_initializer = 'he_normal')(inp_s)
         sty = BatchNormalization()(sty)
@@ -437,8 +441,8 @@ class WGAN(object):
             print("T: " + str(s) + " sec")
             self.lastblip = time.clock()
 
-            self.evalTrunc(self.GAN.steps)
-            print('-------------------- save -------------------')
+            self.evalTrunc(self.GAN.steps)                             # image save
+            print('--------------------'+str(foldername)+'-------------------')
             
             #Save Model
             if self.GAN.steps % 500 == 0:
@@ -485,7 +489,7 @@ class WGAN(object):
         
         x = Image.fromarray(np.uint8(c1*255))               # .fromarray() : numpy -> image
         
-        x.save(save_image + "i"+str(num)+".jpg")
+        x.save("GAN/Results/"+str(foldername)+"i"+str(num)+".jpg")
         
     def evaluate2(self, s1, s2, n1, n2, num = 0, weight = 0.5):
         
@@ -503,7 +507,7 @@ class WGAN(object):
         
         x = Image.fromarray(np.uint8(c1*255))
         
-        x.save(save_image +"i"+str(num)+".jpg")
+        x.save("GAN/Results/"+str(foldername)+"i"+str(num)+".jpg")
         
     def evalTrunc(self, num = 0, trunc = 1.8):
         
@@ -521,31 +525,31 @@ class WGAN(object):
         
         x = Image.fromarray(np.uint8(c1*255))
         
-        x.save(save_image +"t"+str(num)+"_loss%.6f.jpg"%(self.b))         # image 저장 -> 경로
+        x.save("GAN/Results/"+str(foldername)+"/t"+str(num)+'_loss%.6f.jpg'%(self.b))         # image 저장 -> 경로
         
     
     def saveModel(self, model, name, num): #Save a Model
 
         json = model.to_json()
-        with open(save_model + name+".json", "w") as json_file:
+        with open("GAN/Models/"+name+".json", "w") as json_file:
             json_file.write(json)
 
-        model.save_weights(save_model + name+"_"+str(num)+".h5")
+        model.save_weights("GAN/Models/"+name+"_"+str(num)+".h5")
         
     def loadModel(self, name, num): #Load a Model
         
-        file = open(save_model + name+".json", 'r')
+        file = open("GAN/Models/"+name+".json", 'r')
         json = file.read()
         file.close()
         
         mod = model_from_json(json, custom_objects = {'AdaInstanceNormalization': AdaInstanceNormalization})
-        mod.load_weights(save_model + name+"_"+str(num)+".h5")
+        mod.load_weights("GAN/Models/"+name+"_"+str(num)+".h5")
         
         return mod
     
     def save(self, num): #Save JSON and Weights into /Models/
-        self.saveModel(self.GAN.G, "gen_c2", num)
-        self.saveModel(self.GAN.D, "dis_c2", num)
+        self.saveModel(self.GAN.G, "gen_c13", num)
+        self.saveModel(self.GAN.D, "dis_c13", num)
         
 
     def load(self, num): #Load JSON and Weights from /Models/
@@ -555,8 +559,8 @@ class WGAN(object):
         self.GAN = GAN()
 
         #Load Models
-        self.GAN.G = self.loadModel("gen_c2", num)
-        self.GAN.D = self.loadModel("dis_c2", num)
+        self.GAN.G = self.loadModel("gen_c13", num)
+        self.GAN.D = self.loadModel("dis_c13", num)
         
         self.GAN.steps = steps1
         
@@ -565,18 +569,18 @@ class WGAN(object):
         self.DisModel = self.GAN.DisModel()
         self.AdModel = self.GAN.AdModel()
         
-        
+
 import keras.backend.tensorflow_backend as K
         
 if __name__ == "__main__":
-    model = WGAN(lr = 0.08, silent = False)
+    model = WGAN(lr = 0.0002, silent = False)
     # model.load(101)
     cnt = 0
-    while True:                     # 무한번 반복
-        # with K.tf.device('/gpu:0'):
+    while True:
+        with K.tf.device('/gpu:1'):
             model.train()
 
-            '''
+        '''
         # for i in range(10):
             if  cnt % 20 ==0:
                 model.evalTrunc(cnt)
@@ -586,6 +590,6 @@ if __name__ == "__main__":
             
             if cnt == 50000:
                 break
-            '''
+        '''
 
 
